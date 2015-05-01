@@ -23,10 +23,13 @@ public class importRawGraphFromFile {
 	}
 
 	private static void analyseGraph() {
+		int count = 0;
 		for(GraphNode x : nodes) {
 			
 			if(x.isChecked()) continue;
 			ArrayList<GraphNode> pathToRoot = paintGraph(x);
+			//differentGraphs.add(pathToRoot);
+			count++;
 			if(pathToRoot.size()>1) {
 				System.out.println("Found graph with following rootcircle/root:");
 				for(GraphNode y : pathToRoot) {
@@ -35,7 +38,7 @@ public class importRawGraphFromFile {
 				System.out.println();
 			}
 		}
-
+		System.out.println("There are " + count + " individual graphs in memory.");
 	}
 
 	/** "paints" the graph, which means that all connected nodes are recognized and flagged
@@ -58,9 +61,7 @@ public class importRawGraphFromFile {
 		if (cursor.getParent()!=null) {
 			res.addAll(path.subList(path.indexOf(cursor.getParent()), path.size()-1));
 		}
-		else {
-			res.add(cursor);
-		}
+		res.add(cursor);
 		//all the nodes are flagged ("painted") with node.setChecked(true) in order to detect already visited graphs
 		ArrayList<GraphNode> todo = new ArrayList<GraphNode>();
 		for(GraphNode n : res) {
@@ -84,7 +85,7 @@ public class importRawGraphFromFile {
 			String line;
 			int i=0;
 			while ((line = br.readLine()) != null) {
-				if(i%10 == 0) createGraphFromLine(line); //only due to low RAM on my netbook!!!
+				if(i%5 == 0) createGraphFromLine(line); //only due to low RAM on my netbook!!!
 				i++;
 				if(i%1000 == 0) System.out.println(i);
 			}
