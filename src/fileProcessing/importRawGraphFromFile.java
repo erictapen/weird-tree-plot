@@ -30,7 +30,7 @@ public class importRawGraphFromFile {
 			ArrayList<GraphNode> pathToRoot = paintGraph(x);
 			//differentGraphs.add(pathToRoot);
 			count++;
-			if(pathToRoot.size()>1) {
+			if(pathToRoot.size()>2) {
 				System.out.println("Found graph with following rootcircle/root:");
 				for(GraphNode y : pathToRoot) {
 					System.out.print("    " + y.getCaption());
@@ -85,7 +85,7 @@ public class importRawGraphFromFile {
 			String line;
 			int i=0;
 			while ((line = br.readLine()) != null) {
-				if(i%5 == 0) createGraphFromLine(line); //only due to low RAM on my netbook!!!
+				if(i%1 == 0) createGraphFromLine(line); //only due to low RAM on my netbook!!!
 				i++;
 				if(i%1000 == 0) System.out.println(i);
 			}
