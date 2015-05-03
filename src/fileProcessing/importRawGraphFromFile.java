@@ -17,7 +17,7 @@ import graph.GraphNode;
  */
 public class importRawGraphFromFile {
 
-	private static String filename = "/home/justin/Dropbox/java/Wikipedia Crawl/wiki_raw.dot";
+	private static String filename = "/home/justin/Dropbox/java/Wikipedia Crawl/test.dot"; //wiki_raw.dot";
 	private static ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();		//list of all nodes
 	private static HashMap<String, GraphNode> nodemap = new HashMap<String, GraphNode>(4000000, (float) 0.75);
 	//differentGraphs is a List of all rootcircles, where graphs do not intersect
@@ -34,6 +34,7 @@ public class importRawGraphFromFile {
 	 * 
 	 */
 	private static void exportSortedFile(String ofile) {
+		System.out.println("Start exporting to file.");
 		try{
 			FileWriter writer = new FileWriter(ofile);
 			for(ArrayList<GraphNode> x : differentGraphs) {
@@ -43,6 +44,7 @@ public class importRawGraphFromFile {
 				}
 				writer.append(" {\n");
 				for(GraphNode y : x) {
+					if(y.getParent()==null) y.setParent(new GraphNode(""));
 					writer.append("\t" + y.getParent().getCaption() + " <-- " + y.getCaption() + "\n");
 				}
 				GraphNode cursor;
@@ -50,7 +52,7 @@ public class importRawGraphFromFile {
 				stack.addAll(x);
 				while(!stack.empty()) {
 					cursor = stack.pop();
-					writer.append("\t" + cursor.getCaption() + " --> " + cursor.getParent().getCaption() + "\n");
+					writer.append("\t" + cursor.getParent().getCaption() + " <-- " + cursor.getCaption() + "\n");
 					stack.addAll(cursor.getChildren());
 				}
 				
@@ -75,13 +77,13 @@ public class importRawGraphFromFile {
 			ArrayList<GraphNode> rootcircle = paintGraph(x);
 			differentGraphs.add(rootcircle);
 			count++;
-			if(rootcircle.size()>2) {
+			/*if(rootcircle.size()>2) {
 				System.out.println("Found graph with following rootcircle/root:");
 				for(GraphNode y : rootcircle) {
 					System.out.print("    " + y.getCaption());
 				}
 				System.out.println();
-			}
+			}*/
 		}
 		System.out.println("There are " + count + " individual graphs in memory.");
 	}
