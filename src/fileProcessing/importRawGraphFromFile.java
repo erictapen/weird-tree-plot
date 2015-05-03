@@ -3,36 +3,76 @@ package fileProcessing;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
 
 import graph.GraphNode;
 
+/** This class does much more than importing. It can output a sorted list of all graphs which are defined in the .dot-file
+ * @author justin
+ *
+ */
 public class importRawGraphFromFile {
 
 	private static String filename = "/home/justin/Dropbox/java/Wikipedia Crawl/wiki_raw.dot";
 	private static ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();		//list of all nodes
 	private static HashMap<String, GraphNode> nodemap = new HashMap<String, GraphNode>(4000000, (float) 0.75);
-	private static ArrayList<ArrayList<GraphNode>> differentGraphs; //List of all rootcircles, where graphs do not intersect
+	//differentGraphs is a List of all rootcircles, where graphs do not intersect
+	private static ArrayList<ArrayList<GraphNode>> differentGraphs = new ArrayList<ArrayList<GraphNode>>(); 
 
 	public static void main(String[] args) {
-
 		importFile(filename);
 		analyseGraph();
+		exportSortedFile("/home/justin/Dropbox/java/Wikipedia Crawl/wiki_raw_sorted.dot");
 	}
+
+
+	/** Outputs the correct sorted graphs in a dotfile
+	 * 
+	 */
+	private static void exportSortedFile(String ofile) {
+		try{
+			FileWriter writer = new FileWriter(ofile);
+			for(ArrayList<GraphNode> x : differentGraphs) {
+				writer.append(  "digraph ");
+				for(GraphNode y : x) {
+					writer.append(y.getCaption());
+				}
+				writer.append(" {\n");
+				Stack<GraphNode> myStack = new Stack<GraphNode>();
+				myStack.addAll(x);
+				GraphNode cursor;
+				while(!myStack.empty()) {
+					cursor = myStack.pop();
+					writer.append("\t" + cursor.getCaption() + "\n");
+					myStack.addAll(cursor.getChildren());
+				}
+				writer.append("}");
+			}
+			writer.close();
+		} catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+
+	}
+
 
 	private static void analyseGraph() {
 		int count = 0;
 		for(GraphNode x : nodes) {
-			
+
 			if(x.isChecked()) continue;
-			ArrayList<GraphNode> pathToRoot = paintGraph(x);
-			//differentGraphs.add(pathToRoot);
+			ArrayList<GraphNode> rootcircle = paintGraph(x);
+			differentGraphs.add(rootcircle);
 			count++;
-			if(pathToRoot.size()>2) {
+			if(rootcircle.size()>2) {
 				System.out.println("Found graph with following rootcircle/root:");
-				for(GraphNode y : pathToRoot) {
+				for(GraphNode y : rootcircle) {
 					System.out.print("    " + y.getCaption());
 				}
 				System.out.println();
