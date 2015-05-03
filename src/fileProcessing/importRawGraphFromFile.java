@@ -31,29 +31,28 @@ public class importRawGraphFromFile {
 
 
 	/** Outputs the correct sorted graphs in a dotfile
-	 * 
+	 * @param ofile The filename.
 	 */
 	private static void exportSortedFile(String ofile) {
 		System.out.println("Start exporting to file.");
 		try{
 			FileWriter writer = new FileWriter(ofile);
-			for(ArrayList<GraphNode> x : differentGraphs) {
+			for(ArrayList<GraphNode> rootcircle : differentGraphs) {
 				writer.append(  "digraph ");
-				for(GraphNode y : x) {
+				for(GraphNode y : rootcircle) {
 					writer.append(y.getCaption());
 				}
 				writer.append(" {\n");
-				for(GraphNode y : x) {
+				for(GraphNode y : rootcircle) {
 					if(y.getParent()==null) y.setParent(new GraphNode(""));
 					writer.append("\t" + y.getParent().getCaption() + " <-- " + y.getCaption() + "\n");
 				}
-				GraphNode cursor;
-				Stack<GraphNode> stack = new Stack<GraphNode>();
-				stack.addAll(x);
-				while(!stack.empty()) {
-					cursor = stack.pop();
-					writer.append("\t" + cursor.getParent().getCaption() + " <-- " + cursor.getCaption() + "\n");
-					stack.addAll(cursor.getChildren());
+				for(GraphNode root : rootcircle) {
+					ArrayList<GraphNode> start = root.getChildren();
+					start.removeAll(rootcircle);
+					for(GraphNode node : start) {
+						//TODO hier muss die Magie passieren. Ausgangspunkt: alle richtigen Kinder sind in der Liste
+					}
 				}
 				
 				
@@ -94,7 +93,6 @@ public class importRawGraphFromFile {
 	 * any way connected with x will be flagged
 	 * @return The rootcircle of the painted graph
 	 */
-	//TODO it is not clear if this method is doing what it is supposed to!
 	private static ArrayList<GraphNode> paintGraph(GraphNode x) {
 		ArrayList<GraphNode> res = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> path = new ArrayList<GraphNode>();
