@@ -42,15 +42,20 @@ public class importRawGraphFromFile {
 					writer.append(y.getCaption());
 				}
 				writer.append(" {\n");
-				Stack<GraphNode> myStack = new Stack<GraphNode>();
-				myStack.addAll(x);
-				GraphNode cursor;
-				while(!myStack.empty()) {
-					cursor = myStack.pop();
-					writer.append("\t" + cursor.getCaption() + "\n");
-					myStack.addAll(cursor.getChildren());
+				for(GraphNode y : x) {
+					writer.append("\t" + y.getParent().getCaption() + " <-- " + y.getCaption() + "\n");
 				}
-				writer.append("}");
+				GraphNode cursor;
+				Stack<GraphNode> stack = new Stack<GraphNode>();
+				stack.addAll(x);
+				while(!stack.empty()) {
+					cursor = stack.pop();
+					writer.append("\t" + cursor.getCaption() + " --> " + cursor.getParent().getCaption() + "\n");
+					stack.addAll(cursor.getChildren());
+				}
+				
+				
+				writer.append("}\n\n");
 			}
 			writer.close();
 		} catch(IOException e)
