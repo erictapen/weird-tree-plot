@@ -6,4 +6,9 @@ package plot;
  */
 public class NodeSetManager {
 
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
