@@ -15,7 +15,7 @@ import graph.GraphNode;
  * @author justin
  *
  */
-public class importRawGraphFromFile {
+public class RawGraph {
 
 	private static String filename = "/home/justin/Dropbox/java/Wikipedia Crawl/test.dot"; //wiki_raw.dot";
 	private static ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();		//list of all nodes
