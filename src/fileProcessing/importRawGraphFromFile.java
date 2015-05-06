@@ -49,9 +49,17 @@ public class importRawGraphFromFile {
 				}
 				for(GraphNode root : rootcircle) {
 					ArrayList<GraphNode> start = root.getChildren();
+					ArrayList<GraphNode> temp = new ArrayList<GraphNode>();
 					start.removeAll(rootcircle);
-					for(GraphNode node : start) {
-						//TODO hier muss die Magie passieren. Ausgangspunkt: alle richtigen Kinder sind in der Liste
+					while(!start.isEmpty()) {
+						for(GraphNode node : start) {
+							//TODO hier muss die Magie passieren. Ausgangspunkt: alle richtigen Kinder sind in der Liste
+							writer.append("\t" + node.getParent().getCaption() + " <-- " + node.getCaption() + "\n");
+							temp.addAll(node.getChildren());
+						}
+						start.clear();
+						start.addAll(temp);
+						temp.clear();
 					}
 				}
 				
