@@ -9,7 +9,7 @@ public class GraphNode {
 	private int numberOfAllLeafs;
 	private double xPos;
 	private double yPos;
-	private double size;
+	private double size = 1.0;
 	
 	
 	
@@ -28,6 +28,7 @@ public class GraphNode {
 		super();
 		this.caption = caption;
 		this.setChecked(false);
+		
 	}
 
 	public GraphNode getParent() {
@@ -97,6 +98,15 @@ public class GraphNode {
 		return res;
 	}
 
+	@Override
+	public String toString() {
+		return "GraphNode [caption=" + caption + ", parent=" + parent
+				+ ", children=" + children.size() + ", numberOfAllLeafs="
+				+ numberOfAllLeafs + ", xPos=" + xPos + ", yPos=" + yPos
+				+ ", size=" + size + ", checked=" + checked + "]";
+	}
+
+	
 	
 	
 }

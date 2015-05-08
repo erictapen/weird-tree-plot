@@ -21,6 +21,7 @@ public class GraphPlotter {
 		super();
 		this.root = root;
 		this.debug = debug;
+		this.manager = new NodeSetManager();
 		this.init();
 	}
 
@@ -29,7 +30,7 @@ public class GraphPlotter {
 		// TODO Do some initialisation stuff. In this method, everything from getting the root
 		//		to a plottable Graph and a usable NodeSetManager must happen!
 		root.updateNumberOfAllLeafs();
-		this.updateSizes();
+		//this.updateSizes();
 		manager.init();
 
 
