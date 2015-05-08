@@ -116,6 +116,20 @@ public class GraphNode {
 				+ ", size=" + size + ", checked=" + checked + "]";
 	}
 
+	/** Detects an intersection
+	 * @param anyNode The GraphNode which is needed to test against an intersection
+	 * @return Either -1 (if there ist any intersection) or the rad direction in which this needs to move.
+	 */
+	public double intersect(GraphNode n) {
+		if(Math.sqrt(	Math.pow(this.xPos - n.getxPos(), 2)
+						+ Math.pow(this.yPos - n.getyPos(), 2))
+						<
+						this.size + n.getSize()) {
+			return Math.atan2(n.getxPos()-this.xPos, n.getyPos()-this.yPos);
+		}
+		return -1.0;
+	}
+
 	
 	
 	

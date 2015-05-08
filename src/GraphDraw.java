@@ -13,7 +13,7 @@ public class GraphDraw extends PApplet {
 	
 	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 10.0;
+	private double drawRootSize = 30.0;
 
 	public void setup() {
 		size(512, 512);
@@ -22,9 +22,9 @@ public class GraphDraw extends PApplet {
 		root = SortedGraph.importFile(
 				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test.dot", 
 				"sprachliche Einheit");
-				
+		/*	
 		
-		/*root = new GraphNode("Philosophie");
+		root = new GraphNode("Philosophie");
 		root.setSize(1.0);
 		root.setxPos(0.0);
 		root.setyPos(0.0);
@@ -36,22 +36,27 @@ public class GraphDraw extends PApplet {
 		root.getChildren().get(1).setSize(0.5);
 		root.getChildren().get(1).setxPos(2.4);
 		root.getChildren().get(1).setyPos(8.5);
+		root.getChildren().get(1).addChild(new GraphNode("haha"));
+		root.getChildren().get(1).getChildren().get(0).setSize(0.2);
+		root.getChildren().get(1).getChildren().get(0).setxPos(-3.0);
+		root.getChildren().get(1).getChildren().get(0).setyPos(-3.0);
 		*/
+		
 		
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
-		pltr.setRedrawInterval(100);
-		pltr.setMaxIteration(1000);
+		pltr.setRedrawInterval(10);
+		pltr.setMaxIteration(100);
 		pltr.setStepsize(0.001);
-		pltr.setWaitingCircleRadius(40.0);
-		pltr.setMovingCircleRadius(30.0);
+		pltr.setWaitingCircleRadius(10.0);
+		pltr.setMovingCircleRadius(7.0);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
 	public void draw() {
-		System.out.print("Start drawing: ");
 		background(0xFFFFFF);
 		pltr.update();
+		System.out.print("Start drawing: ");
 		ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> temp = new ArrayList<GraphNode>();
 		nodes.add(root);

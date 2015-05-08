@@ -16,7 +16,7 @@ public class GraphPlotter {
 	private int redrawInterval;
 	private double waitingCircleRadius;
 	private double movingCircleRadius;
-	
+
 	private ArrayList<GraphNode> plottedNodes;
 	private ArrayList<GraphNode> movingNodes;
 	private ArrayList<GraphNode> waitingNodes;
@@ -39,7 +39,7 @@ public class GraphPlotter {
 		this.manager = new NodeSetManager(this);
 		this.plottedNodes = new ArrayList<GraphNode>();
 		this.movingNodes = new ArrayList<GraphNode>();
-		this.plottedNodes = new ArrayList<GraphNode>();
+		this.waitingNodes = new ArrayList<GraphNode>();
 		this.init();
 	}
 
@@ -55,10 +55,18 @@ public class GraphPlotter {
 		root.setxPos(0.0);
 		root.setyPos(0.0);
 		root.setSize(1.0);
+		root.setToDraw(true);
 		this.plottedNodes.add(root);
-
-
-
+		this.movingNodes.addAll(root.getChildren());
+		for(GraphNode x : this.movingNodes) {
+			x.setToDraw(true);
+			this.waitingNodes.addAll(x.getChildren());
+		}
+		for(GraphNode x : this.waitingNodes) {
+			x.setToDraw(true);
+		}
+		
+		
 	}
 
 	/** Here does the plotting happen.
@@ -67,6 +75,7 @@ public class GraphPlotter {
 	public void update() {
 		if(this.redrawInterval == 0) this.redrawInterval = this.maxIteration;
 		if(this.iteration==0) {    //update nodeLists, get new nodes, initialize the starting circle
+			System.out.println("Beginning round.");
 			ArrayList<GraphNode> temp = new ArrayList<GraphNode>();
 			for(GraphNode x : this.waitingNodes) {
 				temp.addAll(x.getChildren());
@@ -76,6 +85,9 @@ public class GraphPlotter {
 			this.movingNodes.addAll(this.waitingNodes);
 			this.waitingNodes.clear();
 			this.waitingNodes.addAll(temp);
+			for(GraphNode x : this.waitingNodes) {
+				x.setToDraw(true);
+			}
 			for(GraphNode x : this.movingNodes) {       //doing the movingCircle
 				double rad = 	Math.atan2(x.getxPos(), x.getyPos());
 				x.setxPos(Math.sin(rad)*this.movingCircleRadius);
@@ -83,7 +95,7 @@ public class GraphPlotter {
 			}
 			for(GraphNode x : this.waitingNodes) {       //doing the waitingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos()) + 
-								Math.random()*this.stepsize - this.stepsize/2.0;
+						Math.random()*this.stepsize - this.stepsize/2.0;
 				x.setxPos(Math.sin(rad)*this.waitingCircleRadius);
 				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
 			}
@@ -94,11 +106,36 @@ public class GraphPlotter {
 		for(int i=0; i<this.redrawInterval; i++) {
 
 			//TODO iterate every Node in the way, the specs say
-			
+			for(GraphNode movingNode : this.movingNodes) {
+				for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
+					double radIntersect = movingNode.intersect(anyNode);
+					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
+					if(radIntersect!=-1) {
+
+						movingNode.setxPos(	movingNode.getxPos() + 
+								Math.sin(radIntersect)*this.stepsize*0.5 +
+								Math.sin(radCenter)*this.stepsize*0.5);
+						movingNode.setyPos(	movingNode.getyPos() + 
+								Math.cos(radIntersect)*this.stepsize*0.5 +
+								Math.cos(radCenter)*this.stepsize*0.5);
+					} else {
+						double radParent = Math.atan2(	movingNode.getParent().getxPos() - movingNode.getxPos(), 
+								movingNode.getParent().getyPos() - movingNode.getyPos());
+						movingNode.setxPos( movingNode.getxPos() + 
+								Math.sin(radParent)*this.stepsize*0.5 -
+								Math.sin(radCenter)*this.stepsize*0.5);
+						movingNode.setyPos( movingNode.getyPos() + 
+								Math.cos(radParent)*this.stepsize*0.5 -
+								Math.cos(radCenter)*this.stepsize*0.5);
+
+					}
+				}
+			}
+
 			this.manager.update();   //to update the node searching architecture
 			iteration++;
 			if(this.iteration == this.maxIteration) {    //if one round is finished
-
+				
 				this.iteration = 0;
 				return;
 			}
@@ -196,6 +233,6 @@ public class GraphPlotter {
 	}
 
 
-	
-	
+
+
 }
