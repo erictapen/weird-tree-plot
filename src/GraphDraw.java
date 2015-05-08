@@ -16,13 +16,14 @@ public class GraphDraw extends PApplet {
 	private double drawRootSize = 10.0;
 
 	public void setup() {
-		size(200,200);
-		background(0xFFFFFF);
+		size(512, 512);
+		background(0xffffff);
 
 		root = SortedGraph.importFile(
 				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test.dot", 
 				"sprachliche Einheit");
 				
+		
 		/*root = new GraphNode("Philosophie");
 		root.setSize(1.0);
 		root.setxPos(0.0);
@@ -39,23 +40,30 @@ public class GraphDraw extends PApplet {
 		
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
+		pltr.setRedrawInterval(100);
+		pltr.setMaxIteration(1000);
+		pltr.setStepsize(0.001);
+		pltr.setWaitingCircleRadius(40.0);
+		pltr.setMovingCircleRadius(30.0);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
 	public void draw() {
-		System.out.println("Start drawing: ");
+		System.out.print("Start drawing: ");
+		background(0xFFFFFF);
 		pltr.update();
 		ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> temp = new ArrayList<GraphNode>();
 		nodes.add(root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
+				if(!x.isToDraw()) continue;
 				//draw the node + every link
 				ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 						(float) (height/2.0 + x.getyPos()*drawRootSize),
 						(float) (x.getSize()*drawRootSize*2.0),
 						(float) (x.getSize()*drawRootSize*2.0));
-				System.out.println(x);
+				//System.out.println(x);
 				for(GraphNode y : x.getChildren()) {
 					PVector v1;
 					PVector v2;
@@ -86,7 +94,7 @@ public class GraphDraw extends PApplet {
 			temp.clear();
 		}
 		//ellipse(width/2, height/2, 100, 100);
-		System.out.println(" :drawing completed\n");
+		System.out.print(" :drawing completed\n");
 
 	}
 }

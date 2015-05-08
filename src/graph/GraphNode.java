@@ -10,7 +10,7 @@ public class GraphNode {
 	private double xPos;
 	private double yPos;
 	private double size = 1.0;
-	
+	private boolean toDraw;
 	
 	
 
@@ -28,7 +28,7 @@ public class GraphNode {
 		super();
 		this.caption = caption;
 		this.setChecked(false);
-		
+		this.toDraw = false;
 	}
 
 	public GraphNode getParent() {
@@ -92,10 +92,20 @@ public class GraphNode {
 		int temp = 0;
 		for(GraphNode x : children) {
 			temp = x.updateNumberOfAllLeafs();
-			x.setNumberOfAllLeafs(temp);
 			res += temp;
 		}
+		this.setNumberOfAllLeafs(res);
 		return res;
+	}
+	
+	
+
+	public boolean isToDraw() {
+		return toDraw;
+	}
+
+	public void setToDraw(boolean toDraw) {
+		this.toDraw = toDraw;
 	}
 
 	@Override
