@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Vector;
-
 import fileProcessing.SortedGraph;
 import graph.GraphNode;
 import plot.GraphPlotter;
@@ -13,16 +10,17 @@ public class GraphDraw extends PApplet {
 
 	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 30.0;
+	private double drawRootSize = 20.0;
 	private boolean drawLines = false;
+	private int drawEveryUpdateInterval = 10;
 
 	public void setup() {
 		size(512, 512);
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test.dot", 
-				"sprachliche Einheit");
+				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_2360.dot", 
+				"Geld");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -46,8 +44,8 @@ public class GraphDraw extends PApplet {
 
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
-		pltr.setRedrawInterval(200);
-		pltr.setMaxIteration(10000);
+		pltr.setRedrawInterval(0);
+		pltr.setMaxIteration(20000);
 		pltr.setStepsize(0.001);
 		pltr.setMovingCircleRadius(7.0);
 		pltr.setWaitingCircleRadius(10.0);
@@ -56,8 +54,13 @@ public class GraphDraw extends PApplet {
 
 	public void draw() {
 		background(0xFFFFFF);
-		pltr.update();
-		System.out.print("Start drawing: ");
+		System.out.print(	"Plot in progress: " + pltr.getIteration() + "/" + pltr.getMaxIteration() 
+							+ "iterations and " + pltr.getMovingNodes().size() + " movingNodes and "
+							+ pltr.getPlottedNodes().size() + "plottedNodes\r");
+		for(int i=0; i<drawEveryUpdateInterval; i++) {
+			pltr.update();
+		}
+		System.out.print("Start drawing.                                    \r");
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
 		}
@@ -65,7 +68,7 @@ public class GraphDraw extends PApplet {
 			drawNode(x, 127);
 		}
 		//ellipse(width/2, height/2, 100, 100);
-		System.out.print(" :drawing completed\n");
+		System.out.print("drawing completed.                                 \r");
 	}
 
 	private void drawNode(GraphNode x, int color) {

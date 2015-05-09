@@ -107,9 +107,10 @@ public class GraphNode {
 				+ ", size=" + size + ", checked=" + checked + "]";
 	}
 
+	
 	/** Detects an intersection
-	 * @param anyNode The GraphNode which is needed to test against an intersection
-	 * @return Either -1 (if there ist any intersection) or the rad direction in which this needs to move.
+	 * @param n the Node with which to check
+	 * @return a double[] with the direction vector in which to move
 	 */
 	public double[] intersect(GraphNode n) {
 		if(this==n) return new double[] {0.0, 0.0};
@@ -118,7 +119,24 @@ public class GraphNode {
 						<
 						this.size + n.getSize()) {
 			return new double[] {n.getxPos()-this.xPos, n.getyPos()-this.yPos};
-		}
+		}/*
+		if(this.parent==null || this.parent==n) return new double[] {0.0, 0.0};
+		double[] a = this.getVectorToParent();
+		double[] b = new double[] {	n.getxPos()-this.parent.getxPos(),     //from parent to n
+									n.getyPos()-this.parent.getyPos()};
+		double[] c = new double[] {	n.getxPos()-this.xPos,                 //from this to n
+									n.getyPos()-this.yPos};
+		if( !((a[0]*b[0]+a[1]*b[1]) * (a[0]*c[0]+a[1]*c[1]) < 0) ) return new double[] {0.0, 0.0};
+		double blength = Math.sqrt(b[0]*b[0] + b[1]*b[1]);
+		if(Math.sin(Math.atan2(a[0], a[1]) - Math.atan2(b[0], b[1])) * blength < n.getSize()) {
+			return new double[] {	0, 0};
+		}*/
+		return new double[] {0.0, 0.0};
+	}
+
+	public double[] getVectorToParent() {
+		if(parent!=null) return new double[] {	this.parent.getxPos() - this.xPos, 
+												this.parent.getyPos() - this.yPos};
 		return new double[] {0.0, 0.0};
 	}
 

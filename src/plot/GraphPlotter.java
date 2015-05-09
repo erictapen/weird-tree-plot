@@ -3,7 +3,6 @@ package plot;
 import java.util.ArrayList;
 
 import graph.GraphNode;
-import graph.GraphProcessing;
 
 public class GraphPlotter {
 
@@ -67,28 +66,33 @@ public class GraphPlotter {
 	 */
 	public void update() {
 		if(this.redrawInterval == 0) this.redrawInterval = this.maxIteration;
+		if(this.waitingNodes.isEmpty()) return;
 		if(this.iteration==0) {    	//if new round begins:
 									//update nodeLists, get new nodes, initialize the starting circle
 			System.out.println("Beginning round.");
-			ArrayList<GraphNode> temp = new ArrayList<GraphNode>();
-			for(GraphNode x : this.waitingNodes) {
-				temp.addAll(x.getChildren());
-			}
 			this.plottedNodes.addAll(movingNodes);
+			this.manager.update(movingNodes);
 			this.movingNodes.clear();
-			this.movingNodes.addAll(this.waitingNodes);
-			this.waitingNodes.clear();
-			this.waitingNodes.addAll(temp);
-			temp.clear();
-			for(GraphNode x : this.movingNodes) {       //doing the movingCircle
-				double rad = 	Math.atan2(x.getxPos(), x.getyPos());
+			GraphNode smallest = root;
+			for(GraphNode x : this.waitingNodes) {
+				if(smallest.getNumberOfAllLeafs() > x.getParent().getNumberOfAllLeafs()) 
+							smallest = x.getParent();
+			}
+			this.movingNodes.addAll(smallest.getChildren());
+			this.waitingNodes.removeAll(smallest.getChildren());
+			for(GraphNode x : smallest.getChildren()) {
+				this.waitingNodes.addAll(x.getChildren());
+			}
+			for(GraphNode x : this.movingNodes) {       //do the movingCircle
+				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
+								+ Math.random()*this.stepsize - this.stepsize*0.5;
 				if(x.getParent()==this.root) rad = Math.random()*Math.PI*2.0;
 				x.setxPos(Math.sin(rad)*this.movingCircleRadius);
 				x.setyPos(Math.cos(rad)*this.movingCircleRadius);
 			}
-			for(GraphNode x : this.waitingNodes) {       //doing the waitingCircle
+			for(GraphNode x : this.waitingNodes) {       //do the waitingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
-								+ Math.random()*Math.PI - this.stepsize*50.0;
+								+ Math.random()*this.stepsize - this.stepsize*0.5;
 				x.setxPos(Math.sin(rad)*this.waitingCircleRadius);
 				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
 			}
@@ -107,11 +111,11 @@ public class GraphPlotter {
 					//push against the direction, where the intersction occurs
 					//push away from the center
 					movingNode.setxPos(	movingNode.getxPos()
-										- Math.sin(radIntersect)*this.stepsize*0.5
-										+ Math.sin(radCenter)*this.stepsize*0.5);
+										- Math.sin(radIntersect)*this.stepsize
+										+ Math.sin(radCenter)*this.stepsize);
 					movingNode.setyPos(	movingNode.getyPos()
-										- Math.cos(radIntersect)*this.stepsize*0.5
-										+ Math.cos(radCenter)*this.stepsize*0.5);
+										- Math.cos(radIntersect)*this.stepsize
+										+ Math.cos(radCenter)*this.stepsize);
 				} else {       //in case of no intersection
 					double radParent = Math.atan2(	movingNode.getParent().getxPos()
 													- movingNode.getxPos(), 
@@ -119,12 +123,13 @@ public class GraphPlotter {
 													- movingNode.getyPos());
 					//pull towards parent
 					//pull towards center
+					radCenter += (Math.random()-0.5)*0.05*Math.PI;
 					movingNode.setxPos( movingNode.getxPos()
-										+ Math.sin(radParent)*this.stepsize*0.5
-										- Math.sin(radCenter)*this.stepsize*0.5);
+										+ Math.sin(radParent)*this.stepsize
+										- Math.sin(radCenter)*this.stepsize);
 					movingNode.setyPos( movingNode.getyPos()
-										+ Math.cos(radParent)*this.stepsize*0.5
-										- Math.cos(radCenter)*this.stepsize*0.5);
+										+ Math.cos(radParent)*this.stepsize
+										- Math.cos(radCenter)*this.stepsize);
 				}
 			}
 			this.manager.update();   //to update the node searching architecture
@@ -224,6 +229,14 @@ public class GraphPlotter {
 
 	public void setMovingCircleRadius(double movingCircleRadius) {
 		this.movingCircleRadius = movingCircleRadius;
+	}
+
+	public int getMaxIteration() {
+		return maxIteration;
+	}
+
+	public int getIteration() {
+		return iteration;
 	}
 
 
