@@ -172,7 +172,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt(Math.sqrt((double) n / (double) root.getNumberOfAllLeafs()));
+		return Math.sqrt(((double) n / (double) root.getNumberOfAllLeafs())/Math.PI);
 	}
 
 

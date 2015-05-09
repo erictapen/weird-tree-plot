@@ -10,17 +10,17 @@ public class GraphDraw extends PApplet {
 
 	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 20.0;
+	private double drawRootSize = 150.0;
 	private boolean drawLines = false;
-	private int drawEveryUpdateInterval = 10;
+	private int drawEveryUpdateInterval = 100;
 
 	public void setup() {
-		size(512, 512);
+		size(1024, 1024);
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_2360.dot", 
-				"Geld");
+				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_9881.dot", 
+				"Wort");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -45,9 +45,9 @@ public class GraphDraw extends PApplet {
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.setRedrawInterval(0);
-		pltr.setMaxIteration(20000);
-		pltr.setStepsize(0.001);
-		pltr.setMovingCircleRadius(7.0);
+		pltr.setMaxIteration(5000);
+		pltr.setStepsize(0.01);
+		pltr.setMovingCircleRadius(5.0);
 		pltr.setWaitingCircleRadius(10.0);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
