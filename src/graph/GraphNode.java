@@ -10,7 +10,6 @@ public class GraphNode {
 	private double xPos;
 	private double yPos;
 	private double size = 1.0;
-	private boolean toDraw;
 	
 	
 
@@ -28,7 +27,6 @@ public class GraphNode {
 		super();
 		this.caption = caption;
 		this.setChecked(false);
-		this.toDraw = false;
 	}
 
 	public GraphNode getParent() {
@@ -100,13 +98,6 @@ public class GraphNode {
 	
 	
 
-	public boolean isToDraw() {
-		return toDraw;
-	}
-
-	public void setToDraw(boolean toDraw) {
-		this.toDraw = toDraw;
-	}
 
 	@Override
 	public String toString() {
@@ -120,14 +111,15 @@ public class GraphNode {
 	 * @param anyNode The GraphNode which is needed to test against an intersection
 	 * @return Either -1 (if there ist any intersection) or the rad direction in which this needs to move.
 	 */
-	public double intersect(GraphNode n) {
+	public double[] intersect(GraphNode n) {
+		if(this==n) return new double[] {0.0, 0.0};
 		if(Math.sqrt(	Math.pow(this.xPos - n.getxPos(), 2)
 						+ Math.pow(this.yPos - n.getyPos(), 2))
 						<
 						this.size + n.getSize()) {
-			return Math.atan2(n.getxPos()-this.xPos, n.getyPos()-this.yPos);
+			return new double[] {n.getxPos()-this.xPos, n.getyPos()-this.yPos};
 		}
-		return -1.0;
+		return new double[] {0.0, 0.0};
 	}
 
 	
