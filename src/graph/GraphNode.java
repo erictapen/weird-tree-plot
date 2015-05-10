@@ -9,16 +9,16 @@ public class GraphNode {
 	private int numberOfAllLeafs;
 	private double xPos;
 	private double yPos;
-	private double size = 1.0;
+	private double radius = 1.0;
 	
 	
 
-	public double getSize() {
-		return size;
+	public double getRadius() {
+		return radius;
 	}
 
-	public void setSize(double size) {
-		this.size = size;
+	public void setRadius(double radius) {
+		this.radius = radius;
 	}
 
 	private boolean checked;
@@ -104,7 +104,7 @@ public class GraphNode {
 		return "GraphNode [caption=" + caption + ", parent=" + parent
 				+ ", children=" + children.size() + ", numberOfAllLeafs="
 				+ numberOfAllLeafs + ", xPos=" + xPos + ", yPos=" + yPos
-				+ ", size=" + size + ", checked=" + checked + "]";
+				+ ", radius=" + radius + ", checked=" + checked + "]";
 	}
 
 	
@@ -117,7 +117,7 @@ public class GraphNode {
 		if(Math.sqrt(	Math.pow(this.xPos - n.getxPos(), 2)
 						+ Math.pow(this.yPos - n.getyPos(), 2))
 						<
-						this.size + n.getSize()) {
+						this.radius + n.getRadius()) {
 			return new double[] {n.getxPos()-this.xPos, n.getyPos()-this.yPos};
 		}/*
 		if(this.parent==null || this.parent==n) return new double[] {0.0, 0.0};

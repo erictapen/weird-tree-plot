@@ -10,17 +10,17 @@ public class GraphDraw extends PApplet {
 
 	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 150.0;
-	private boolean drawLines = false;
-	private int drawEveryUpdateInterval = 100;
+	private double drawRootSize = 75.0;
+	private boolean drawLines = true;
+	private int drawEveryUpdateInterval = 10;
 
 	public void setup() {
-		size(1024, 1024);
+		size(512, 512);
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_9881.dot", 
-				"Wort");
+				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_2360.dot", 
+				"Geld");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -76,8 +76,8 @@ public class GraphDraw extends PApplet {
 		//draw the node + every link
 		ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 				(float) (height/2.0 + x.getyPos()*drawRootSize),
-				(float) (x.getSize()*drawRootSize*2.0),
-				(float) (x.getSize()*drawRootSize*2.0));
+				(float) (x.getRadius()*drawRootSize*2.0),
+				(float) (x.getRadius()*drawRootSize*2.0));
 		//System.out.println(x);
 		for(GraphNode y : x.getChildren()) {
 			if(!drawLines) break;
@@ -93,9 +93,9 @@ public class GraphDraw extends PApplet {
 			vNorm1.sub(v2);
 			vNorm1.normalize();
 			vNorm2 = vNorm1.get();
-			vNorm1.mult((float)(x.getSize()*drawRootSize));
+			vNorm1.mult((float)(x.getRadius()*drawRootSize));
 			v1.sub(vNorm1);
-			vNorm2.mult((float)(y.getSize()*drawRootSize));
+			vNorm2.mult((float)(y.getRadius()*drawRootSize));
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
 		}

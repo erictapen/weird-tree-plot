@@ -1,6 +1,7 @@
 package plot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import graph.GraphNode;
 
@@ -16,9 +17,9 @@ public class GraphPlotter {
 	private double waitingCircleRadius;
 	private double movingCircleRadius;
 
-	private ArrayList<GraphNode> plottedNodes;
-	private ArrayList<GraphNode> movingNodes;
-	private ArrayList<GraphNode> waitingNodes;
+	private HashSet<GraphNode> plottedNodes;
+	private HashSet<GraphNode> movingNodes;
+	private HashSet<GraphNode> waitingNodes;
 
 
 
@@ -36,9 +37,9 @@ public class GraphPlotter {
 		this.root = root;
 		this.debug = debug;
 		this.manager = new NodeSetManager(this);
-		this.plottedNodes = new ArrayList<GraphNode>();
-		this.movingNodes = new ArrayList<GraphNode>();
-		this.waitingNodes = new ArrayList<GraphNode>();
+		this.plottedNodes = new HashSet<GraphNode>();
+		this.movingNodes = new HashSet<GraphNode>();
+		this.waitingNodes = new HashSet<GraphNode>();
 		this.init();
 	}
 
@@ -50,10 +51,11 @@ public class GraphPlotter {
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
+		manager.setGridsize(0.25);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
-		root.setSize(1.0);
+		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
 		
@@ -90,12 +92,14 @@ public class GraphPlotter {
 				x.setxPos(Math.sin(rad)*this.movingCircleRadius);
 				x.setyPos(Math.cos(rad)*this.movingCircleRadius);
 			}
+			/*
 			for(GraphNode x : this.waitingNodes) {       //do the waitingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
 								+ Math.random()*this.stepsize - this.stepsize*0.5;
 				x.setxPos(Math.sin(rad)*this.waitingCircleRadius);
 				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
 			}
+			*/
 		}
 		for(int i=0; i<this.redrawInterval; i++) {
 			for(GraphNode movingNode : this.movingNodes) {
@@ -152,12 +156,12 @@ public class GraphPlotter {
 	 * @param root
 	 */
 	public void updateSizes() {
-		ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();
-		ArrayList<GraphNode> temp  = new ArrayList<GraphNode>();
+		HashSet<GraphNode> nodes = new HashSet<GraphNode>();
+		HashSet<GraphNode> temp  = new HashSet<GraphNode>();
 		nodes.add(this.root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
-				x.setSize(this.getSizeFromLeafs(x.getNumberOfAllLeafs()));
+				x.setRadius(this.getSizeFromLeafs(x.getNumberOfAllLeafs()));
 				temp.addAll(x.getChildren());
 			}
 			nodes.clear();
@@ -172,7 +176,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt(((double) n / (double) root.getNumberOfAllLeafs())/Math.PI);
+		return Math.sqrt((((double) n + 2.0)/ ((double) root.getNumberOfAllLeafs() + 2.0)));
 	}
 
 
@@ -199,7 +203,7 @@ public class GraphPlotter {
 		this.redrawInterval = redrawInterval;
 	}
 
-	public ArrayList<GraphNode> getPlottedNodes() {
+	public HashSet<GraphNode> getPlottedNodes() {
 		return plottedNodes;
 	}
 
@@ -207,7 +211,7 @@ public class GraphPlotter {
 		this.plottedNodes.add(plottedNode);
 	}
 
-	public ArrayList<GraphNode> getMovingNodes() {
+	public HashSet<GraphNode> getMovingNodes() {
 		return movingNodes;
 	}
 
@@ -215,7 +219,7 @@ public class GraphPlotter {
 		this.movingNodes.add(movingNode);
 	}
 
-	public ArrayList<GraphNode> getWaitingNodes() {
+	public HashSet<GraphNode> getWaitingNodes() {
 		return waitingNodes;
 	}
 
