@@ -49,7 +49,7 @@ public class GraphDraw extends PApplet {
 		pltr.setMaxIteration(500);
 		pltr.setStepsize(0.01);
 		pltr.setMovingCircleRadius(5.0);
-		pltr.setWaitingCircleRadius(10.0);
+		pltr.setWaitingCircleRadius(10.0); 
 		pltr.setSizeOffSet(0.0);
 		pltr.setMinNodeLeafs(0);
 		pltr.getManager().setGridsize(0.25);
