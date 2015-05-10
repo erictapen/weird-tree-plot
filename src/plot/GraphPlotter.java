@@ -3,6 +3,7 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import fileProcessing.TexGraph;
 import graph.GraphNode;
 
 public class GraphPlotter {
@@ -20,6 +21,8 @@ public class GraphPlotter {
 	private HashSet<GraphNode> plottedNodes;
 	private HashSet<GraphNode> movingNodes;
 	private HashSet<GraphNode> waitingNodes;
+	private double sizeOffSet;
+	private int minNodeLeafs;
 
 
 
@@ -51,7 +54,6 @@ public class GraphPlotter {
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
-		manager.setGridsize(0.25);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
@@ -71,7 +73,7 @@ public class GraphPlotter {
 		if(this.waitingNodes.isEmpty()) return;
 		if(this.iteration==0) {    	//if new round begins:
 									//update nodeLists, get new nodes, initialize the starting circle
-			System.out.println("Beginning round.");
+			//System.out.println("Beginning round.");
 			this.plottedNodes.addAll(movingNodes);
 			this.manager.update(movingNodes);
 			this.movingNodes.clear();
@@ -85,6 +87,12 @@ public class GraphPlotter {
 			for(GraphNode x : smallest.getChildren()) {
 				this.waitingNodes.addAll(x.getChildren());
 			}
+			HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
+			for(GraphNode x : this.waitingNodes) {
+				if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
+			}
+			this.waitingNodes.removeAll(tooSmall);
+			//TODO filter out nodes in waitingNodes, which are too small
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
 								+ Math.random()*this.stepsize - this.stepsize*0.5;
@@ -176,7 +184,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt((((double) n + 2.0)/ ((double) root.getNumberOfAllLeafs() + 2.0)));
+		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getNumberOfAllLeafs() + sizeOffSet)));
 	}
 
 
@@ -241,6 +249,18 @@ public class GraphPlotter {
 
 	public int getIteration() {
 		return iteration;
+	}
+
+	public NodeSetManager getManager() {
+		return manager;
+	}
+
+	public void setSizeOffSet(double sizeOffSet) {
+		this.sizeOffSet = sizeOffSet;
+	}
+
+	public void setMinNodeLeafs(int minNodeLeafs) {
+		this.minNodeLeafs = minNodeLeafs;
 	}
 
 
