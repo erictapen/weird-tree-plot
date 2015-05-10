@@ -1,4 +1,5 @@
 import fileProcessing.SortedGraph;
+import fileProcessing.TexGraph;
 import graph.GraphNode;
 import plot.GraphPlotter;
 import processing.core.*;
@@ -10,17 +11,17 @@ public class GraphDraw extends PApplet {
 
 	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 50.0;
+	private double drawRootSize = 75.0;
 	private boolean drawLines = false;
-	private int drawEveryUpdateInterval = 100;
+	private int drawEveryUpdateInterval = 10;
 
 	public void setup() {
 		size(1024, 1024);
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted.dot", 
-				"Philosophie");
+				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_235.dot", 
+				"korea");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -45,23 +46,33 @@ public class GraphDraw extends PApplet {
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.setRedrawInterval(0);
-		pltr.setMaxIteration(5000);
+		pltr.setMaxIteration(500);
 		pltr.setStepsize(0.01);
 		pltr.setMovingCircleRadius(5.0);
 		pltr.setWaitingCircleRadius(10.0);
-		pltr.getManager().setGridsize(0.015625);
+		pltr.setSizeOffSet(0.0);
+		pltr.setMinNodeLeafs(0);
+		pltr.getManager().setGridsize(0.25);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
 	public void draw() {
+		if(pltr.getWaitingNodes().isEmpty()) {
+			System.out.println("Starting export to tikz.");
+			TexGraph.exportToTex(	"/home/justin/Dropbox/java/Wikipedia Crawl/test.tex", 
+									pltr.getPlottedNodes(), true, true, false);
+			System.out.println("Export to tikz complete.");
+			exit();
+		}
 		background(0xFFFFFF);
 		System.out.print(	"Plot in progress: " + pltr.getIteration() + "/" + pltr.getMaxIteration() 
-							+ "iterations and " + pltr.getMovingNodes().size() + " movingNodes and "
-							+ pltr.getPlottedNodes().size() + "plottedNodes\r");
+							+ "iterations, \n" + pltr.getMovingNodes().size() + " movingNodes, "
+							+ pltr.getPlottedNodes().size() + " plottedNodes and " 
+							+ pltr.getWaitingNodes().size() + " waitingNodes\n");
 		for(int i=0; i<drawEveryUpdateInterval; i++) {
 			pltr.update();
 		}
-		System.out.print("Start drawing.                                    \r");
+		System.out.print("Start drawing.                                    \n");
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
 		}
@@ -69,9 +80,7 @@ public class GraphDraw extends PApplet {
 			drawNode(x, 127);
 		}
 		//ellipse(width/2, height/2, 100, 100);
-		System.out.print("drawing completed.                                 \r");
-		
-
+		System.out.print("drawing completed.                                 \n");
 	}
 
 	private void drawNode(GraphNode x, int color) {

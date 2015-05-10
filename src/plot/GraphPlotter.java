@@ -3,6 +3,7 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import fileProcessing.TexGraph;
 import graph.GraphNode;
 
 public class GraphPlotter {
@@ -20,6 +21,8 @@ public class GraphPlotter {
 	private HashSet<GraphNode> plottedNodes;
 	private HashSet<GraphNode> movingNodes;
 	private HashSet<GraphNode> waitingNodes;
+	private double sizeOffSet;
+	private int minNodeLeafs;
 
 
 
@@ -86,7 +89,7 @@ public class GraphPlotter {
 			}
 			HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
 			for(GraphNode x : this.waitingNodes) { 
-				if(x.getNumberOfAllLeafs()<10000) tooSmall.add(x);
+				if(x.getNumberOfAllLeafs()<minNodeLeafs) tooSmall.add(x);
 			}
 			this.waitingNodes.removeAll(tooSmall);
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
@@ -180,7 +183,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt((((double) n + 2000.0)/ ((double) root.getNumberOfAllLeafs() + 2000.0)));
+		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getNumberOfAllLeafs() + sizeOffSet)));
 	}
 
 
@@ -251,7 +254,13 @@ public class GraphPlotter {
 		return manager;
 	}
 
+	public void setSizeOffSet(double sizeOffSet) {
+		this.sizeOffSet = sizeOffSet;
+	}
 
+	public void setMinNodeLeafs(int minNodeLeafs) {
+		this.minNodeLeafs = minNodeLeafs;
+	}
 
 
 }
