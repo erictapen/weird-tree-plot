@@ -20,14 +20,15 @@ public class TexGraph {
 			FileWriter writer = new FileWriter(filename);
 
 			writer.append(
-					"\\documentclass{article}\n" +
-							"\\usepackage[latin1]{inputenc}\n" +
+					"\\documentclass{standalone}\n" +
 							"\\usepackage{tikz}\n" +
 							"\\pagestyle{empty}\n" +
 							"\\usepackage[english,ngerman]{babel}\n" +
 							"\\usepackage[utf8]{inputenc}\n" +
+							"\\newcommand{\\SCALE}{" + df.format(MAX_SCALE) + "}\n" +
 							"\\begin{document}\n" +
 							"\\begin{tikzpicture}\n"
+							
 					);
 			for(GraphNode x : nodes) {
 				if(writeCaption) {
@@ -36,8 +37,8 @@ public class TexGraph {
 						writer.append("\\node[scale=" + 
 								df.format(size) + 
 								"pt] at (" + 
-								df.format(x.getxPos()*MAX_SCALE) + "," + 
-								df.format(x.getyPos()*MAX_SCALE) + ") {" + x.getCaption() + "};\n"); 
+								df.format(x.getxPos()) + "*\\SCALE," + 
+								df.format(x.getyPos()) + "*\\SCALE) {" + x.getCaption() + "};\n"); 
 					}
 				}
 				/*if(writeBoxes) {
@@ -50,18 +51,18 @@ public class TexGraph {
 				}*/
 				if(writeCircles) {
 					writer.append("\\draw (" + 
-							df.format(x.getxPos()*MAX_SCALE) + ", " + 
-							df.format(x.getyPos()*MAX_SCALE) + ") circle (" + 
-							df.format(x.getRadius()*MAX_SCALE) + "cm);\n");
+							df.format(x.getxPos()) + "*\\SCALE, " + 
+							df.format(x.getyPos()) + "*\\SCALE) circle (" + 
+							df.format(x.getRadius()) + "*\\SCALE );\n");
 				}
 				try{
 					GraphNode p = x.getParent();
 					if(writeEdges && p!=null) {
 						writer.append("\\draw [->] (" + 
-								df.format(x.getxPos()*MAX_SCALE) + "," + 
-								df.format(x.getyPos()*MAX_SCALE) + ") -- (" + 
-								df.format(p.getxPos()*MAX_SCALE) + "," + 
-								df.format(p.getyPos()*MAX_SCALE) + ");\n\n");
+								df.format(x.getxPos()) + "*\\SCALE," + 
+								df.format(x.getyPos()) + "*\\SCALE) -- (" + 
+								df.format(p.getxPos()) + "*\\SCALE," + 
+								df.format(p.getyPos()) + "*\\SCALE);\n\n");
 					}
 				} catch(NullPointerException e) {}
 

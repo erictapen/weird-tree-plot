@@ -262,5 +262,9 @@ public class GraphPlotter {
 		this.minNodeLeafs = minNodeLeafs;
 	}
 
+	public double getMovingCircleRadius() {
+		return movingCircleRadius;
+	}
+
 
 }

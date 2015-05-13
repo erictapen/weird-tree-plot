@@ -14,14 +14,17 @@ public class GraphDraw extends PApplet {
 	private double drawRootSize = 75.0;
 	private boolean drawLines = false;
 	private int drawEveryUpdateInterval = 10;
+	private boolean exportAndClose = false;
 
+	
 	public void setup() {
+		
 		size(1024, 1024);
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted_test_235.dot", 
-				"korea");
+				"C:\\Users\\finn\\Desktop\\Wikipedia Crawl\\Wikipedia Crawl\\wiki_sorted_formal.dot", 
+				"formale Sprache");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -46,20 +49,20 @@ public class GraphDraw extends PApplet {
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.setRedrawInterval(0);
-		pltr.setMaxIteration(500);
-		pltr.setStepsize(0.01);
-		pltr.setMovingCircleRadius(5.0);
-		pltr.setWaitingCircleRadius(10.0);
+		pltr.setMaxIteration(10000);
+		pltr.setStepsize(0.001);
+		pltr.setMovingCircleRadius(10.0);
+		pltr.setWaitingCircleRadius(40.0);
 		pltr.setSizeOffSet(0.0);
 		pltr.setMinNodeLeafs(0);
-		pltr.getManager().setGridsize(0.25);
+		pltr.getManager().setGridsize(0.025);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
 	public void draw() {
-		if(pltr.getWaitingNodes().isEmpty()) {
+		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
 			System.out.println("Starting export to tikz.");
-			TexGraph.exportToTex(	"/home/justin/Dropbox/java/Wikipedia Crawl/test.tex", 
+			TexGraph.exportToTex(	"C:\\Users\\finn\\Desktop\\Wikipedia Crawl\\Wikipedia Crawl\\test.tex", 
 									pltr.getPlottedNodes(), true, true, false);
 			System.out.println("Export to tikz complete.");
 			exit();
@@ -111,5 +114,15 @@ public class GraphDraw extends PApplet {
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
 		}
+		ellipse(width/2,
+				height/2,
+				(float) (pltr.getMovingCircleRadius()*0.5),
+				(float) (pltr.getMovingCircleRadius()*0.5));
 	}
+	
+	public void mousePressed() {
+		   exportAndClose = true;
+
+		}
+
 }
