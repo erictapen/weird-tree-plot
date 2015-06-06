@@ -15,6 +15,7 @@ public class GraphDraw extends PApplet {
 	private boolean drawLines = false;
 	private int drawEveryUpdateInterval = 10;
 	private boolean exportAndClose = false;
+	private String exportfile = "/home/justin/Dropbox/Wikipedia Crawl/test.tex";
 
 	
 	public void setup() {
@@ -23,8 +24,8 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"C:\\Users\\finn\\Desktop\\Wikipedia Crawl\\Wikipedia Crawl\\wiki_sorted_formal.dot", 
-				"formale Sprache");
+				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted.dot", 
+				"Philosophie");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -62,7 +63,7 @@ public class GraphDraw extends PApplet {
 	public void draw() {
 		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
 			System.out.println("Starting export to tikz.");
-			TexGraph.exportToTex(	"C:\\Users\\finn\\Desktop\\Wikipedia Crawl\\Wikipedia Crawl\\test.tex", 
+			TexGraph.exportToTex(	exportfile, 
 									pltr.getPlottedNodes(), true, true, false);
 			System.out.println("Export to tikz complete.");
 			exit();
