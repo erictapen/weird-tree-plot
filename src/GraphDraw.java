@@ -54,7 +54,7 @@ public class GraphDraw extends PApplet {
 		pltr.setStepsize(0.001);
 		pltr.setMovingCircleRadius(10.0);
 		pltr.setWaitingCircleRadius(40.0);
-		pltr.setSizeOffSet(0.0);
+		pltr.setSizeOffSet(100.0);
 		pltr.setMinNodeLeafs(0);
 		pltr.getManager().setGridsize(0.025);
 		System.out.println("root has " + root.getChildren().size() + " children.");
