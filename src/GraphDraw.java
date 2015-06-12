@@ -15,7 +15,7 @@ public class GraphDraw extends PApplet {
 	private boolean drawLines = false;
 	private int drawEveryUpdateInterval = 10;
 	private boolean exportAndClose = false;
-	private String exportfile = "/home/justin/Dropbox/Wikipedia Crawl/test.tex";
+	private String exportfile = "/home/justin/git/wikipedia-map/out/test.tex";
 
 	
 	public void setup() {
@@ -24,7 +24,7 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/Dropbox/java/Wikipedia Crawl/wiki_sorted.dot", 
+				"/home/justin/git/wikipedia-map/data/wiki_sorted.dot", 
 				"Philosophie");
 		/*	
 
@@ -55,8 +55,8 @@ public class GraphDraw extends PApplet {
 		pltr.setMovingCircleRadius(10.0);
 		pltr.setWaitingCircleRadius(40.0);
 		pltr.setSizeOffSet(100.0);
-		pltr.setMinNodeLeafs(0);
-		pltr.getManager().setGridsize(0.025);
+		pltr.setMinNodeLeafs(100);
+		pltr.getManager().setGridsize(0.0125);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
@@ -124,7 +124,7 @@ public class GraphDraw extends PApplet {
 
 	public void mousePressed() {
 		   exportAndClose = true;
-
+		   System.out.println("Will abort asap.");
 		}
 
 }
