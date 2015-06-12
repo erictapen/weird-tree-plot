@@ -8,14 +8,39 @@ import graph.GraphNode;
 
 public class GraphPlotter {
 
+	/** This is the root Node, where everything starts. needs to be init by hand, 
+	 * this is not obvious from looking at your inputfile!
+	 * 
+	 */
 	private GraphNode root;
+	/** Doesn't have any meaning atm
+	 * 
+	 */
 	private boolean debug;
+	/** The manager, which is responsible for getting better solutions for collision detection
+	 * 
+	 */
 	private NodeSetManager manager;
+	/** Every node will travel with this stepsize. It will determine the accuracy of the result.
+	 *  For smaller stepsize, you'll need more iterations
+	 */
 	private double stepsize;       
+	/** Maximum of steps, a single node will travel. After that, it stops where it is.
+	 * 
+	 */
 	private int maxIteration;
+	/** iterator for local use
+	 * 
+	 */
 	private int iteration;
+	/** every redrawInterval, the thread of control will return to the PApplet, in order to update the
+	 *  live drawing of the plot
+	 */
 	private int redrawInterval;
-	private double waitingCircleRadius;
+	/** This is the distance to 0;0, from which every Node starts its journey. 
+	 * Should be big enough to not intersect with any already plotted Nodes!
+	 * The bigger it is, the more iterations you will need.
+	 */
 	private double movingCircleRadius;
 
 	private HashSet<GraphNode> plottedNodes;
@@ -72,9 +97,10 @@ public class GraphPlotter {
 	public void update() {
 		if(this.redrawInterval == 0) this.redrawInterval = this.maxIteration;
 		if(this.waitingNodes.isEmpty()) return;
-		if(this.iteration==0) {    	//if new round begins:
-									//update nodeLists, get new nodes, initialize the starting circle
-									//System.out.println("Beginning round.");
+		
+		if(this.iteration==0) {    	
+			//if new round begins:
+			//update nodeLists, get new nodes, initialize the starting circle
 			this.plottedNodes.addAll(movingNodes);
 			this.manager.update(movingNodes);
 			this.movingNodes.clear();
@@ -254,10 +280,6 @@ public class GraphPlotter {
 
 	public void addWaitingNode(GraphNode waitingNode) {
 		this.waitingNodes.add(waitingNode);
-	}
-
-	public void setWaitingCircleRadius(double waitingCircleRadius) {
-		this.waitingCircleRadius = waitingCircleRadius;
 	}
 
 	public void setMovingCircleRadius(double movingCircleRadius) {
