@@ -24,8 +24,8 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/git/wikipedia-map/data/wiki_sorted.dot", 
-				"Philosophie");
+				"/home/justin/git/wikipedia-map/data/wiki_sorted_test_9881.dot", 
+				"Wort");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -46,16 +46,16 @@ public class GraphDraw extends PApplet {
 		root.getChildren().get(1).getChildren().get(0).setyPos(-3.0);
 		 */
 
-
+		
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.setRedrawInterval(0);
-		pltr.setMaxIteration(10000);
-		pltr.setStepsize(0.001);
+		pltr.setMaxIteration(5000);
+		pltr.setStepsize(0.01);
 		pltr.setMovingCircleRadius(10.0);
 		pltr.setWaitingCircleRadius(40.0);
 		pltr.setSizeOffSet(100.0);
-		pltr.setMinNodeLeafs(100);
+		pltr.setMinNodeLeafs(1);
 		pltr.getManager().setGridsize(0.0125);
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}

@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class GraphNode {
 	private String caption;
@@ -10,8 +11,19 @@ public class GraphNode {
 	private double xPos;
 	private double yPos;
 	private double radius = 1.0;
+	private ArrayList<ArrayList<Double>> memoryOfMovements;
 	
+	public boolean sentMessage = false; //testing
+
 	
+
+	public ArrayList<ArrayList<Double>> getMemoryOfMovements() {
+		return memoryOfMovements;
+	}
+
+	public void setMemoryOfMovements(ArrayList<ArrayList<Double>> memoryOfMovements) {
+		this.memoryOfMovements = memoryOfMovements;
+	}
 
 	public double getRadius() {
 		return radius;

@@ -24,7 +24,8 @@ public class GraphPlotter {
 	private double sizeOffSet;
 	private int minNodeLeafs;
 
-
+	private double minStepSizeBeforeAbort = 0.02;
+	private int persistenceBeforeAbort = 500;
 
 
 
@@ -73,7 +74,7 @@ public class GraphPlotter {
 		if(this.waitingNodes.isEmpty()) return;
 		if(this.iteration==0) {    	//if new round begins:
 									//update nodeLists, get new nodes, initialize the starting circle
-			//System.out.println("Beginning round.");
+									//System.out.println("Beginning round.");
 			this.plottedNodes.addAll(movingNodes);
 			this.manager.update(movingNodes);
 			this.movingNodes.clear();
@@ -109,9 +110,30 @@ public class GraphPlotter {
 				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
 			}
 			*/
+			for(GraphNode x : this.movingNodes) {
+				x.setMemoryOfMovements(new ArrayList<ArrayList<Double>>());
+			}
 		}
 		for(int i=0; i<this.redrawInterval; i++) {
 			for(GraphNode movingNode : this.movingNodes) {
+				if(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1) {
+					boolean abort = false;
+					double traveledDist = Math.sqrt(
+							Math.pow(
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									2.0)
+							+ Math.pow(
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									2.0));
+					if(traveledDist <= this.minStepSizeBeforeAbort) abort = true;
+					
+					if(abort && movingNode.sentMessage == false) {
+						System.out.println("Needed only " + iteration + "steps, instead of " 
+							+ this.maxIteration + ".");
+						movingNode.sentMessage = true;
+					}
+					if(abort) continue;
+				}
 				double[] vIntersect = new double[2];
 				for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
 					double[] v = movingNode.intersect(anyNode);
@@ -144,21 +166,25 @@ public class GraphPlotter {
 										+ Math.cos(radParent)*this.stepsize
 										- Math.cos(radCenter)*this.stepsize);
 				}
+				movingNode.getMemoryOfMovements().add(0, 
+						new ArrayList<Double>());
+				movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
+				movingNode.getMemoryOfMovements().get(0).add(1, movingNode.getyPos());
 			}
 			this.manager.update();   //to update the node searching architecture
+			
 			iteration++;
-			if(this.iteration == this.maxIteration) {    //if one round is finished
+			if(this.iteration == this.maxIteration) {    	//if one round is finished
 				this.iteration = 0;
+				for(GraphNode x : this.movingNodes) {		//saves memory
+					x.setMemoryOfMovements(null);
+				}
 				return;
 			}
 		}
 
 	}
 
-	public GraphNode getRoot() {
-		return root;
-
-	}
 
 
 	/** Updates all the size fields in the tree, according to this.getSizeFromLeafs(int)
@@ -268,5 +294,18 @@ public class GraphPlotter {
 		return movingCircleRadius;
 	}
 
+	public GraphNode getRoot() {
+		return root;
 
+	}
+
+	public void setMinStepSizeBeforeAbort(double minStepSizeBeforeAbort) {
+		this.minStepSizeBeforeAbort = minStepSizeBeforeAbort;
+	}
+
+	public void setPersistenceBeforeAbort(int persistenceBeforeAbort) {
+		this.persistenceBeforeAbort = persistenceBeforeAbort;
+	}
+	
+	
 }
