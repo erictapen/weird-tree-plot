@@ -24,7 +24,7 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 
 		root = SortedGraph.importFile(
-				"/home/justin/git/wikipedia-map/data/wiki_sorted_test_9881.dot", 
+				"/home/justin/git/wikipedia-map/data/wiki_sorted.dot", 
 				"Wort");
 		/*	
 
@@ -46,7 +46,11 @@ public class GraphDraw extends PApplet {
 		root.getChildren().get(1).getChildren().get(0).setyPos(-3.0);
 		 */
 
-		
+		if(root == null) {
+			System.out.println("root is null! You have to tell the program where it have to start."
+					+ "\nWill terminate.");
+			exit();
+		}
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.setRedrawInterval(0);
