@@ -22,10 +22,11 @@ public class GraphDraw extends PApplet {
 		
 		size(1024, 1024);
 		background(0xffffff);
+		noFill();
 
 		root = SortedGraph.importFile(
 				"/home/justin/git/wikipedia-map/data/wiki_sorted.dot", 
-				"Philosophie");
+				"Wissenschaft");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -53,12 +54,12 @@ public class GraphDraw extends PApplet {
 		}
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
-		pltr.setRedrawInterval(0);
-		pltr.setMaxIteration(5000);
+		pltr.setRedrawInterval(200);
+		pltr.setMaxIteration(2000);
 		pltr.setStepsize(0.01);
 		pltr.setMovingCircleRadius(10.0);
-		pltr.setSizeOffSet(100.0);
-		pltr.setMinNodeLeafs(1);
+		pltr.setSizeOffSet(100000.0);
+		pltr.setMinNodeLeafs(1000);
 		pltr.getManager().setGridsize(0.0125);
 		pltr.setMinStepSizeBeforeAbort(0.02);
 		pltr.setPersistenceBeforeAbort(500);
@@ -122,8 +123,8 @@ public class GraphDraw extends PApplet {
 		}
 		ellipse(width/2,
 				height/2,
-				(float) (pltr.getMovingCircleRadius()*0.5),
-				(float) (pltr.getMovingCircleRadius()*0.5));
+				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize),
+				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize));
 	}
 
 
