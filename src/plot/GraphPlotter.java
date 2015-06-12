@@ -126,12 +126,6 @@ public class GraphPlotter {
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
 									2.0));
 					if(traveledDist <= this.minStepSizeBeforeAbort) abort = true;
-					
-					if(abort && movingNode.sentMessage == false) {
-						System.out.println("Needed only " + iteration + "steps, instead of " 
-							+ this.maxIteration + ".");
-						movingNode.sentMessage = true;
-					}
 					if(abort) continue;
 				}
 				double[] vIntersect = new double[2];
