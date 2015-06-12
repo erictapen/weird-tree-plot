@@ -3,7 +3,6 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import fileProcessing.TexGraph;
 import graph.GraphNode;
 
 public class GraphPlotter {

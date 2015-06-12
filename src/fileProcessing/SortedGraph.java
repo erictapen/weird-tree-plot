@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /** Import and Export functionality for .dot-files which are already sorted
@@ -17,7 +16,7 @@ import java.util.HashMap;
  */
 public class SortedGraph {
 
-	private static ArrayList<ArrayList<GraphNode>> differentGraphs = new ArrayList<ArrayList<GraphNode>>();
+	
 	//private static ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();		//list of all nodes
 	private static HashMap<String, GraphNode> nodemap = new HashMap<String, GraphNode>(4000000, (float) 0.75);
 	

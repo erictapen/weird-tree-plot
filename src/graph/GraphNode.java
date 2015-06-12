@@ -1,7 +1,6 @@
 package graph;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class GraphNode {
 	private String caption;
