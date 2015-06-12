@@ -15,7 +15,7 @@ public class TexGraph {
 	public static void exportToTex(	String filename, HashSet<GraphNode> nodes, boolean writeCaption,
 									boolean writeCircles, boolean writeEdges) {
 		Locale.setDefault(Locale.ENGLISH);
-		DecimalFormat df = new DecimalFormat("#.######");
+		DecimalFormat df = new DecimalFormat("#.########");
 		try{
 			FileWriter writer = new FileWriter(filename);
 
