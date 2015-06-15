@@ -2,10 +2,8 @@ package plot;
 
 import graph.GraphNode;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Vector;
 
 /** This is for (probably) more efficient search of neighbored Nodes in the plane

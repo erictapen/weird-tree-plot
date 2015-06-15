@@ -32,8 +32,9 @@ public class GraphPlotter {
 	 * 
 	 */
 	private int iteration;
-	/** every redrawInterval, the thread of control will return to the PApplet, in order to update the
-	 *  live drawing of the plot
+	/** every redrawInterval*iterations, the thread of control will return to the PApplet, in order 
+	 * to update the live drawing of the plot
+	 *  
 	 */
 	private int redrawInterval;
 	/** This is the distance to 0;0, from which every Node starts its journey. 
@@ -141,8 +142,9 @@ public class GraphPlotter {
 		}
 		for(int i=0; i<this.redrawInterval; i++) {
 			for(GraphNode movingNode : this.movingNodes) {
+				boolean abort = false;
 				if(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1) {
-					boolean abort = false;
+					
 					double traveledDist = Math.sqrt(
 							Math.pow(
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
@@ -151,44 +153,46 @@ public class GraphPlotter {
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
 									2.0));
 					if(traveledDist <= this.minStepSizeBeforeAbort) abort = true;
-					if(abort) continue;
+					//if(abort) continue;
 				}
-				double[] vIntersect = new double[2];
-				for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
-					double[] v = movingNode.intersect(anyNode);
-					vIntersect[0] += v[0];
-					vIntersect[1] += v[1];
+				if(!abort) {
+					double[] vIntersect = new double[2];
+					for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
+						double[] v = movingNode.intersect(anyNode);
+						vIntersect[0] += v[0];
+						vIntersect[1] += v[1];
+					}
+					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
+					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
+						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
+						//push against the direction, where the intersction occurs
+						//push away from the center
+						movingNode.setxPos(	movingNode.getxPos()
+											- Math.sin(radIntersect)*this.stepsize
+											+ Math.sin(radCenter)*this.stepsize);
+						movingNode.setyPos(	movingNode.getyPos()
+											- Math.cos(radIntersect)*this.stepsize
+											+ Math.cos(radCenter)*this.stepsize);
+					} else {       //in case of no intersection
+						double radParent = Math.atan2(	movingNode.getParent().getxPos()
+														- movingNode.getxPos(), 
+														movingNode.getParent().getyPos()
+														- movingNode.getyPos());
+						//pull towards parent
+						//pull towards center
+						radCenter += (Math.random()-0.5)*0.05*Math.PI;
+						movingNode.setxPos( movingNode.getxPos()
+											+ Math.sin(radParent)*this.stepsize
+											- Math.sin(radCenter)*this.stepsize);
+						movingNode.setyPos( movingNode.getyPos()
+											+ Math.cos(radParent)*this.stepsize
+											- Math.cos(radCenter)*this.stepsize);
+					}
+					movingNode.getMemoryOfMovements().add(0, 
+							new ArrayList<Double>());
+					movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
+					movingNode.getMemoryOfMovements().get(0).add(1, movingNode.getyPos());
 				}
-				double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
-				if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
-					double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
-					//push against the direction, where the intersction occurs
-					//push away from the center
-					movingNode.setxPos(	movingNode.getxPos()
-										- Math.sin(radIntersect)*this.stepsize
-										+ Math.sin(radCenter)*this.stepsize);
-					movingNode.setyPos(	movingNode.getyPos()
-										- Math.cos(radIntersect)*this.stepsize
-										+ Math.cos(radCenter)*this.stepsize);
-				} else {       //in case of no intersection
-					double radParent = Math.atan2(	movingNode.getParent().getxPos()
-													- movingNode.getxPos(), 
-													movingNode.getParent().getyPos()
-													- movingNode.getyPos());
-					//pull towards parent
-					//pull towards center
-					radCenter += (Math.random()-0.5)*0.05*Math.PI;
-					movingNode.setxPos( movingNode.getxPos()
-										+ Math.sin(radParent)*this.stepsize
-										- Math.sin(radCenter)*this.stepsize);
-					movingNode.setyPos( movingNode.getyPos()
-										+ Math.cos(radParent)*this.stepsize
-										- Math.cos(radCenter)*this.stepsize);
-				}
-				movingNode.getMemoryOfMovements().add(0, 
-						new ArrayList<Double>());
-				movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
-				movingNode.getMemoryOfMovements().get(0).add(1, movingNode.getyPos());
 			}
 			this.manager.update();   //to update the node searching architecture
 			
