@@ -59,7 +59,21 @@ public class SortedGraph {
 		//System.out.println(line);
 		line = line.replace("\t", "");  //deletes the tab at the beginning
 		String[] str = line.split(" <-- ");
+		String attr = "";
+		@SuppressWarnings("unused")
+		int attrNumberOfLeafs;
 		if(str.length!=2) return;
+		if(str[1].contains("[")) {  //Attrributes are read out from string
+			attr = str[1].substring(str[1].indexOf("["));
+			str[1] = str[1].substring(0, str[1].indexOf("[")-1);
+			try{
+				attrNumberOfLeafs = Integer.parseInt(
+						attr.substring(	attr.indexOf("numberOfAllLeafs=\""), 
+										attr.indexOf("\"", attr.indexOf("numberOfAllLeafs=\""))));
+			} catch (NumberFormatException e) {
+				System.out.println("There might be corrupted attributes in " + line);
+			}
+		}
 		GraphNode parent = nodemap.get(str[0]);
 		GraphNode child = nodemap.get(str[1]);
 		if(child==null) {
