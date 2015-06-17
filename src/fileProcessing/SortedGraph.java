@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** Import and Export functionality for .dot-files which are already sorted
@@ -48,8 +49,22 @@ public class SortedGraph {
 		}
 
 		System.out.println("Graph imported. There are " + nodemap.size() + " nodes in memory.");
-		
-		return nodemap.get(rootcaption);
+		GraphNode root = nodemap.get(rootcaption);
+		boolean graphNeedsUpdateLeafSizes = false;
+		ArrayList<GraphNode> togo = new ArrayList<GraphNode>();
+		ArrayList<GraphNode> togo2 = new ArrayList<GraphNode>();
+		togo.add(root);
+		while(!togo.isEmpty()) {
+			for(GraphNode x : togo) {
+				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateLeafSizes = true;
+				togo2.addAll(x.getChildren());
+			}
+			togo.clear();
+			togo.addAll(togo2);
+			togo2.clear();
+		}
+		if(graphNeedsUpdateLeafSizes) root.updateNumberOfAllLeafs();
+		return root;
 	}
 	
 	/** takes a line and adds the accounting relation into the whole graphset (ArrayList nodes)
@@ -61,7 +76,7 @@ public class SortedGraph {
 		String[] str = line.split(" <-- ");
 		String attr = "";
 		@SuppressWarnings("unused")
-		int attrNumberOfLeafs;
+		int attrNumberOfLeafs = 0;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attrributes are read out from string
 			attr = str[1].substring(str[1].indexOf("["));
@@ -86,6 +101,7 @@ public class SortedGraph {
 		}
 		child.setParent(parent);
 		parent.addChild(child);
+		parent.setNumberOfAllLeafs(attrNumberOfLeafs);
 		//nodes.add(parent);
 		//nodes.add(child);
 	}
