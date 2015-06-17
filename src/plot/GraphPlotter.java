@@ -74,10 +74,6 @@ public class GraphPlotter {
 	}
 
 	public void init() {
-
-		// TODO Do some initialisation stuff. In this method, everything from getting the root
-		//		to a plottable Graph and a usable NodeSetManager must happen!
-		//root.updateNumberOfAllLeafs();  //Should already happen at fileimport!
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
