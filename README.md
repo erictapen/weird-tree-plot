@@ -1,7 +1,6 @@
 # wikipedia-map
-An attempt do draw a tree-graph over the whole set of Wikipedia articles. The way from one articel to another is: "Click on the first link in article text which is not embraced".
-# TODO
-
+An attempt to visualize the whole Wikipedia on a single poster. This toolset is still highly experimental. Contact me on @erictapen for further support.
 #Data :
-The Data get be downloaded as .dot here:
+The Data can be downloaded as .dot here:
 https://drive.google.com/folderview?id=0B7TXAQUsQGPQfnozOWRBVVExR2s3SmVnb1RJa0t2VmJoZFNRSk5QMFBaYnN1VlhXSjl4WXc&usp=sharing
+Without this file, you can't do anything. It is just too big for GitHub.
