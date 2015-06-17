@@ -94,7 +94,10 @@ public class GraphNode {
 	 * 
 	 */
 	public int updateNumberOfAllLeafs() {
-		if(children.isEmpty()) return 1;
+		if(children.isEmpty()) { 
+			this.setNumberOfAllLeafs(1);
+			return 1;
+		}
 		int res = 1;
 		int temp = 0;
 		for(GraphNode x : children) {

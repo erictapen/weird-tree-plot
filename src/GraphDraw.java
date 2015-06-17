@@ -20,13 +20,13 @@ public class GraphDraw extends PApplet {
 	
 	public void setup() {
 		
-		size(1024, 1024);
+		size(512, 512);
 		background(0xffffff);
 		noFill();
 
 		root = SortedGraph.importFile(
-				"/home/justin/git/wikipedia-map/data/wiki_sorted.dot", 
-				"Wissenschaft");
+				"/home/justin/git/wikipedia-map/data/wiki_sorted_attr.dot", 
+				"formale Sprache");
 		/*	
 
 		root = new GraphNode("Philosophie");
@@ -48,7 +48,7 @@ public class GraphDraw extends PApplet {
 		 */
 
 		if(root == null) {
-			System.out.println("root is null! You have to tell the program where it have to start."
+			System.out.println("root is null! You have to tell the program where it should start."
 					+ "\nWill terminate.");
 			exit();
 		}

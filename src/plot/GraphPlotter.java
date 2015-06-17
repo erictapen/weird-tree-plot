@@ -3,6 +3,7 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import fileProcessing.SortedGraph;
 import graph.GraphNode;
 
 public class GraphPlotter {
@@ -76,10 +77,11 @@ public class GraphPlotter {
 
 		// TODO Do some initialisation stuff. In this method, everything from getting the root
 		//		to a plottable Graph and a usable NodeSetManager must happen!
-		root.updateNumberOfAllLeafs();
+		//root.updateNumberOfAllLeafs();  //Should already happen at fileimport!
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
+		SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);

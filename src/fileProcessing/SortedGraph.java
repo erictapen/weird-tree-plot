@@ -5,6 +5,7 @@ import graph.GraphNode;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,8 +75,10 @@ public class SortedGraph {
 		//System.out.println(line);
 		line = line.replace("\t", "");  //deletes the tab at the beginning
 		String[] str = line.split(" <-- ");
+		
+		if(str[0].contains("[")) str[0] = str[0].substring(0, str[0].indexOf(" ["));
+		
 		String attr = "";
-		@SuppressWarnings("unused")
 		int attrNumberOfLeafs = 0;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attrributes are read out from string
@@ -87,8 +90,10 @@ public class SortedGraph {
 										attr.indexOf("\"", attr.indexOf("numberOfAllLeafs=\""))));
 			} catch (NumberFormatException e) {
 				System.out.println("There might be corrupted attributes in " + line);
-			}
+			} catch (StringIndexOutOfBoundsException e) {}
 		}
+		
+		
 		GraphNode parent = nodemap.get(str[0]);
 		GraphNode child = nodemap.get(str[1]);
 		if(child==null) {
@@ -107,11 +112,42 @@ public class SortedGraph {
 	}
 	
 	/** Exports the graph! Every data, which is determined by now will be written into the file
-	 * @param root The rootNode where to start. Every other node with posx=0, posy=0 
+	 * @param root The rootNode where to start. Every other node with posx=0.0, posy=0.0 
 	 * will be seen as without position data!
 	 * @param ofile Filename where to export. File must exist!
 	 */
-	public static void exportFile(GraphNode root, String ofile) {
-		//TODO
+	public static void exportFile(GraphNode root, String ofile, boolean writeAttributes) {
+		try{
+			FileWriter writer = new FileWriter(ofile);
+			
+			writer.append(  "digraph " + root.getCaption() + " {\n");
+			ArrayList<GraphNode> togo = new ArrayList<GraphNode>();
+			ArrayList<GraphNode> togo2 = new ArrayList<GraphNode>();
+			togo.addAll(root.getChildren());
+			while(!togo.isEmpty()) {
+				for(GraphNode x : togo) {
+					writer.append("\t" + x.getParent().getCaption());
+					if(writeAttributes && x.getParent()==root) {
+						writer.append(" [numberOfAllLeafs=" + x.getParent().getNumberOfAllLeafs() + "]");
+					}
+					writer.append(" <-- " + x.getCaption());
+					if(writeAttributes) {
+						writer.append(" [numberOfAllLeafs=" + x.getNumberOfAllLeafs() + "]\n");
+					} else {
+						writer.append("\n");
+					}
+					togo2.addAll(x.getChildren());
+				}
+				togo.clear();
+				togo.addAll(togo2);
+				togo2.clear();
+			}
+			
+			writer.append("}");
+			writer.close();
+		} catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
