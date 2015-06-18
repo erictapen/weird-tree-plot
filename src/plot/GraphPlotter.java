@@ -91,8 +91,7 @@ public class GraphPlotter {
 	 * will be initialized by their default.
 	 * @param file The filepath to the config file
 	 */
-	public void init(String file) {
-		ConfReader cnf = new ConfReader(file);
+	public void init(ConfReader cnf) {
 		String value;
 		
 		value = cnf.getValueByKey("PLOTTERredrawInterval");

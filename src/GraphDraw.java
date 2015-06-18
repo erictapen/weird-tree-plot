@@ -1,3 +1,4 @@
+import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
 import graph.GraphNode;
@@ -54,6 +55,10 @@ public class GraphDraw extends PApplet {
 		}
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
+		ConfReader config = new ConfReader("../plotter.conf");
+		pltr.init(config);
+		pltr.getManager().init(config);
+		/*
 		pltr.setRedrawInterval(200);
 		pltr.setMaxIteration(2000);
 		pltr.setStepsize(0.01);
@@ -63,6 +68,8 @@ public class GraphDraw extends PApplet {
 		pltr.getManager().setGridsize(0.0125);
 		pltr.setMinStepSizeBeforeAbort(0.02);
 		pltr.setPersistenceBeforeAbort(500);
+		*/
+		
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 
