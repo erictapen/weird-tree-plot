@@ -3,6 +3,7 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import graph.GraphNode;
 
@@ -84,9 +85,26 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
+	}
+	
+	/** initializes a file by using a config file. Attributes, which are not in the file will be initialized
+	 * by their default.
+	 * @param file The filepath to the config file
+	 */
+	public void init(String file) {
+		ConfReader cnfRdr = new ConfReader(file);
 		
-		
-		
+//		pltr = new GraphPlotter(root, true);
+//		pltr.setRedrawInterval(200);
+//		pltr.setMaxIteration(2000);
+//		pltr.setStepsize(0.01);
+//		pltr.setMovingCircleRadius(10.0);
+//		pltr.setSizeOffSet(100000.0);
+//		pltr.setMinNodeLeafs(1000);
+//		pltr.getManager().setGridsize(0.0125);
+//		pltr.setMinStepSizeBeforeAbort(0.02);
+//		pltr.setPersistenceBeforeAbort(500);
+		init();
 	}
 
 	/** Here does the plotting happen.
