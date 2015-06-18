@@ -15,9 +15,12 @@ public class GraphDraw extends PApplet {
 	private double drawRootSize = 75.0;
 	private boolean drawLines = false;
 	private int drawEveryUpdateInterval = 10;
-	private boolean exportAndClose = false;
-	private String exportfile = "/home/justin/git/wikipedia-map/out/test.tex";
+	private String exportfile;
+	private String inputDOTfile;
+	private String rootCaption;
+	private ConfReader config;
 
+	private boolean exportAndClose = false;
 	
 	public void setup() {
 		
@@ -25,50 +28,36 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 		noFill();
 
-		root = SortedGraph.importFile(
-				"/home/justin/git/wikipedia-map/data/wiki_sorted_attr.dot", 
-				"formale Sprache");
-		/*	
-
-		root = new GraphNode("Philosophie");
-		root.setSize(1.0);
-		root.setxPos(0.0);
-		root.setyPos(0.0);
-		root.addChild(new GraphNode("Bla"));
-		root.getChildren().get(0).setSize(0.8);
-		root.getChildren().get(0).setxPos(4.4);
-		root.getChildren().get(0).setyPos(2.5);
-		root.addChild(new GraphNode("Blubb"));
-		root.getChildren().get(1).setSize(0.5);
-		root.getChildren().get(1).setxPos(2.4);
-		root.getChildren().get(1).setyPos(8.5);
-		root.getChildren().get(1).addChild(new GraphNode("haha"));
-		root.getChildren().get(1).getChildren().get(0).setSize(0.2);
-		root.getChildren().get(1).getChildren().get(0).setxPos(-3.0);
-		root.getChildren().get(1).getChildren().get(0).setyPos(-3.0);
-		 */
-
+		config = new ConfReader("../plotter_example.conf");
+		String value;
+		
+		value = config.getValueByKey("GRAPHinputDOTfile");
+		if(value != null) this.inputDOTfile = value;
+		else this.inputDOTfile = 
+				"../data/wiki_sorted_attr.dot"; //default value
+		
+		value = config.getValueByKey("GRAPHrootCaption");
+		if(value != null) this.rootCaption = value;
+		else this.rootCaption = "formale Sprache"; //default value
+		
+		value = config.getValueByKey("GRAPHoutputTEXfile");
+		if(value != null) this.exportfile = value;
+		else this.exportfile = "../out/out.tex"; //default value
+		
+		
+		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption);
+		
 		if(root == null) {
 			System.out.println("root is null! You have to tell the program where it should start."
+					+ "Plese check your config again. "
+					+ "The file at GRAPHinputDOTfile must include a Node GRAPHrootCaption."
 					+ "\nWill terminate.");
 			exit();
 		}
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
-		ConfReader config = new ConfReader("../plotter.conf");
 		pltr.init(config);
 		pltr.getManager().init(config);
-		/*
-		pltr.setRedrawInterval(200);
-		pltr.setMaxIteration(2000);
-		pltr.setStepsize(0.01);
-		pltr.setMovingCircleRadius(10.0);
-		pltr.setSizeOffSet(100000.0);
-		pltr.setMinNodeLeafs(1000);
-		pltr.getManager().setGridsize(0.0125);
-		pltr.setMinStepSizeBeforeAbort(0.02);
-		pltr.setPersistenceBeforeAbort(500);
-		*/
 		
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}

@@ -15,6 +15,7 @@ public class ConfReader {
 	private HashMap<String, String> content;
 	
 	public ConfReader(String file) {
+		this.content = new HashMap<String, String>();
 		System.out.println("Reading config file " + file + " ...");
 		int count = 0;
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
