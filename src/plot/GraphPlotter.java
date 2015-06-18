@@ -87,23 +87,86 @@ public class GraphPlotter {
 		this.waitingNodes.addAll(root.getChildren());
 	}
 	
-	/** initializes a file by using a config file. Attributes, which are not in the file will be initialized
-	 * by their default.
+	/** initializes a file by using a config file. Attributes, which are not in the file 
+	 * will be initialized by their default.
 	 * @param file The filepath to the config file
 	 */
 	public void init(String file) {
-		ConfReader cnfRdr = new ConfReader(file);
+		ConfReader cnf = new ConfReader(file);
+		String value;
 		
-//		pltr = new GraphPlotter(root, true);
-//		pltr.setRedrawInterval(200);
-//		pltr.setMaxIteration(2000);
-//		pltr.setStepsize(0.01);
-//		pltr.setMovingCircleRadius(10.0);
-//		pltr.setSizeOffSet(100000.0);
-//		pltr.setMinNodeLeafs(1000);
-//		pltr.getManager().setGridsize(0.0125);
-//		pltr.setMinStepSizeBeforeAbort(0.02);
-//		pltr.setPersistenceBeforeAbort(500);
+		value = cnf.getValueByKey("PLOTTERredrawInterval");
+		try {
+			if(value != null) this.redrawInterval = Integer.parseInt(value);
+			else this.redrawInterval = 200; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERredrawInterval.");
+		}
+		
+		value = cnf.getValueByKey("PLOTTERmaxIteration");
+		try {
+			if(value != null) this.maxIteration = Integer.parseInt(value);
+			else this.maxIteration = 2000; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERmaxIteration.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERstepSize");
+		try {
+			if(value != null) this.stepsize = Double.parseDouble(value);
+			else this.stepsize = 0.01; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERstepSize.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERmovingCircleRadius");
+		try {
+			if(value != null) this.movingCircleRadius = Double.parseDouble(value);
+			else this.movingCircleRadius = 10.0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERmovingCircleRadius.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERsizeOffSet");
+		try {
+			if(value != null) this.sizeOffSet = Double.parseDouble(value);
+			else this.sizeOffSet = 100000.0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERsizeOffSet.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERminNodeLeafs");
+		try {
+			if(value != null) this.minNodeLeafs = Integer.parseInt(value);
+			else this.minNodeLeafs = 1000; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERminNodeLeafs.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERminStepSizeBeforeAbort");
+		try {
+			if(value != null) this.minStepSizeBeforeAbort = Double.parseDouble(value);
+			else this.minStepSizeBeforeAbort = 0.02; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERminStepSizeBeforeAbort.");
+		}
+			
+		value = cnf.getValueByKey("PLOTTERpersistenceBeforeAbort");
+		try {
+			if(value != null) this.persistenceBeforeAbort = Integer.parseInt(value);
+			else this.persistenceBeforeAbort = 500; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "PLOTTERpersistenceBeforeAbort.");
+		}
+		
 		init();
 	}
 
