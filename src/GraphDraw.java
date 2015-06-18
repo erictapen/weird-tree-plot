@@ -9,16 +9,33 @@ import processing.core.*;
 public class GraphDraw extends PApplet {
 	PApplet parent; // The parent PApplet that we will render ourselves onto
 
-
-	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 75.0;
-	private boolean drawLines = false;
-	private int drawEveryUpdateInterval = 10;
+	/** The size of the root node on the sreen, in pixels
+	 * 
+	 */
+	private double drawRootSize;
+	/**check this, if you want to draw edges of the graph
+	 * 
+	 */
+	private boolean drawLines;
+	/** How often to update the Plotter, before the picture is redrawn.
+	 * 
+	 */
+	private int drawEveryUpdateInterval;
+	/** Where to export the final TEX file
+	 * 
+	 */
 	private String exportfile;
+	/**Where to get the input DOT file
+	 * 
+	 */
 	private String inputDOTfile;
+	/** Which Article should stand in the middle?
+	 * 
+	 */
 	private String rootCaption;
 	private ConfReader config;
+	private GraphPlotter pltr;
 
 	private boolean exportAndClose = false;
 	
@@ -44,6 +61,28 @@ public class GraphDraw extends PApplet {
 		if(value != null) this.exportfile = value;
 		else this.exportfile = "../out/out.tex"; //default value
 		
+		value = config.getValueByKey("DRAWrootSize");
+		try {
+			if(value != null) this.drawRootSize = Double.parseDouble(value);
+			else this.drawRootSize = 75.0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWrootSize.");
+		}
+		
+		value = config.getValueByKey("DRAWlines");
+		if(value == "true") this.drawLines = true;
+		else if(value == "false") this.drawLines = false;
+		else this.drawLines = false; //default value
+		
+		value = config.getValueByKey("DRAWeveryNumberOfUpdates");
+		try {
+			if(value != null) this.drawEveryUpdateInterval = Integer.parseInt(value);
+			else this.drawEveryUpdateInterval = 10; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWeveryNumberOfUpdates.");
+		}
 		
 		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption);
 		
