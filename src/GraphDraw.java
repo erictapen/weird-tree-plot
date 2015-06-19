@@ -45,7 +45,7 @@ public class GraphDraw extends PApplet {
 		background(0xffffff);
 		noFill();
 
-		config = new ConfReader("../plotter_example.conf");
+		config = new ConfReader("../plotter.conf");
 		String value;
 		
 		value = config.getValueByKey("GRAPHinputDOTfile");
