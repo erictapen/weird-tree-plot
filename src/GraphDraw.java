@@ -11,27 +11,21 @@ public class GraphDraw extends PApplet {
 
 	private GraphNode root;
 	/** The size of the root node on the sreen, in pixels
-	 * 
 	 */
 	private double drawRootSize;
 	/**check this, if you want to draw edges of the graph
-	 * 
 	 */
 	private boolean drawLines;
 	/** How often to update the Plotter, before the picture is redrawn.
-	 * 
 	 */
 	private int drawEveryUpdateInterval;
 	/** Where to export the final TEX file
-	 * 
 	 */
 	private String exportfile;
 	/**Where to get the input DOT file
-	 * 
 	 */
 	private String inputDOTfile;
 	/** Which Article should stand in the middle?
-	 * 
 	 */
 	private String rootCaption;
 	private ConfReader config;
@@ -40,13 +34,36 @@ public class GraphDraw extends PApplet {
 	private boolean exportAndClose = false;
 	
 	public void setup() {
+		int sizex = 0;
+		int sizey = 0;
 		
-		size(512, 512);
 		background(0xffffff);
 		noFill();
-
+		
+		
 		config = new ConfReader("../plotter.conf");
 		String value;
+		
+		value = config.getValueByKey("DRAWdisplayWidth");
+		try {
+			if(value != null) sizex = Integer.parseInt(value);
+			else sizex = 512; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWdisplayWidth.");
+		}
+		
+		value = config.getValueByKey("DRAWdisplayHeight");
+		try {
+			if(value != null) sizey = Integer.parseInt(value);
+			else sizey = 0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWdisplayHeight.");
+		}
+		
+		if(sizey==0) size(sizex, sizex);
+		else size(sizex, sizey);
 		
 		value = config.getValueByKey("GRAPHinputDOTfile");
 		if(value != null) this.inputDOTfile = value;
