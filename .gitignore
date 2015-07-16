@@ -5,3 +5,5 @@
 *.log
 *.tex
 *.gz
+plotter.conf
+*.png

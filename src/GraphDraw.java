@@ -1,3 +1,4 @@
+import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
 import graph.GraphNode;
@@ -8,61 +9,112 @@ import processing.core.*;
 public class GraphDraw extends PApplet {
 	PApplet parent; // The parent PApplet that we will render ourselves onto
 
-
-	private GraphPlotter pltr;
 	private GraphNode root;
-	private double drawRootSize = 75.0;
-	private boolean drawLines = false;
-	private int drawEveryUpdateInterval = 10;
-	private boolean exportAndClose = false;
-	private String exportfile = "/home/justin/git/wikipedia-map/out/test.tex";
+	/** The size of the root node on the sreen, in pixels
+	 */
+	private double drawRootSize;
+	/**check this, if you want to draw edges of the graph
+	 */
+	private boolean drawLines;
+	/** How often to update the Plotter, before the picture is redrawn.
+	 */
+	private int drawEveryUpdateInterval;
+	/** Where to export the final TEX file
+	 */
+	private String exportfile;
+	/**Where to get the input DOT file
+	 */
+	private String inputDOTfile;
+	/** Which Article should stand in the middle?
+	 */
+	private String rootCaption;
+	private ConfReader config;
+	private GraphPlotter pltr;
 
+	private boolean exportAndClose = false;
 	
 	public void setup() {
+		int sizex = 0;
+		int sizey = 0;
 		
-		size(512, 512);
 		background(0xffffff);
 		noFill();
-
-		root = SortedGraph.importFile(
-				"/home/justin/git/wikipedia-map/data/wiki_sorted_attr.dot", 
-				"formale Sprache");
-		/*	
-
-		root = new GraphNode("Philosophie");
-		root.setSize(1.0);
-		root.setxPos(0.0);
-		root.setyPos(0.0);
-		root.addChild(new GraphNode("Bla"));
-		root.getChildren().get(0).setSize(0.8);
-		root.getChildren().get(0).setxPos(4.4);
-		root.getChildren().get(0).setyPos(2.5);
-		root.addChild(new GraphNode("Blubb"));
-		root.getChildren().get(1).setSize(0.5);
-		root.getChildren().get(1).setxPos(2.4);
-		root.getChildren().get(1).setyPos(8.5);
-		root.getChildren().get(1).addChild(new GraphNode("haha"));
-		root.getChildren().get(1).getChildren().get(0).setSize(0.2);
-		root.getChildren().get(1).getChildren().get(0).setxPos(-3.0);
-		root.getChildren().get(1).getChildren().get(0).setyPos(-3.0);
-		 */
-
+		
+		
+		config = new ConfReader("../plotter.conf");
+		String value;
+		
+		value = config.getValueByKey("DRAWdisplayWidth");
+		try {
+			if(value != null) sizex = Integer.parseInt(value);
+			else sizex = 512; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWdisplayWidth.");
+		}
+		
+		value = config.getValueByKey("DRAWdisplayHeight");
+		try {
+			if(value != null) sizey = Integer.parseInt(value);
+			else sizey = 0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWdisplayHeight.");
+		}
+		
+		if(sizey==0) size(sizex, sizex);
+		else size(sizex, sizey);
+		
+		value = config.getValueByKey("GRAPHinputDOTfile");
+		if(value != null) this.inputDOTfile = value;
+		else this.inputDOTfile = 
+				"../data/wiki_sorted_attr.dot"; //default value
+		
+		value = config.getValueByKey("GRAPHrootCaption");
+		if(value != null) this.rootCaption = value;
+		else this.rootCaption = "formale Sprache"; //default value
+		
+		value = config.getValueByKey("GRAPHoutputTEXfile");
+		if(value != null) this.exportfile = value;
+		else this.exportfile = "../out/out.tex"; //default value
+		
+		value = config.getValueByKey("DRAWrootSize");
+		try {
+			if(value != null) this.drawRootSize = Double.parseDouble(value);
+			else this.drawRootSize = 75.0; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWrootSize.");
+		}
+		
+		value = config.getValueByKey("DRAWlines");
+		if(value == "true") this.drawLines = true;
+		else if(value == "false") this.drawLines = false;
+		else this.drawLines = false; //default value
+		
+		value = config.getValueByKey("DRAWeveryNumberOfUpdates");
+		try {
+			if(value != null) this.drawEveryUpdateInterval = Integer.parseInt(value);
+			else this.drawEveryUpdateInterval = 10; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "DRAWeveryNumberOfUpdates.");
+		}
+		
+		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption);
+		
 		if(root == null) {
 			System.out.println("root is null! You have to tell the program where it should start."
+					+ "Plese check your config again. "
+					+ "The file at GRAPHinputDOTfile must include a Node GRAPHrootCaption."
 					+ "\nWill terminate.");
 			exit();
 		}
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
-		pltr.setRedrawInterval(200);
-		pltr.setMaxIteration(2000);
-		pltr.setStepsize(0.01);
-		pltr.setMovingCircleRadius(10.0);
-		pltr.setSizeOffSet(100000.0);
-		pltr.setMinNodeLeafs(1000);
-		pltr.getManager().setGridsize(0.0125);
-		pltr.setMinStepSizeBeforeAbort(0.02);
-		pltr.setPersistenceBeforeAbort(500);
+		pltr.init(config);
+		pltr.getManager().init(config);
+		
 		System.out.println("root has " + root.getChildren().size() + " children.");
 	}
 

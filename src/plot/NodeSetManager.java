@@ -1,5 +1,6 @@
 package plot;
 
+import fileProcessing.ConfReader;
 import graph.GraphNode;
 
 import java.util.HashMap;
@@ -23,8 +24,22 @@ public class NodeSetManager {
 	}
 
 	public void init() {
-		// TODO Auto-generated method stub
+		//still nothing to do. This is just here for future support.
+	}
+	
+	public void init(ConfReader cnf) {
+		String value;
 		
+		value = cnf.getValueByKey("NODESETMANAGERgridSize");
+		try {
+			if(value != null) this.gridsize = Double.parseDouble(value);
+			else this.gridsize = 0.0125; //default value
+		} catch (NumberFormatException e) {
+			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
+					+ "NODESETMANAGERgridSize.");
+		}
+		
+		init();
 	}
 	
 	
