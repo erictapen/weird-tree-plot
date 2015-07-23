@@ -1,4 +1,5 @@
 import fileProcessing.ConfReader;
+import fileProcessing.SVGGraph;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
 import graph.GraphNode;
@@ -123,6 +124,8 @@ public class GraphDraw extends PApplet {
 			System.out.println("Starting export to tikz.");
 			TexGraph.exportToTex(	exportfile, 
 									pltr.getPlottedNodes(), true, true, false);
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+									pltr.getPlottedNodes(), false, true, false);
 			System.out.println("Export to tikz complete.");
 			exit();
 		}
