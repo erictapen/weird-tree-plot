@@ -68,9 +68,7 @@ public class SVGGraph {
 					insert.replaceAll("%cx", df.format(x.getxPos()));
 					insert.replaceAll("%cy", df.format(x.getyPos()));
 					insert.replaceAll("%r", df.format(x.getRadius()));
-					
-					
-					writer.append("<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\"/>");
+					writer.append(insert);
 				}
 				try{
 					GraphNode p = x.getParent();
