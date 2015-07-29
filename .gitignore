@@ -7,3 +7,5 @@
 *.gz
 plotter.conf
 *.png
+/roadmap/
+*.svg
