@@ -53,6 +53,7 @@ public class SortedGraph {
 
 		System.out.println("Graph imported. There are " + nodemap.size() + " nodes in memory.");
 		GraphNode root = nodemap.get(rootcaption);
+		if(root==null) return null;
 		boolean graphNeedsUpdateOnLeafSizes = false;
 		ArrayList<GraphNode> togo = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> togo2 = new ArrayList<GraphNode>();
