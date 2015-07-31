@@ -1,0 +1,7 @@
+adaptive movingcircleradius
+tooSmall check nur wenn der Parameter sinnvoll ist
+sinnvoller abbruch bei zu wenig traveledDist
+parallel coll detection
+adaptierte, zumindest zweistufige stepsize
+nur soweit wandern, dass keine coll auftritt?
+
