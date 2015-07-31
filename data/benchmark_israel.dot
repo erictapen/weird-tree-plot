@@ -1,5 +1,5 @@
 digraph israel {
-	 <-- israel
+	 <- israel
 	israel <-- Ariel Scharon
 	israel <-- Uri Avnery
 	israel <-- Golda Meir
@@ -1926,5 +1926,3 @@ digraph israel {
 	Rabbi Tarfon <-- Tarphon
 	Simeon ben Gamaliel <-- Simeon ben Gamliel
 }
-
-d

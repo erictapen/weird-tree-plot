@@ -33,7 +33,14 @@ public class GraphDraw extends PApplet {
 
 	private boolean exportAndClose = false;
 	
+	/** This is for benchmarking
+	 * 
+	 */
+	private long startTime = 0;
+	private long stopTime = 0;
+	
 	public void setup() {
+		startTime = System.currentTimeMillis();
 		int sizex = 0;
 		int sizey = 0;
 		
@@ -124,6 +131,8 @@ public class GraphDraw extends PApplet {
 			TexGraph.exportToTex(	exportfile, 
 									pltr.getPlottedNodes(), true, true, false);
 			System.out.println("Export to tikz complete.");
+			stopTime = System.currentTimeMillis();
+			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
 			exit();
 		}
 		background(0xFFFFFF);
