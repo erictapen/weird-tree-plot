@@ -55,6 +55,8 @@ public class GraphPlotter {
 	private int persistenceBeforeAbort = 500;
 
 
+	private NodeSetManager movingmanager = new NodeSetManager();
+
 
 
 
@@ -176,7 +178,7 @@ public class GraphPlotter {
 		if(this.redrawInterval == 0) this.redrawInterval = this.maxIteration;
 		if(this.waitingNodes.isEmpty()) return;
 		
-		if(this.iteration==0) {    	
+		if(this.iteration==0) {   
 			//if new round begins:
 			//update nodeLists, get new nodes, initialize the starting circle
 			this.plottedNodes.addAll(movingNodes);
@@ -217,8 +219,14 @@ public class GraphPlotter {
 			for(GraphNode x : this.movingNodes) {
 				x.setMemoryOfMovements(new ArrayList<ArrayList<Double>>());
 			}
+			
 		}
+		
+		
 		for(int i=0; i<this.redrawInterval; i++) {
+			this.movingmanager = new NodeSetManager();
+			this.movingmanager.update(this.movingNodes);
+			
 			for(GraphNode movingNode : this.movingNodes) {
 				boolean abort = false;
 				if(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1) {
@@ -236,7 +244,7 @@ public class GraphPlotter {
 				if(!abort) {
 					double[] vIntersect = new double[2];
 					HashSet<GraphNode> toCheck = this.manager.getNearbyNodes(movingNode);
-					toCheck.addAll(this.movingNodes);
+					toCheck.addAll(movingmanager.getNearbyNodes(movingNode));
 					for(GraphNode anyNode : toCheck) {
 						double[] v = movingNode.intersect(anyNode);
 						vIntersect[0] += v[0];
