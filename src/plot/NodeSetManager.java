@@ -12,14 +12,12 @@ import java.util.Vector;
  *
  */
 public class NodeSetManager {
-	private GraphPlotter pltr;
 	private double gridsize;
 	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;	
 	
 	
-	public NodeSetManager(GraphPlotter pltr) {
+	public NodeSetManager() {
 		super();
-		this.pltr = pltr;
 		this.plottedNodesMap = new HashMap<Vector<Integer>, HashSet<GraphNode>>();
 	}
 
@@ -46,7 +44,6 @@ public class NodeSetManager {
 	
 	public HashSet<GraphNode> getNearbyNodes(GraphNode node) {
 		HashSet<GraphNode> res = new HashSet<GraphNode>();
-		res.addAll(pltr.getMovingNodes());
 		int radius = (int)(node.getRadius()*this.gridsize);
 		for(int x=-radius-1; x<=radius+1; x++) {
 			for(int y=-radius-1; y<=radius+1; y++) {

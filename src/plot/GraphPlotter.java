@@ -67,7 +67,7 @@ public class GraphPlotter {
 		super();
 		this.root = root;
 		this.debug = debug;
-		this.manager = new NodeSetManager(this);
+		this.manager = new NodeSetManager();
 		this.plottedNodes = new HashSet<GraphNode>();
 		this.movingNodes = new HashSet<GraphNode>();
 		this.waitingNodes = new HashSet<GraphNode>();
@@ -235,7 +235,9 @@ public class GraphPlotter {
 				}
 				if(!abort) {
 					double[] vIntersect = new double[2];
-					for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
+					HashSet<GraphNode> toCheck = this.manager.getNearbyNodes(movingNode);
+					toCheck.addAll(this.movingNodes);
+					for(GraphNode anyNode : toCheck) {
 						double[] v = movingNode.intersect(anyNode);
 						vIntersect[0] += v[0];
 						vIntersect[1] += v[1];
