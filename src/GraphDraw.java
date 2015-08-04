@@ -184,17 +184,17 @@ public class GraphDraw extends PApplet {
 		}
 		//draws a grid of 1*1 units for better view
 		stroke(0);
-		for(int i=width/2; i>0; i -= drawRootSize) {
-			line(i, 0, i, height);
+		for(double i=width/2.0; i>0; i -= drawRootSize) {
+			line((int)i, 0, (int)i, height);
 		}
-		for(int i=width/2; i<width; i += drawRootSize) {
-			line(i, 0, i, height);
+		for(double i=width/2.0; i<width; i += drawRootSize) {
+			line((int)i, 0, (int)i, height);
 		}
-		for(int i=height/2; i>0; i -= drawRootSize) {
-			line(0, i, width, i);
+		for(double i=height/2.0; i>0; i -= drawRootSize) {
+			line(0, (int)i, width, (int)i);
 		}
-		for(int i=height/2; i<height; i += drawRootSize) {
-			line(0, i, width, i);
+		for(double i=height/2.0; i<height; i += drawRootSize) {
+			line(0, (int)i, width, (int)i);
 		}
 		
 	}
