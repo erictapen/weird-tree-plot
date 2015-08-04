@@ -191,10 +191,10 @@ public class GraphDraw extends PApplet {
 			line(i, 0, i, height);
 		}
 		for(int i=height/2; i>0; i -= drawRootSize) {
-			line(i, 0, i, width);
+			line(0, i, width, i);
 		}
 		for(int i=height/2; i<height; i += drawRootSize) {
-			line(i, 0, i, width);
+			line(0, i, width, i);
 		}
 		
 	}
