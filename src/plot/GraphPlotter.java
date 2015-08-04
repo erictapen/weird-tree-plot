@@ -199,7 +199,9 @@ public class GraphPlotter {
 				if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
 			}
 			this.waitingNodes.removeAll(tooSmall);
-			double movingCircleMinRadius = Math.atan2(smallest.getxPos(), smallest.getyPos());
+			double movingCircleMinRadius = Math.sqrt(	Math.pow(smallest.getxPos(), 2) +
+														Math.pow(smallest.getyPos(), 2))
+											+ smallest.getRadius();
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
 								+ Math.random()*this.stepsize - this.stepsize*0.5;
