@@ -199,23 +199,14 @@ public class GraphPlotter {
 				if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
 			}
 			this.waitingNodes.removeAll(tooSmall);
-			
-			this.waitingNodes.removeAll(tooSmall);
+			double movingCircleMinRadius = Math.atan2(smallest.getxPos(), smallest.getyPos());
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
 								+ Math.random()*this.stepsize - this.stepsize*0.5;
 				if(x.getParent()==this.root) rad = Math.random()*Math.PI*2.0;
-				x.setxPos(Math.sin(rad)*this.movingCircleRadius);
-				x.setyPos(Math.cos(rad)*this.movingCircleRadius);
+				x.setxPos(Math.sin(rad)*(movingCircleMinRadius + this.movingCircleRadius));
+				x.setyPos(Math.cos(rad)*(movingCircleMinRadius + this.movingCircleRadius));
 			}
-			/*
-			for(GraphNode x : this.waitingNodes) {       //do the waitingCircle
-				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
-								+ Math.random()*this.stepsize - this.stepsize*0.5;
-				x.setxPos(Math.sin(rad)*this.waitingCircleRadius);
-				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
-			}
-			*/
 			for(GraphNode x : this.movingNodes) {
 				x.setMemoryOfMovements(new ArrayList<ArrayList<Double>>());
 			}
