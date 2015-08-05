@@ -221,8 +221,9 @@ public class GraphPlotter {
 			this.movingmanager.update(this.movingNodes);
 			
 			for(GraphNode movingNode : this.movingNodes) {
-				boolean abort = false;
-				if(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1) {
+				if(		(!movingNode.isPlotted()) && 
+						(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1)
+					) {
 					
 					double traveledDist = Math.sqrt(
 							Math.pow(
@@ -231,10 +232,15 @@ public class GraphPlotter {
 							+ Math.pow(
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
 									2.0));
-					if(traveledDist <= this.minStepSizeBeforeAbort) abort = true;
+					if(traveledDist <= this.minStepSizeBeforeAbort) {
+						movingNode.setPlotted(true);
+						//System.out.println("Node " + movingNode.getCaption() + " only needed " + iteration +
+						//		" steps.");
+					}
+					
 					//if(abort) continue;
 				}
-				if(!abort) {
+				if(!movingNode.isPlotted()) {
 					double[] vIntersect = new double[2];
 					HashSet<GraphNode> toCheck = this.manager.getNearbyNodes(movingNode);
 					toCheck.addAll(movingmanager.getNearbyNodes(movingNode));
@@ -246,7 +252,7 @@ public class GraphPlotter {
 					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
 					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
 						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
-						//push against the direction, where the intersction occurs
+						//push against the direction, where the intersection occurs
 						//push away from the center
 						movingNode.setxPos(	movingNode.getxPos()
 											- Math.sin(radIntersect)*this.stepsize
@@ -269,8 +275,7 @@ public class GraphPlotter {
 											+ Math.cos(radParent)*this.stepsize
 											- Math.cos(radCenter)*this.stepsize);
 					}
-					movingNode.getMemoryOfMovements().add(0, 
-							new ArrayList<Double>());
+					movingNode.getMemoryOfMovements().add(0, new ArrayList<Double>());
 					movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
 					movingNode.getMemoryOfMovements().get(0).add(1, movingNode.getyPos());
 				}
