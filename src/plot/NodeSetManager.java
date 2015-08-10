@@ -108,10 +108,13 @@ public class NodeSetManager {
 			sum += x.size();
 			count++;
 		}
+		String keys = "";
+		for(Vector<Integer> x : plottedNodesMap.keySet()) keys += "\t\t" + x.toString() + "\n";
 		double average = 0.0;
 		if(count!=0) average = (double)sum/count;
 		return "NodeSetManager_Status: " + "\n\t" 
 			+ count + " cells" + "\n\t" 
+			+ keys
 			+ sum + " nodes" + "\n\t"
 			+ biggest + " nodes in the biggest cell" + "\n\t"
 			+ smallest + " nodes in the smallest cell" + "\n\t"
