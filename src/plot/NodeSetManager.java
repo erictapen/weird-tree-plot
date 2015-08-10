@@ -76,7 +76,7 @@ public class NodeSetManager {
 	public void update(HashSet<GraphNode> addedNodes) {
 		for(GraphNode node : addedNodes) {
 			
-			int radius = (int)(node.getRadius()*this.gridsize);
+			int radius = (int)(node.getRadius()/this.gridsize); //nodesize in the grids scale
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
 					Vector<Integer> vect = new Vector<Integer>(2);
