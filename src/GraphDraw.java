@@ -142,8 +142,8 @@ public class GraphDraw extends PApplet {
 		//draws a grid of 1*1 units for better view
 		drawOneUnitGrid();
 		//highlights every block of the NodeSetManager for better optimization
-		//drawNodeSetManagerGrid();
-		//drawWaitingNodeSetManagerGrid();
+		drawNodeSetManagerGrid();
+		drawWaitingNodeSetManagerGrid();
 		//draw Nodes
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
@@ -174,7 +174,7 @@ public class GraphDraw extends PApplet {
 	private void drawNode(GraphNode x, int color) {
 		noFill();
 		stroke(color);
-		if(x.isPlotted()) {
+		if(!x.isPlotted()) {
 			stroke(255, 0, 255);
 			fill(255, 0, 255);
 		} //TODO
