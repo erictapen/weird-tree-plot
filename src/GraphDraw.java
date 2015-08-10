@@ -1,6 +1,7 @@
 import java.util.Vector;
 
 import fileProcessing.ConfReader;
+import fileProcessing.SVGGraph;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
 import graph.GraphNode;
@@ -155,7 +156,9 @@ public class GraphDraw extends PApplet {
 			System.out.println("Starting export to tikz.");
 			TexGraph.exportToTex(	exportfile, 
 									pltr.getPlottedNodes(), true, true, false);
-			System.out.println("Export to tikz complete.");
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+					pltr.getPlottedNodes(), false, true, false);
+			System.out.println("Export to tikz,svg complete.");
 			stopTime = System.currentTimeMillis();
 			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
 			saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
