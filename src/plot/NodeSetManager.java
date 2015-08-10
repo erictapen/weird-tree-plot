@@ -70,6 +70,9 @@ public class NodeSetManager {
 		
 	}
 	
+	/** Add nodes to the managed Set.
+	 * @param addedNodes
+	 */
 	public void update(HashSet<GraphNode> addedNodes) {
 		for(GraphNode node : addedNodes) {
 			
@@ -113,7 +116,7 @@ public class NodeSetManager {
 		double average = 0.0;
 		if(count!=0) average = (double)sum/count;
 		return "NodeSetManager_Status: " + "\n\t" 
-			+ count + " cells" + "\n\t" 
+			+ count + " cells" + "\n" 
 			+ keys
 			+ sum + " nodes" + "\n\t"
 			+ biggest + " nodes in the biggest cell" + "\n\t"
