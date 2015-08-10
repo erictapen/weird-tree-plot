@@ -233,7 +233,7 @@ public class GraphPlotter {
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
 									2.0)
 							+ Math.pow(
-									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(1), 
 									2.0));
 					if(traveledDist <= this.minStepSizeBeforeAbort) {
 						movingNode.setPlotted(true);

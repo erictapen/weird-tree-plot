@@ -174,10 +174,10 @@ public class GraphDraw extends PApplet {
 	private void drawNode(GraphNode x, int color) {
 		noFill();
 		stroke(color);
-//		if(Math.abs(x.getxPos()) < 0.01) {
-//			stroke(255, 0, 255);
-//			fill(255, 0, 255);
-//		} //TODO
+		if(x.isPlotted()) {
+			stroke(255, 0, 255);
+			fill(255, 0, 255);
+		} //TODO
 		
 		//draw the node + every link
 		
