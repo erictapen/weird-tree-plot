@@ -13,6 +13,9 @@ import java.util.Vector;
  *
  */
 public class NodeSetManager {
+	/** This is the length of a grid cell, in world units.
+	 * 
+	 */
 	private double gridsize;
 	
 
@@ -47,7 +50,7 @@ public class NodeSetManager {
 	
 	public HashSet<GraphNode> getNearbyNodes(GraphNode node) {
 		HashSet<GraphNode> res = new HashSet<GraphNode>();
-		int radius = (int)(node.getRadius()*this.gridsize);
+		int radius = (int)(node.getRadius()/this.gridsize);
 		for(int x=-radius-1; x<=radius+1; x++) {
 			for(int y=-radius-1; y<=radius+1; y++) {
 				Vector<Integer> vect = new Vector<Integer>(2);
@@ -83,8 +86,8 @@ public class NodeSetManager {
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
 					Vector<Integer> vect = new Vector<Integer>(2);
-					vect.addElement(new Integer((int)(node.getxPos()*this.gridsize) + x));
-					vect.addElement(new Integer((int)(node.getyPos()*this.gridsize) + y));
+					vect.add(0, new Integer((int)(node.getxPos()/this.gridsize) + x));
+					vect.add(1, new Integer((int)(node.getyPos()/this.gridsize) + y));
 					HashSet<GraphNode> temp = this.plottedNodesMap.get(vect);
 					if(temp!=null) {
 						temp.add(node);
@@ -100,7 +103,7 @@ public class NodeSetManager {
 	}
 
 	public void setGridsize(double gridsize) {
-		this.gridsize = 1.0/gridsize;
+		this.gridsize = gridsize;
 	}
 
 	public String getStatus() {
@@ -115,7 +118,8 @@ public class NodeSetManager {
 			count++;
 		}
 		String keys = "";
-		for(Vector<Integer> x : plottedNodesMap.keySet()) keys += "\t\t" + x.toString() + "\n";
+		for(Vector<Integer> x : plottedNodesMap.keySet()) keys += "\t\t" + x.toString() 
+				+ this.plottedNodesMap.get(x).size()+ "\n";
 		double average = 0.0;
 		if(count!=0) average = (double)sum/count;
 		return "NodeSetManager_Status: " + "\n\t" 
