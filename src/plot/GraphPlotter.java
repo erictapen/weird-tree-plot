@@ -259,13 +259,13 @@ public class GraphPlotter {
 					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
 						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
 						//push against the direction, where the intersection occurs
-						//push away from the center
+						//push away from the center (but not so much)
 						movingNode.setxPos(	movingNode.getxPos()
 											- Math.sin(radIntersect)*this.stepsize
-											+ Math.sin(radCenter)*this.stepsize);
+											+ Math.sin(radCenter)*this.stepsize*0.5);
 						movingNode.setyPos(	movingNode.getyPos()
 											- Math.cos(radIntersect)*this.stepsize
-											+ Math.cos(radCenter)*this.stepsize);
+											+ Math.cos(radCenter)*this.stepsize*0.5);
 					} else {       //in case of no intersection
 						double radParent = Math.atan2(	movingNode.getParent().getxPos()
 														- movingNode.getxPos(), 
