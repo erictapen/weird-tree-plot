@@ -128,15 +128,6 @@ public class GraphDraw extends PApplet {
 	}
 
 	public void draw() {
-		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
-			System.out.println("Starting export to tikz.");
-			TexGraph.exportToTex(	exportfile, 
-									pltr.getPlottedNodes(), true, true, false);
-			System.out.println("Export to tikz complete.");
-			stopTime = System.currentTimeMillis();
-			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
-			exit();
-		}
 		background(0xFFFFFF);
 		System.out.print(	"Plot in progress: " + pltr.getIteration() + "/" + pltr.getMaxIteration() 
 							+ "iterations, \n" + pltr.getMovingNodes().size() + " movingNodes, "
@@ -160,6 +151,16 @@ public class GraphDraw extends PApplet {
 		}
 		
 		System.out.print("drawing completed.                                 \n");
+		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
+			System.out.println("Starting export to tikz.");
+			TexGraph.exportToTex(	exportfile, 
+									pltr.getPlottedNodes(), true, true, false);
+			System.out.println("Export to tikz complete.");
+			stopTime = System.currentTimeMillis();
+			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
+			saveFrame("../screenshot.png");
+			exit();
+		}
 	}
 
 
