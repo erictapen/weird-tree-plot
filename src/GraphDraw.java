@@ -152,6 +152,7 @@ public class GraphDraw extends PApplet {
 		}
 		
 		System.out.print("drawing completed.                                 \n");
+		saveFrame(); //TODO delete debugging msg
 		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
 			System.out.println("Starting export to tikz.");
 			TexGraph.exportToTex(	exportfile, 
