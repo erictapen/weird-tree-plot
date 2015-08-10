@@ -167,12 +167,30 @@ public class SortedGraph {
 				for(GraphNode x : togo) {
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
-						writer.append(" [numberOfAllLeafs=\"" + x.getParent().getNumberOfAllLeafs() 
-								+ "\"]");
+						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+								+ "posx=\"%posx\""
+								+ "posy=\"%posy\""
+								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%numberOfAllLeafs", 
+								Integer.toString(x.getParent().getNumberOfAllLeafs()));
+						append = append.replaceAll("%posx", Double.toString(x.getParent().getxPos()));
+						append = append.replaceAll("%posy", Double.toString(x.getParent().getyPos()));
+						append = append.replaceAll("%radius", 
+								Double.toString(x.getParent().getRadius()));
+						writer.append(append);
 					}
 					writer.append(" <-- " + x.getCaption());
 					if(writeAttributes) {
-						writer.append(" [numberOfAllLeafs=\"" + x.getNumberOfAllLeafs() + "\"]\n");
+						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+								+ "posx=\"%posx\""
+								+ "posy=\"%posy\""
+								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%numberOfAllLeafs", 
+								Integer.toString(x.getNumberOfAllLeafs()));
+						append = append.replaceAll("%posx", Double.toString(x.getxPos()));
+						append = append.replaceAll("%posy", Double.toString(x.getyPos()));
+						append = append.replaceAll("%radius", Double.toString(x.getRadius()));
+						writer.append(append);
 					} else {
 						writer.append("\n");
 					}
