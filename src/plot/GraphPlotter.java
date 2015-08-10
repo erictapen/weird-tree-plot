@@ -61,6 +61,8 @@ public class GraphPlotter {
 
 
 
+	
+
 	/** Also calls init()
 	 * @param root
 	 * @param debug
@@ -218,6 +220,7 @@ public class GraphPlotter {
 		
 		for(int i=0; i<this.redrawInterval; i++) {
 			this.movingmanager = new NodeSetManager();
+			this.movingmanager.setGridsize(this.manager.getGridsize());
 			this.movingmanager.update(this.movingNodes);
 			
 			for(GraphNode movingNode : this.movingNodes) {
@@ -412,5 +415,7 @@ public class GraphPlotter {
 		this.persistenceBeforeAbort = persistenceBeforeAbort;
 	}
 	
-	
+	public NodeSetManager getMovingmanager() {
+		return movingmanager;
+	}
 }

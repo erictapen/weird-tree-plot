@@ -143,6 +143,7 @@ public class GraphDraw extends PApplet {
 		drawOneUnitGrid();
 		//highlights every block of the NodeSetManager for better optimization
 		drawNodeSetManagerGrid();
+		drawWaitingNodeSetManagerGrid();
 		//draw Nodes
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
@@ -239,6 +240,29 @@ public class GraphDraw extends PApplet {
 			int fill = (int)(x.get(2));
 			if(fill<=20) fill = 20;
 			fill(fill);
+			stroke(fill);
+			rect(x1, y1, x2, y2);
+		}
+	}
+	
+	/** highlights every block of the WaitingNodeSetManager for better optimization
+	 * 
+	 */
+	private void drawWaitingNodeSetManagerGrid() {
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+		for(Vector<Integer> x : this.pltr.getMovingmanager().getOverview()) {
+			x1 = (float)(x.elementAt(0)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			x1 += width/2.0;
+			y1 = (float)(x.elementAt(1)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y1 += height/2.0;
+			x2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			int fill = (int)(x.get(2));
+			if(fill<=20) fill = 20;
+			fill(fill, 0, 0);
 			stroke(fill);
 			rect(x1, y1, x2, y2);
 		}
