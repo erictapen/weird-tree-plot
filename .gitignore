@@ -9,3 +9,4 @@ plotter.conf
 *.png
 /roadmap/
 *.svg
+*.swp

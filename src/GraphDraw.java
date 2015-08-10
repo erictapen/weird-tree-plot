@@ -182,10 +182,21 @@ public class GraphDraw extends PApplet {
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
 		}
-		ellipse(width/2,
-				height/2,
-				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize),
-				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize));
+		//draws a grid of 1*1 units for better view
+		stroke(0);
+		for(double i=width/2.0; i>0; i -= drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=width/2.0; i<width; i += drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=height/2.0; i>0; i -= drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		for(double i=height/2.0; i<height; i += drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		
 	}
 
 
