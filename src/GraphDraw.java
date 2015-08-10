@@ -158,7 +158,7 @@ public class GraphDraw extends PApplet {
 			System.out.println("Export to tikz complete.");
 			stopTime = System.currentTimeMillis();
 			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
-			saveFrame("../screenshot.png");
+			saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
 			exit();
 		}
 	}
