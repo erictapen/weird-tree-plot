@@ -20,10 +20,10 @@ public class SVGGraph {
 		
 		writeCaption = false;
 		writeEdges = false;
-		double posxmin = 0.0;
-		double posxmax = 0.0;
-		double posymin = 0.0;
-		double posymax = 0.0;
+		double posxmin = Double.MAX_VALUE;
+		double posxmax = Double.MIN_VALUE;
+		double posymin = Double.MAX_VALUE;
+		double posymax = Double.MIN_VALUE;
 		for(GraphNode x : nodes) {
 			if(x.getxPos() - x.getRadius() < posxmin) posxmin = x.getxPos() - x.getRadius();
 			if(x.getxPos() + x.getRadius() > posxmax) posxmax = x.getxPos() + x.getRadius();
@@ -31,13 +31,15 @@ public class SVGGraph {
 			if(x.getyPos() + x.getRadius() > posymax) posymax = x.getyPos() + x.getRadius();
 		}
 		
+		double width = posxmax - posxmin;
+		double height = posymax - posymin;
+		
+		
 		Locale.setDefault(Locale.ENGLISH);
 		DecimalFormat df = new DecimalFormat("#.########");
 		try{
 			FileWriter writer = new FileWriter(filename);
-
-			writer.append(
-					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+			String append = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
 					"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
 					+ "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" + 
 					"\n" + 
@@ -45,13 +47,16 @@ public class SVGGraph {
 					"     xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
 					+ "xmlns:ev=\"http://www.w3.org/2001/xml-events\"\n" + 
 					"     version=\"1.1\" baseProfile=\"full\"\n" + 
-					"     width=\"1024mm\" height=\"1024mm\"\n" + 
-					"     viewBox=\"-512 -512 1024 1024\">\n" + 
-					"\n"
-					
-					
-							
-					);
+					"     width=\"%widthpx\" height=\"%heightpx\"\n" + 
+					"     viewBox=\"%cornerx %cornery %width %height\">\n" + 
+					"\n";
+			append = append.replaceAll("%width", df.format(width*1024));
+			append = append.replaceAll("%height", df.format(height*1024));
+			append = append.replaceAll("%cornerx", df.format(posxmin*1024));
+			append = append.replaceAll("%cornery", df.format(posymin*1024));
+			
+			writer.append(append);
+			
 			for(GraphNode x : nodes) {
 				if(writeCaption) {
 					double size = (50.0*x.getRadius())/(double)x.getCaption().length();
@@ -64,10 +69,11 @@ public class SVGGraph {
 					}
 				}
 				if(writeCircles) {
-					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\"/>\n";
-					insert = insert.replaceAll("%cx", df.format(x.getxPos()*256));
-					insert = insert.replaceAll("%cy", df.format(x.getyPos()*256));
-					insert = insert.replaceAll("%r", df.format(x.getRadius()*256));
+					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
+							+ "stroke=\"black\" stroke-width=\"10px\" fill=\"none\"/>\n";
+					insert = insert.replaceAll("%cx", df.format(x.getxPos()*1024));
+					insert = insert.replaceAll("%cy", df.format(x.getyPos()*1024));
+					insert = insert.replaceAll("%r", df.format(x.getRadius()*1024));
 					writer.append(insert);
 				}
 				try{
