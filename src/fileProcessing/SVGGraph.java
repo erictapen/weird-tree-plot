@@ -64,7 +64,7 @@ public class SVGGraph {
 					}
 				}
 				if(writeCircles) {
-					String insert = "<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\"/>";
+					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\"/>\n";
 					insert.replaceAll("%cx", df.format(x.getxPos()));
 					insert.replaceAll("%cy", df.format(x.getyPos()));
 					insert.replaceAll("%r", df.format(x.getRadius()));
