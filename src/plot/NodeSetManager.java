@@ -3,6 +3,7 @@ package plot;
 import fileProcessing.ConfReader;
 import graph.GraphNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
@@ -13,6 +14,8 @@ import java.util.Vector;
  */
 public class NodeSetManager {
 	private double gridsize;
+	
+
 	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;	
 	
 	
@@ -125,4 +128,23 @@ public class NodeSetManager {
 		
 	}
 	
+	/** Returns a three-dimensional Vector for every cell, containing the key (0 and 1) and the size (2)
+	 * @return
+	 */
+	public ArrayList<Vector<Integer>> getOverview() {
+		ArrayList<Vector<Integer>> res = new ArrayList<Vector<Integer>>();
+		Vector<Integer> vect;
+		for(Vector<Integer> x : this.plottedNodesMap.keySet()) {
+			vect = new Vector<Integer>(3);
+			vect.add(0, x.elementAt(0));
+			vect.add(1, x.elementAt(1));
+			vect.add(2, this.plottedNodesMap.get(x).size());
+			res.add(vect);
+		}
+		return res;
+	}
+	
+	public double getGridsize() {
+		return gridsize;
+	}
 }

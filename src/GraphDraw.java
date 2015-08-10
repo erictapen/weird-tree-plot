@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
@@ -145,33 +147,27 @@ public class GraphDraw extends PApplet {
 			pltr.update();
 		}
 		System.out.print("Start drawing.                                    \n");
+		//draws a grid of 1*1 units for better view
+		drawOneUnitGrid();
+		//highlights every block of the NodeSetManager for better optimization
+		drawNodeSetManagerGrid();
+		//draw Nodes
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
 		}
 		for(GraphNode x : pltr.getMovingNodes()) {
 			drawNode(x, 127);
 		}
-
-		//draws a grid of 1*1 units for better view
-		stroke(0);
-		for(double i=width/2.0; i>0; i -= drawRootSize) {
-			line((int)i, 0, (int)i, height);
-		}
-		for(double i=width/2.0; i<width; i += drawRootSize) {
-			line((int)i, 0, (int)i, height);
-		}
-		for(double i=height/2.0; i>0; i -= drawRootSize) {
-			line(0, (int)i, width, (int)i);
-		}
-		for(double i=height/2.0; i<height; i += drawRootSize) {
-			line(0, (int)i, width, (int)i);
-		}
 		
 		System.out.print("drawing completed.                                 \n");
 	}
 
+
+	
+
 	private void drawNode(GraphNode x, int color) {
 		stroke(color);
+		noFill();
 		//draw the node + every link
 		ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 				(float) (height/2.0 + x.getyPos()*drawRootSize),
@@ -198,6 +194,50 @@ public class GraphDraw extends PApplet {
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
 		}		
+	}
+	
+
+	/** draws a grid of 1*1 units for better view
+	 * 
+	 */
+	private void drawOneUnitGrid() {
+		stroke(0);
+		for(double i=width/2.0; i>0; i -= drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=width/2.0; i<width; i += drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=height/2.0; i>0; i -= drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		for(double i=height/2.0; i<height; i += drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+	}
+	
+	/** highlights every block of the NodeSetManager for better optimization
+	 * 
+	 */
+	private void drawNodeSetManagerGrid() {
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+		for(Vector<Integer> x : this.pltr.getManager().getOverview()) {
+			x1 = (float)(x.elementAt(0)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			x1 += width/2.0;
+			y1 = (float)(x.elementAt(1)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y1 += height/2.0;
+			x2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			int fill = (int)(x.get(2));
+			if(fill<=20) fill = 20;
+			fill(fill);
+			//fill(127);
+			stroke(0);
+			rect(x1, y1, x2, y2);
+		}
 	}
 
 
