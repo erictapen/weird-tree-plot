@@ -8,4 +8,4 @@
 plotter.conf
 *.png
 *.svg
-processing-master/*
+/processing-master/*
