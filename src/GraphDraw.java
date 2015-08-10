@@ -142,8 +142,8 @@ public class GraphDraw extends PApplet {
 		//draws a grid of 1*1 units for better view
 		drawOneUnitGrid();
 		//highlights every block of the NodeSetManager for better optimization
-		drawNodeSetManagerGrid();
-		drawWaitingNodeSetManagerGrid();
+		//drawNodeSetManagerGrid();
+		//drawWaitingNodeSetManagerGrid();
 		//draw Nodes
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
@@ -172,9 +172,15 @@ public class GraphDraw extends PApplet {
 	
 
 	private void drawNode(GraphNode x, int color) {
-		stroke(color);
 		noFill();
+		stroke(color);
+//		if(Math.abs(x.getxPos()) < 0.01) {
+//			stroke(255, 0, 255);
+//			fill(255, 0, 255);
+//		} //TODO
+		
 		//draw the node + every link
+		
 		ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 				(float) (height/2.0 + x.getyPos()*drawRootSize),
 				(float) (x.getRadius()*drawRootSize*2.0),
