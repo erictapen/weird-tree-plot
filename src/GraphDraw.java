@@ -235,8 +235,7 @@ public class GraphDraw extends PApplet {
 			int fill = (int)(x.get(2));
 			if(fill<=20) fill = 20;
 			fill(fill);
-			//fill(127);
-			stroke(0);
+			noStroke();
 			rect(x1, y1, x2, y2);
 		}
 	}

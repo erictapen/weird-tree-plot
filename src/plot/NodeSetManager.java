@@ -60,19 +60,19 @@ public class NodeSetManager {
 				if(temp!=null) res.addAll(temp);
 			}
 		}
-		if(Math.random() < 0.0001) {
-			System.out.println("Node " + node.getCaption() + node.getRadius() + " lies near " + res.size()
-					+ " other nodes:");
+		//if(Math.random() < 0.0001) {
+			//TODO delete debug messages
+//			System.out.println("Node " + node.getCaption() + node.getRadius() + " lies near " + res.size()
+//					+ " other nodes:");
 //			for(GraphNode x : res) {
 //				System.out.println("\t" + x.getCaption() + "\t " + x.getRadius());
 //			}
-		}
+		//}
 
 		return res;
 	}
 
 	public void update() {
-		// TODO Auto-generated method stub
 		
 	}
 	
