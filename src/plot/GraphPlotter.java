@@ -230,10 +230,12 @@ public class GraphPlotter {
 					
 					double traveledDist = Math.sqrt(
 							Math.pow(
-									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0)
+										- movingNode.getxPos(), 
 									2.0)
 							+ Math.pow(
-									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(1), 
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(1)
+										- movingNode.getyPos(), 
 									2.0));
 					if(traveledDist <= this.minStepSizeBeforeAbort) {
 						movingNode.setPlotted(true);
@@ -253,7 +255,7 @@ public class GraphPlotter {
 						vIntersect[1] += v[1];
 					}
 					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
-					radCenter += (Math.random()-0.5)*0.05*Math.PI;
+					radCenter += (Math.random()-0.5)*this.stepsize*0.01*Math.PI;
 					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
 						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
 						//push against the direction, where the intersection occurs
