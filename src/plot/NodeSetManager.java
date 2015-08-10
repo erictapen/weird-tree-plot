@@ -54,8 +54,14 @@ public class NodeSetManager {
 				if(temp!=null) res.addAll(temp);
 			}
 		}
-		if(Math.random() < 0.01) System.out.println("Node " + node.getCaption() + " lies near " + res.size()
-				+ " other nodes.");
+		if(Math.random() < 0.0001) {
+			System.out.println("Node " + node.getCaption() + node.getRadius() + " lies near " + res.size()
+					+ " other nodes:");
+//			for(GraphNode x : res) {
+//				System.out.println("\t" + x.getCaption() + "\t " + x.getRadius());
+//			}
+		}
+
 		return res;
 	}
 
@@ -91,5 +97,26 @@ public class NodeSetManager {
 		this.gridsize = 1.0/gridsize;
 	}
 
+	public String getStatus() {
+		int biggest = 0;
+		int smallest = Integer.MAX_VALUE;
+		int sum = 0;
+		int count = 0;
+		for(HashSet<GraphNode> x : plottedNodesMap.values()) {
+			if(x.size() > biggest) biggest = x.size();
+			if(x.size() < smallest) smallest = x.size();
+			sum += x.size();
+			count++;
+		}
+		double average = 0.0;
+		if(count!=0) average = (double)sum/count;
+		return "NodeSetManager_Status: " + "\n\t" 
+			+ count + " cells" + "\n\t" 
+			+ sum + " nodes" + "\n\t"
+			+ biggest + " nodes in the biggest cell" + "\n\t"
+			+ smallest + " nodes in the smallest cell" + "\n\t"
+			+ average + " nodes in the average cell\n";
+		
+	}
 	
 }

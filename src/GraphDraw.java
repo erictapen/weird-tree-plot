@@ -140,6 +140,7 @@ public class GraphDraw extends PApplet {
 							+ "iterations, \n" + pltr.getMovingNodes().size() + " movingNodes, "
 							+ pltr.getPlottedNodes().size() + " plottedNodes and " 
 							+ pltr.getWaitingNodes().size() + " waitingNodes\n");
+		System.out.println(pltr.getManager().getStatus());
 		for(int i=0; i<drawEveryUpdateInterval; i++) {
 			pltr.update();
 		}
