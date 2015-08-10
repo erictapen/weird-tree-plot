@@ -54,7 +54,8 @@ public class NodeSetManager {
 				if(temp!=null) res.addAll(temp);
 			}
 		}
-		
+		if(Math.random() < 0.01) System.out.println("Node " + node.getCaption() + " lies near " + res.size()
+				+ " other nodes.");
 		return res;
 	}
 
