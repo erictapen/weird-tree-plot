@@ -151,7 +151,22 @@ public class GraphDraw extends PApplet {
 		for(GraphNode x : pltr.getMovingNodes()) {
 			drawNode(x, 127);
 		}
-		//ellipse(width/2, height/2, 100, 100);
+
+		//draws a grid of 1*1 units for better view
+		stroke(0);
+		for(double i=width/2.0; i>0; i -= drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=width/2.0; i<width; i += drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=height/2.0; i>0; i -= drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		for(double i=height/2.0; i<height; i += drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		
 		System.out.print("drawing completed.                                 \n");
 	}
 
@@ -182,22 +197,7 @@ public class GraphDraw extends PApplet {
 			vNorm2.mult((float)(y.getRadius()*drawRootSize));
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
-		}
-		//draws a grid of 1*1 units for better view
-		stroke(0);
-		for(double i=width/2.0; i>0; i -= drawRootSize) {
-			line((int)i, 0, (int)i, height);
-		}
-		for(double i=width/2.0; i<width; i += drawRootSize) {
-			line((int)i, 0, (int)i, height);
-		}
-		for(double i=height/2.0; i>0; i -= drawRootSize) {
-			line(0, (int)i, width, (int)i);
-		}
-		for(double i=height/2.0; i<height; i += drawRootSize) {
-			line(0, (int)i, width, (int)i);
-		}
-		
+		}		
 	}
 
 
