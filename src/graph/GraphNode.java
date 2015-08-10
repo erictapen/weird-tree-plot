@@ -11,8 +11,17 @@ public class GraphNode {
 	private double yPos;
 	private double radius = 1.0;
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
+	private boolean plotted = false;
 
 	
+
+	public boolean isPlotted() {
+		return plotted;
+	}
+
+	public void setPlotted(boolean plotted) {
+		this.plotted = plotted;
+	}
 
 	public ArrayList<ArrayList<Double>> getMemoryOfMovements() {
 		return memoryOfMovements;

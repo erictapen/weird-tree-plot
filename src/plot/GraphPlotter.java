@@ -55,9 +55,13 @@ public class GraphPlotter {
 	private int persistenceBeforeAbort = 500;
 
 
+	private NodeSetManager movingmanager = new NodeSetManager();
 
 
 
+
+
+	
 
 	/** Also calls init()
 	 * @param root
@@ -67,7 +71,7 @@ public class GraphPlotter {
 		super();
 		this.root = root;
 		this.debug = debug;
-		this.manager = new NodeSetManager(this);
+		this.manager = new NodeSetManager();
 		this.plottedNodes = new HashSet<GraphNode>();
 		this.movingNodes = new HashSet<GraphNode>();
 		this.waitingNodes = new HashSet<GraphNode>();
@@ -176,7 +180,7 @@ public class GraphPlotter {
 		if(this.redrawInterval == 0) this.redrawInterval = this.maxIteration;
 		if(this.waitingNodes.isEmpty()) return;
 		
-		if(this.iteration==0) {    	
+		if(this.iteration==0) {   
 			//if new round begins:
 			//update nodeLists, get new nodes, initialize the starting circle
 			this.plottedNodes.addAll(movingNodes);
@@ -197,60 +201,71 @@ public class GraphPlotter {
 				if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
 			}
 			this.waitingNodes.removeAll(tooSmall);
-			
-			this.waitingNodes.removeAll(tooSmall);
+			double movingCircleMinRadius = Math.sqrt(	Math.pow(smallest.getxPos(), 2) +
+														Math.pow(smallest.getyPos(), 2))
+											+ smallest.getRadius();
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
 								+ Math.random()*this.stepsize - this.stepsize*0.5;
 				if(x.getParent()==this.root) rad = Math.random()*Math.PI*2.0;
-				x.setxPos(Math.sin(rad)*this.movingCircleRadius);
-				x.setyPos(Math.cos(rad)*this.movingCircleRadius);
+				x.setxPos(Math.sin(rad)*(movingCircleMinRadius + this.movingCircleRadius));
+				x.setyPos(Math.cos(rad)*(movingCircleMinRadius + this.movingCircleRadius));
 			}
-			/*
-			for(GraphNode x : this.waitingNodes) {       //do the waitingCircle
-				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
-								+ Math.random()*this.stepsize - this.stepsize*0.5;
-				x.setxPos(Math.sin(rad)*this.waitingCircleRadius);
-				x.setyPos(Math.cos(rad)*this.waitingCircleRadius);
-			}
-			*/
 			for(GraphNode x : this.movingNodes) {
 				x.setMemoryOfMovements(new ArrayList<ArrayList<Double>>());
 			}
+			
 		}
+		
+		
 		for(int i=0; i<this.redrawInterval; i++) {
+			this.movingmanager = new NodeSetManager();
+			this.movingmanager.setGridsize(this.manager.getGridsize());
+			this.movingmanager.update(this.movingNodes);
+			
 			for(GraphNode movingNode : this.movingNodes) {
-				boolean abort = false;
-				if(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1) {
+				if(		(!movingNode.isPlotted()) && 
+						(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1)
+					) {
 					
 					double traveledDist = Math.sqrt(
 							Math.pow(
-									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0)
+										- movingNode.getxPos(), 
 									2.0)
 							+ Math.pow(
-									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0), 
+									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(1)
+										- movingNode.getyPos(), 
 									2.0));
-					if(traveledDist <= this.minStepSizeBeforeAbort) abort = true;
+					if(traveledDist <= this.minStepSizeBeforeAbort) {
+						movingNode.setPlotted(true);
+						//System.out.println("Node " + movingNode.getCaption() + " only needed " + iteration +
+						//		" steps.");
+					}
+					
 					//if(abort) continue;
 				}
-				if(!abort) {
+				if(!movingNode.isPlotted()) {
 					double[] vIntersect = new double[2];
-					for(GraphNode anyNode : this.manager.getNearbyNodes(movingNode)) {
+					HashSet<GraphNode> toCheck = this.manager.getNearbyNodes(movingNode);
+					toCheck.addAll(movingmanager.getNearbyNodes(movingNode));
+					for(GraphNode anyNode : toCheck) {
 						double[] v = movingNode.intersect(anyNode);
 						vIntersect[0] += v[0];
 						vIntersect[1] += v[1];
 					}
 					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
+					radCenter += (Math.random()-0.5)*this.stepsize*0.01*Math.PI;
 					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
 						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
-						//push against the direction, where the intersction occurs
-						//push away from the center
+						//push against the direction, where the intersection occurs
+						//push away from the center (but not so much)
 						movingNode.setxPos(	movingNode.getxPos()
 											- Math.sin(radIntersect)*this.stepsize
-											+ Math.sin(radCenter)*this.stepsize);
+											+ Math.sin(radCenter)*this.stepsize*0.5);
 						movingNode.setyPos(	movingNode.getyPos()
 											- Math.cos(radIntersect)*this.stepsize
-											+ Math.cos(radCenter)*this.stepsize);
+											+ Math.cos(radCenter)*this.stepsize*0.5);
 					} else {       //in case of no intersection
 						double radParent = Math.atan2(	movingNode.getParent().getxPos()
 														- movingNode.getxPos(), 
@@ -258,7 +273,6 @@ public class GraphPlotter {
 														- movingNode.getyPos());
 						//pull towards parent
 						//pull towards center
-						radCenter += (Math.random()-0.5)*0.05*Math.PI;
 						movingNode.setxPos( movingNode.getxPos()
 											+ Math.sin(radParent)*this.stepsize
 											- Math.sin(radCenter)*this.stepsize);
@@ -266,8 +280,7 @@ public class GraphPlotter {
 											+ Math.cos(radParent)*this.stepsize
 											- Math.cos(radCenter)*this.stepsize);
 					}
-					movingNode.getMemoryOfMovements().add(0, 
-							new ArrayList<Double>());
+					movingNode.getMemoryOfMovements().add(0, new ArrayList<Double>());
 					movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
 					movingNode.getMemoryOfMovements().get(0).add(1, movingNode.getyPos());
 				}
@@ -404,5 +417,7 @@ public class GraphPlotter {
 		this.persistenceBeforeAbort = persistenceBeforeAbort;
 	}
 	
-	
+	public NodeSetManager getMovingmanager() {
+		return movingmanager;
+	}
 }

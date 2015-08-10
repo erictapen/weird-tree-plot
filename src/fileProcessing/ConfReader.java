@@ -23,7 +23,7 @@ public class ConfReader {
 			while ((line = br.readLine()) != null) {
 				count++;
 				if(line.startsWith("#")) continue;
-				if(line == "") continue;
+				if(line.isEmpty()) continue;
 				String[] pair = line.split(" = ");
 				if(pair.length != 2) {
 					System.out.println("Syntax error on line " + count + 

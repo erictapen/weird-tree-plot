@@ -1,3 +1,5 @@
+import java.util.Vector;
+
 import fileProcessing.ConfReader;
 import fileProcessing.SVGGraph;
 import fileProcessing.SortedGraph;
@@ -34,7 +36,14 @@ public class GraphDraw extends PApplet {
 
 	private boolean exportAndClose = false;
 	
+	/** This is for benchmarking
+	 * 
+	 */
+	private long startTime = 0;
+	private long stopTime = 0;
+	
 	public void setup() {
+		startTime = System.currentTimeMillis();
 		int sizex = 0;
 		int sizey = 0;
 		
@@ -120,37 +129,58 @@ public class GraphDraw extends PApplet {
 	}
 
 	public void draw() {
-		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
-			System.out.println("Starting export to tikz.");
-			TexGraph.exportToTex(	exportfile, 
-									pltr.getPlottedNodes(), true, true, false);
-			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
-									pltr.getPlottedNodes(), false, true, false);
-			System.out.println("Export to tikz complete.");
-			exit();
-		}
 		background(0xFFFFFF);
 		System.out.print(	"Plot in progress: " + pltr.getIteration() + "/" + pltr.getMaxIteration() 
 							+ "iterations, \n" + pltr.getMovingNodes().size() + " movingNodes, "
 							+ pltr.getPlottedNodes().size() + " plottedNodes and " 
 							+ pltr.getWaitingNodes().size() + " waitingNodes\n");
+		//System.out.println(pltr.getManager().getStatus());
 		for(int i=0; i<drawEveryUpdateInterval; i++) {
 			pltr.update();
 		}
 		System.out.print("Start drawing.                                    \n");
+		//draws a grid of 1*1 units for better view
+		drawOneUnitGrid();
+		//highlights every block of the NodeSetManager for better optimization
+		drawNodeSetManagerGrid();
+		drawWaitingNodeSetManagerGrid();
+		//draw Nodes
 		for(GraphNode x : pltr.getPlottedNodes()) {
 			drawNode(x, 0);
 		}
 		for(GraphNode x : pltr.getMovingNodes()) {
 			drawNode(x, 127);
 		}
-		//ellipse(width/2, height/2, 100, 100);
+		
 		System.out.print("drawing completed.                                 \n");
+		saveFrame(); //TODO delete debugging msg
+		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
+			System.out.println("Starting export to tikz.");
+			TexGraph.exportToTex(	exportfile, 
+									pltr.getPlottedNodes(), true, true, false);
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+					pltr.getPlottedNodes(), false, true, false);
+			System.out.println("Export to tikz,svg complete.");
+			stopTime = System.currentTimeMillis();
+			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
+			saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
+			exit();
+		}
 	}
 
+
+	
+
 	private void drawNode(GraphNode x, int color) {
+		noFill();
 		stroke(color);
+		if(!x.isPlotted()) {
+			stroke(255, 0, 255);
+			fill(255, 0, 255);
+		} //TODO
+		
 		//draw the node + every link
+		
 		ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 				(float) (height/2.0 + x.getyPos()*drawRootSize),
 				(float) (x.getRadius()*drawRootSize*2.0),
@@ -175,11 +205,73 @@ public class GraphDraw extends PApplet {
 			vNorm2.mult((float)(y.getRadius()*drawRootSize));
 			v2.add(vNorm2);
 			line(v1.x, v1.y, v2.x, v2.y);
+		}		
+	}
+	
+
+	/** draws a grid of 1*1 units for better view
+	 * 
+	 */
+	private void drawOneUnitGrid() {
+		stroke(0);
+		for(double i=width/2.0; i>0; i -= drawRootSize) {
+			line((int)i, 0, (int)i, height);
 		}
-		ellipse(width/2,
-				height/2,
-				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize),
-				(float) (pltr.getMovingCircleRadius()*0.5*drawRootSize));
+		for(double i=width/2.0; i<width; i += drawRootSize) {
+			line((int)i, 0, (int)i, height);
+		}
+		for(double i=height/2.0; i>0; i -= drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+		for(double i=height/2.0; i<height; i += drawRootSize) {
+			line(0, (int)i, width, (int)i);
+		}
+	}
+	
+	/** highlights every block of the NodeSetManager for better optimization
+	 * 
+	 */
+	private void drawNodeSetManagerGrid() {
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+		for(Vector<Integer> x : this.pltr.getManager().getOverview()) {
+			x1 = (float)(x.elementAt(0)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			x1 += width/2.0;
+			y1 = (float)(x.elementAt(1)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y1 += height/2.0;
+			x2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			int fill = (int)(x.get(2));
+			if(fill<=20) fill = 20;
+			fill(fill);
+			stroke(fill);
+			rect(x1, y1, x2, y2);
+		}
+	}
+	
+	/** highlights every block of the WaitingNodeSetManager for better optimization
+	 * 
+	 */
+	private void drawWaitingNodeSetManagerGrid() {
+		float x1;
+		float y1;
+		float x2;
+		float y2;
+		for(Vector<Integer> x : this.pltr.getMovingmanager().getOverview()) {
+			x1 = (float)(x.elementAt(0)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			x1 += width/2.0;
+			y1 = (float)(x.elementAt(1)*this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y1 += height/2.0;
+			x2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			y2 = (float)(this.pltr.getManager().getGridsize()*this.drawRootSize);
+			int fill = (int)(x.get(2));
+			if(fill<=20) fill = 20;
+			fill(fill, 0, 0);
+			stroke(fill);
+			rect(x1, y1, x2, y2);
+		}
 	}
 
 
