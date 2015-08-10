@@ -253,6 +253,7 @@ public class GraphPlotter {
 						vIntersect[1] += v[1];
 					}
 					double radCenter = Math.atan2(movingNode.getxPos(), movingNode.getyPos());
+					radCenter += (Math.random()-0.5)*0.05*Math.PI;
 					if(vIntersect[0]!=0 || vIntersect[1]!=0) {   //in case of intersection
 						double radIntersect = Math.atan2(vIntersect[0], vIntersect[1]);
 						//push against the direction, where the intersection occurs
@@ -270,7 +271,6 @@ public class GraphPlotter {
 														- movingNode.getyPos());
 						//pull towards parent
 						//pull towards center
-						radCenter += (Math.random()-0.5)*0.05*Math.PI;
 						movingNode.setxPos( movingNode.getxPos()
 											+ Math.sin(radParent)*this.stepsize
 											- Math.sin(radCenter)*this.stepsize);
