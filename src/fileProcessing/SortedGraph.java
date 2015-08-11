@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** Import and Export functionality for .dot-files which are already sorted
  * and are therefore faster readable. There are only .dot-files with a single graph allowed!
@@ -35,9 +37,7 @@ public class SortedGraph {
 			String line;
 			int i=0;
 			while ((line = br.readLine()) != null) {
-				if(i%1 == 0) createNodeFromLine(line); //this if condition is 
-														//only due to low RAM on my netbook!!!
-														//Set i%1 for processing every single line.
+				createNodeFromLine(line);
 				i++;
 				if(i%10000 == 0) System.out.println(i + " Nodes imported.");
 			}
@@ -55,14 +55,16 @@ public class SortedGraph {
 		GraphNode root = nodemap.get(rootcaption);
 		if(root==null) return null;
 		boolean graphNeedsUpdateOnLeafSizes = false;
+		boolean graphNeedsPlot = false;
 		ArrayList<GraphNode> togo = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> togo2 = new ArrayList<GraphNode>();
 		togo.add(root);
 		while(!togo.isEmpty()) {
 			for(GraphNode x : togo) {
-				if(x.getNumberOfAllLeafs()==0) {
-					graphNeedsUpdateOnLeafSizes = true;
-					//System.out.println(x);
+				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
+				if(x.getRadius()==0.0) {
+					graphNeedsPlot = true;
+					System.out.println(x.getCaption());	
 				}
 				togo2.addAll(x.getChildren());
 			}
@@ -70,6 +72,7 @@ public class SortedGraph {
 			togo.addAll(togo2);
 			togo2.clear();
 		}
+		if(root.getRadius()!=1.0) graphNeedsPlot = true;
 		if(graphNeedsUpdateOnLeafSizes) {
 			System.out.println("It seems like, the imported file doesn't have any information about "
 					+ "numberOfAllLeafs. This must be "
@@ -80,7 +83,13 @@ public class SortedGraph {
 			System.out.println("Update completed. Your stack was big enough.");
 		} else {
 			System.out.println("Expensive Updateprocess of numberOfAllLeafs was not necessary, due to"
-					+ "enough infomration in the file!");
+					+ "enough information in the file!");
+		}
+		if(graphNeedsPlot) {
+			System.out.println("Graph needs plot.");
+		} else {
+			System.out.println("It appears, that the graph is already plotted. If you want to "
+					+ "force plot it, change the radius of root to something different than 1.0.");
 		}
 		System.out.println("Import completed.");
 		return root;
@@ -93,18 +102,34 @@ public class SortedGraph {
 		//System.out.println(line);
 		line = line.replace("\t", "");  //deletes the tab at the beginning
 		String[] str = line.split(" <-- ");
-		
+		boolean parentGotAttr = false;
+		boolean childGotAttr = false;
 		int attrNumberOfLeafsParent = 0;
+		double attrPosXParent = 0.0;
+		double attrPosYParent = 0.0;
+		double attrRadiusParent = 0.0;
 		if(str[0].contains("[")) {
 			attrNumberOfLeafsParent = Integer.parseInt(extractAttributeFromString(str[0], 
 					"numberOfAllLeafs"));
+			attrPosXParent = Double.parseDouble(extractAttributeFromString(str[0], "posx"));
+			attrPosYParent = Double.parseDouble(extractAttributeFromString(str[0], "posy"));
+			attrRadiusParent = Double.parseDouble(extractAttributeFromString(str[0], "radius"));
+			parentGotAttr = true;
 			str[0] = str[0].substring(0, str[0].indexOf(" ["));
 		}
 		
 		int attrNumberOfLeafs = 0;
+		double attrPosX = 0.0;
+		double attrPosY = 0.0;
+		double attrRadius = 0.0;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attributes are read out from string
-			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], "numberOfAllLeafs"));
+			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], 
+					"numberOfAllLeafs"));
+			attrPosX = Double.parseDouble(extractAttributeFromString(str[1], "posx"));
+			attrPosY = Double.parseDouble(extractAttributeFromString(str[1], "posy"));
+			attrRadius = Double.parseDouble(extractAttributeFromString(str[1], "radius"));
+			childGotAttr = true;
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
 		
@@ -121,26 +146,42 @@ public class SortedGraph {
 		}
 		child.setParent(parent);
 		parent.addChild(child);
-		child.setNumberOfAllLeafs(attrNumberOfLeafs);
-		if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
-		//nodes.add(parent);
-		//nodes.add(child);
+		if(parentGotAttr) {
+			if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
+			parent.setxPos(attrPosXParent);
+			parent.setyPos(attrPosYParent);
+			parent.setRadius(attrRadiusParent);
+		}
+		if(childGotAttr) {
+			child.setNumberOfAllLeafs(attrNumberOfLeafs);
+			child.setxPos(attrPosX);
+			child.setyPos(attrPosY);
+			child.setRadius(attrRadius);
+		}
 	}
 	
 	private static String extractAttributeFromString(String str, String attribute) {
-		String attr = "";
-		attr = str.substring(str.indexOf("["));
-		str = str.substring(0, str.indexOf("[")-1);
-		try{
-			return attr.substring(	attr.indexOf(attribute + "=\"") + attribute.length() + 2, 
-									attr.indexOf("\"", attr.indexOf(attribute + "=\"") 
-											+ attribute.length() + 3));
-		} catch (NumberFormatException e) {
-			System.out.println("There might be corrupted attributes in " + str);
-		} catch (StringIndexOutOfBoundsException e) {
-			System.out.println("IndexOutOfBounds: " + str);
-		}
-		return "";
+		
+		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
+		Matcher matcher = pattern.matcher(str);
+		matcher.find();
+		return matcher.group(1);
+		
+//		String attr = "";
+//		attr = str.substring(str.indexOf("["));
+//		str = str.substring(0, str.indexOf("[")-1);
+//		try{
+//			return attr.substring(	attr.indexOf(attribute + "=\"") + attribute.length() + 2, 
+//									attr.indexOf("\"", attr.indexOf(attribute + "=\"") 
+//											+ attribute.length() + 3));
+//		} catch (NumberFormatException e) {
+//			System.out.println("There might be corrupted attributes in " + str);
+//		} catch (StringIndexOutOfBoundsException e) {
+//			System.out.println("IndexOutOfBounds: " + str);
+//		}
+//		return "";
+		
+		
 	}
 
 	/** Exports the graph! Every data, which is determined by now will be written into the file
@@ -167,15 +208,32 @@ public class SortedGraph {
 				for(GraphNode x : togo) {
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
-						writer.append(" [numberOfAllLeafs=\"" + x.getParent().getNumberOfAllLeafs() 
-								+ "\"]");
+						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+								+ "posx=\"%posx\""
+								+ "posy=\"%posy\""
+								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%numberOfAllLeafs", 
+								Integer.toString(x.getParent().getNumberOfAllLeafs()));
+						append = append.replaceAll("%posx", Double.toString(x.getParent().getxPos()));
+						append = append.replaceAll("%posy", Double.toString(x.getParent().getyPos()));
+						append = append.replaceAll("%radius", 
+								Double.toString(x.getParent().getRadius()));
+						writer.append(append);
 					}
 					writer.append(" <-- " + x.getCaption());
 					if(writeAttributes) {
-						writer.append(" [numberOfAllLeafs=\"" + x.getNumberOfAllLeafs() + "\"]\n");
-					} else {
-						writer.append("\n");
+						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+								+ "posx=\"%posx\", "
+								+ "posy=\"%posy\", "
+								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%numberOfAllLeafs", 
+								Integer.toString(x.getNumberOfAllLeafs()));
+						append = append.replaceAll("%posx", Double.toString(x.getxPos()));
+						append = append.replaceAll("%posy", Double.toString(x.getyPos()));
+						append = append.replaceAll("%radius", Double.toString(x.getRadius()));
+						writer.append(append);
 					}
+					writer.append("\n");
 					togo2.addAll(x.getChildren());
 				}
 				togo.clear();

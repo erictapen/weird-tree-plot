@@ -120,6 +120,7 @@ public class GraphDraw extends PApplet {
 					+ "\nWill terminate.");
 			exit();
 		}
+		if(root.getRadius() == 1.0) abortAndExport(); //Graph is already plotted
 		System.out.println("rootnode is: " + root.getCaption());
 		pltr = new GraphPlotter(root, true);
 		pltr.init(config);
@@ -155,21 +156,35 @@ public class GraphDraw extends PApplet {
 		System.out.print("drawing completed.                                 \n");
 		saveFrame(); //TODO delete debugging msg
 		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
-			System.out.println("Starting export to tikz.");
-			TexGraph.exportToTex(	exportfile, 
-									pltr.getPlottedNodes(), true, true, false);
-			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
-					pltr.getPlottedNodes(), false, true, false);
-			System.out.println("Export to tikz,svg complete.");
-			stopTime = System.currentTimeMillis();
-			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
-			saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
-			exit();
+			abortAndExport();
 		}
 	}
 
 
 	
+
+	private void abortAndExport() {
+		System.out.println("Starting export to tikz, svg, dot.");
+		if(pltr!=null) {
+			TexGraph.exportToTex(	exportfile, 
+									pltr.getPlottedNodes(), true, true, false);
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+					pltr.getPlottedNodes(), false, true, false);
+			SortedGraph.exportFile(pltr.getRoot(), "../data/wiki_sorted_attr.dot", true);
+		} else {
+			TexGraph.exportToTex(	exportfile, 
+					this.root.getWholeTree(), true, true, false);
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+					this.root.getWholeTree(), false, true, false);
+			SortedGraph.exportFile(this.root, "../data/wiki_sorted_attr.dot", true);
+		}
+		
+		System.out.println("Export to tikz, svg, dot complete.");
+		stopTime = System.currentTimeMillis();
+		System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
+		saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
+		exit();
+	}
 
 	private void drawNode(GraphNode x, int color) {
 		noFill();

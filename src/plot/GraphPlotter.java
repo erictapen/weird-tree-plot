@@ -7,6 +7,7 @@ import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import graph.GraphNode;
 
+@SuppressWarnings("unused")
 public class GraphPlotter {
 
 	/** This is the root Node, where everything starts. needs to be init by hand, 
@@ -82,7 +83,7 @@ public class GraphPlotter {
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
-		SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
+		//SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
@@ -196,11 +197,13 @@ public class GraphPlotter {
 			for(GraphNode x : smallest.getChildren()) {
 				this.waitingNodes.addAll(x.getChildren());
 			}
-			HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
-			for(GraphNode x : this.waitingNodes) {
-				if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
+			if(minNodeLeafs>1) {
+				HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
+				for(GraphNode x : this.waitingNodes) {
+					if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
+				}
+				this.waitingNodes.removeAll(tooSmall);
 			}
-			this.waitingNodes.removeAll(tooSmall);
 			double movingCircleMinRadius = Math.sqrt(	Math.pow(smallest.getxPos(), 2) +
 														Math.pow(smallest.getyPos(), 2))
 											+ smallest.getRadius();
