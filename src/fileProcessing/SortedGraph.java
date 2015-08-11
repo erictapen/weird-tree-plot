@@ -37,9 +37,7 @@ public class SortedGraph {
 			String line;
 			int i=0;
 			while ((line = br.readLine()) != null) {
-				if(i%1 == 0) createNodeFromLine(line); //this if condition is 
-														//only due to low RAM on my netbook!!!
-														//Set i%1 for processing every single line.
+				createNodeFromLine(line);
 				i++;
 				if(i%10000 == 0) System.out.println(i + " Nodes imported.");
 			}
@@ -64,7 +62,10 @@ public class SortedGraph {
 		while(!togo.isEmpty()) {
 			for(GraphNode x : togo) {
 				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
-				if(x.getRadius()==0.0) graphNeedsPlot = true;
+				if(x.getRadius()==0.0) {
+					graphNeedsPlot = true;
+					//System.out.println(x.getCaption());
+				}
 				togo2.addAll(x.getChildren());
 			}
 			togo.clear();
