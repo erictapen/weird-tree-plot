@@ -165,7 +165,11 @@ public class SortedGraph {
 		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
 		Matcher matcher = pattern.matcher(str);
 		matcher.find();
-		return matcher.group(1);
+		try{
+			return matcher.group(1);
+		} catch (IllegalStateException e) {
+			return "0.0";
+		}
 		
 //		String attr = "";
 //		attr = str.substring(str.indexOf("["));
