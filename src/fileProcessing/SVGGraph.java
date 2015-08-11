@@ -21,6 +21,7 @@ public class SVGGraph {
 		writeCaption = false;
 		writeEdges = false;
 		double scale = 512.0;
+		double strokeWidth = 0.001; //relative to scale
 		double posxmin = Double.MAX_VALUE;
 		double posxmax = Double.MIN_VALUE;
 		double posymin = Double.MAX_VALUE;
@@ -78,10 +79,11 @@ public class SVGGraph {
 					}
 					if(level < 17) level = 17;
 					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
-							+ "stroke=\"none\" stroke-width=\"10px\" fill=\"%color\"/>\n";
+							+ "stroke=\"none\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
 					insert = insert.replaceAll("%cx", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%cy", df.format(x.getyPos()*scale));
 					insert = insert.replaceAll("%r", df.format(x.getRadius()*scale));
+					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*scale));
 					insert = insert.replaceAll("%color", "#" + Integer.toHexString(level) + "0000");
 					writer.append(insert);
 				}
