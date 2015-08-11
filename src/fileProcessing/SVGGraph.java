@@ -20,6 +20,7 @@ public class SVGGraph {
 		
 		writeCaption = false;
 		writeEdges = false;
+		double scale = 512.0;
 		double posxmin = Double.MAX_VALUE;
 		double posxmax = Double.MIN_VALUE;
 		double posymin = Double.MAX_VALUE;
@@ -50,10 +51,10 @@ public class SVGGraph {
 					"     width=\"%widthpx\" height=\"%heightpx\"\n" + 
 					"     viewBox=\"%cornerx %cornery %width %height\">\n" + 
 					"\n";
-			append = append.replaceAll("%width", df.format(width*1024));
-			append = append.replaceAll("%height", df.format(height*1024));
-			append = append.replaceAll("%cornerx", df.format(posxmin*1024));
-			append = append.replaceAll("%cornery", df.format(posymin*1024));
+			append = append.replaceAll("%width", df.format(width*scale));
+			append = append.replaceAll("%height", df.format(height*scale));
+			append = append.replaceAll("%cornerx", df.format(posxmin*scale));
+			append = append.replaceAll("%cornery", df.format(posymin*scale));
 			
 			writer.append(append);
 			
@@ -78,9 +79,9 @@ public class SVGGraph {
 					if(level < 17) level = 17;
 					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
 							+ "stroke=\"none\" stroke-width=\"10px\" fill=\"%color\"/>\n";
-					insert = insert.replaceAll("%cx", df.format(x.getxPos()*1024));
-					insert = insert.replaceAll("%cy", df.format(x.getyPos()*1024));
-					insert = insert.replaceAll("%r", df.format(x.getRadius()*1024));
+					insert = insert.replaceAll("%cx", df.format(x.getxPos()*scale));
+					insert = insert.replaceAll("%cy", df.format(x.getyPos()*scale));
+					insert = insert.replaceAll("%r", df.format(x.getRadius()*scale));
 					insert = insert.replaceAll("%color", "#" + Integer.toHexString(level) + "0000");
 					writer.append(insert);
 				}
