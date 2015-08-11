@@ -87,6 +87,7 @@ public class NodeSetManager {
 			if(radius==0) System.out.println("Radius ist null!");
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
+					if(Math.sqrt(x*x + y*y) > radius+1) continue;
 					Vector<Integer> vect = new Vector<Integer>(2);
 					vect.add(0, new Integer((int)Math.floor(node.getxPos()/this.gridsize)) + x);
 					vect.add(1, new Integer((int)Math.floor(node.getyPos()/this.gridsize)) + y);
