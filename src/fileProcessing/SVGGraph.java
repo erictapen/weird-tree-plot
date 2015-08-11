@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -71,8 +73,8 @@ public class SVGGraph {
 							"</text>\n";
 					insert = insert.replaceAll("%x", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%y", df.format(x.getyPos()*scale));
-					System.out.println(x.getCaption());
-					insert = insert.replaceAll("%caption",  x.getCaption());
+					insert = insert.replaceAll("%caption",  
+							StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
 					writer.append(insert);
 				}
 				if(writeCircles) {
