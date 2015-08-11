@@ -69,11 +69,19 @@ public class SVGGraph {
 					}
 				}
 				if(writeCircles) {
+					GraphNode it = x;
+					int level = 255;
+					while(it.getParent()!=null) {
+						it = it.getParent();
+						level -= 10;
+					}
+					if(level < 17) level = 17;
 					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
-							+ "stroke=\"black\" stroke-width=\"10px\" fill=\"none\"/>\n";
+							+ "stroke=\"none\" stroke-width=\"10px\" fill=\"%color\"/>\n";
 					insert = insert.replaceAll("%cx", df.format(x.getxPos()*1024));
 					insert = insert.replaceAll("%cy", df.format(x.getyPos()*1024));
 					insert = insert.replaceAll("%r", df.format(x.getRadius()*1024));
+					insert = insert.replaceAll("%color", "#" + Integer.toHexString(level) + "0000");
 					writer.append(insert);
 				}
 				try{
