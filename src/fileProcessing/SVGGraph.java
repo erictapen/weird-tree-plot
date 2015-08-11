@@ -67,12 +67,13 @@ public class SVGGraph {
 			
 			for(GraphNode x : nodes) {
 				if(writeCaption) {
-					String insert = "<text x=\"%x\" y=\"%y\"\n" + 
+					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" lengthAdjust=\"spacingAndGlyphs\"\n" + 
 							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" + 
 							"    %caption\n" + 
 							"</text>\n";
 					insert = insert.replaceAll("%x", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%y", df.format(x.getyPos()*scale + x.getRadius()*scale*0.175));
+					insert = insert.replaceAll("%textlength", df.format(x.getRadius()*1.8*scale));
 					insert = insert.replaceAll("%fontsize", df.format(x.getRadius()*scale*0.5));
 					insert = insert.replaceAll("%caption",  
 							StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
