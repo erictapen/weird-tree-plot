@@ -8,12 +8,9 @@ import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Export feature for svg vector graphics
- * At the moment, only circles will be written
  * @author justin
  *
  */
@@ -25,7 +22,7 @@ public class SVGGraph {
 		writeCaption = true;
 		writeEdges = false;
 		double scale = 256.0;
-		double strokeWidth = 0.002; //relative to scale
+		double strokeWidth = 0.005; //relative to scale
 		boolean fillGradient = false;
 		boolean stroke = true;
 		double captionMinNodesize = 0.01;
