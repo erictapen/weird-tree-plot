@@ -1,0 +1,12 @@
+processing.app
+processing.app.contrib
+processing.app.exec
+processing.app.platform
+processing.app.syntax
+processing.app.syntax.im
+processing.app.tools
+processing.core
+processing.data
+processing.event
+processing.mode.java.preproc
+processing.opengl

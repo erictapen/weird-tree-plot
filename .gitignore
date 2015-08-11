@@ -7,3 +7,7 @@
 *.gz
 plotter.conf
 *.png
+*.svg
+/processing-master/
+/roadmap/
+*.swp

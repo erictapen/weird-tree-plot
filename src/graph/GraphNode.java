@@ -1,6 +1,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GraphNode {
 	private String caption;
@@ -9,10 +10,19 @@ public class GraphNode {
 	private int numberOfAllLeafs;
 	private double xPos;
 	private double yPos;
-	private double radius = 1.0;
+	private double radius = 0.0;
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
+	private boolean plotted = false;
 
 	
+
+	public boolean isPlotted() {
+		return plotted;
+	}
+
+	public void setPlotted(boolean plotted) {
+		this.plotted = plotted;
+	}
 
 	public ArrayList<ArrayList<Double>> getMemoryOfMovements() {
 		return memoryOfMovements;
@@ -152,7 +162,17 @@ public class GraphNode {
 		return new double[] {0.0, 0.0};
 	}
 
-	
+	/**
+	 * @return whole tree under the node as a hashset, including itself
+	 */
+	public HashSet<GraphNode> getWholeTree() {
+		HashSet<GraphNode> res = new HashSet<GraphNode>();
+		res.add(this);
+		for(GraphNode x : this.children) {
+			res.addAll(x.getWholeTree());
+		}
+		return res;
+	}
 	
 	
 }
