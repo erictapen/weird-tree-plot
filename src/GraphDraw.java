@@ -155,12 +155,13 @@ public class GraphDraw extends PApplet {
 		System.out.print("drawing completed.                                 \n");
 		saveFrame(); //TODO delete debugging msg
 		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
-			System.out.println("Starting export to tikz.");
+			System.out.println("Starting export to tikz, svg, dot.");
 			TexGraph.exportToTex(	exportfile, 
 									pltr.getPlottedNodes(), true, true, false);
 			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
 					pltr.getPlottedNodes(), false, true, false);
-			System.out.println("Export to tikz,svg complete.");
+			SortedGraph.exportFile(pltr.getRoot(), "../data/wiki_sorted_attr.dot", true);
+			System.out.println("Export to tikz, svg, dot complete.");
 			stopTime = System.currentTimeMillis();
 			System.out.println("Program ran in " + (stopTime - startTime) + " Milliseconds.");
 			saveFrame("/home/justin/git/wikipedia-map/out/screen.png");
