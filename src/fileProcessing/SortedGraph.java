@@ -63,8 +63,7 @@ public class SortedGraph {
 			for(GraphNode x : togo) {
 				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
 				if(x.getRadius()==0.0) {
-					graphNeedsPlot = true;
-					System.out.println(x.getCaption());	
+					graphNeedsPlot = true;	
 				}
 				togo2.addAll(x.getChildren());
 			}
