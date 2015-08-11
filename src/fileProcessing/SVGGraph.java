@@ -22,6 +22,8 @@ public class SVGGraph {
 		writeEdges = false;
 		double scale = 512.0;
 		double strokeWidth = 0.001; //relative to scale
+		boolean fillGradient = false;
+		boolean stroke = true;
 		double posxmin = Double.MAX_VALUE;
 		double posxmax = Double.MIN_VALUE;
 		double posymin = Double.MAX_VALUE;
@@ -72,19 +74,26 @@ public class SVGGraph {
 				}
 				if(writeCircles) {
 					GraphNode it = x;
-					int level = 255;
-					while(it.getParent()!=null) {
-						it = it.getParent();
-						level -= 10;
-					}
-					if(level < 17) level = 17;
 					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
-							+ "stroke=\"none\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
+							+ "stroke=\"%Stroke\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
+					if(fillGradient) {
+						int level = 255;
+						while(it.getParent()!=null) {
+							it = it.getParent();
+							level -= 10;
+						}
+						if(level < 17) level = 17;
+						insert = insert.replaceAll("%color", "#" + 
+								Integer.toHexString(level) + "0000");
+					} else {
+						insert = insert.replaceAll("%color", "none");
+					}
 					insert = insert.replaceAll("%cx", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%cy", df.format(x.getyPos()*scale));
 					insert = insert.replaceAll("%r", df.format(x.getRadius()*scale));
 					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*scale));
-					insert = insert.replaceAll("%color", "#" + Integer.toHexString(level) + "0000");
+					if(stroke) insert = insert.replaceAll("%Stroke", "black");
+					else insert = insert.replaceAll("%Stroke", "none");
 					writer.append(insert);
 				}
 				try{
