@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /** Import and Export functionality for .dot-files which are already sorted
  * and are therefore faster readable. There are only .dot-files with a single graph allowed!
@@ -128,19 +130,27 @@ public class SortedGraph {
 	}
 	
 	private static String extractAttributeFromString(String str, String attribute) {
-		String attr = "";
-		attr = str.substring(str.indexOf("["));
-		str = str.substring(0, str.indexOf("[")-1);
-		try{
-			return attr.substring(	attr.indexOf(attribute + "=\"") + attribute.length() + 2, 
-									attr.indexOf("\"", attr.indexOf(attribute + "=\"") 
-											+ attribute.length() + 3));
-		} catch (NumberFormatException e) {
-			System.out.println("There might be corrupted attributes in " + str);
-		} catch (StringIndexOutOfBoundsException e) {
-			System.out.println("IndexOutOfBounds: " + str);
-		}
-		return "";
+		
+		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
+		Matcher matcher = pattern.matcher(str);
+		matcher.find();
+		return matcher.group(1);
+		
+//		String attr = "";
+//		attr = str.substring(str.indexOf("["));
+//		str = str.substring(0, str.indexOf("[")-1);
+//		try{
+//			return attr.substring(	attr.indexOf(attribute + "=\"") + attribute.length() + 2, 
+//									attr.indexOf("\"", attr.indexOf(attribute + "=\"") 
+//											+ attribute.length() + 3));
+//		} catch (NumberFormatException e) {
+//			System.out.println("There might be corrupted attributes in " + str);
+//		} catch (StringIndexOutOfBoundsException e) {
+//			System.out.println("IndexOutOfBounds: " + str);
+//		}
+//		return "";
+		
+		
 	}
 
 	/** Exports the graph! Every data, which is determined by now will be written into the file
@@ -182,8 +192,8 @@ public class SortedGraph {
 					writer.append(" <-- " + x.getCaption());
 					if(writeAttributes) {
 						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
-								+ "posx=\"%posx\""
-								+ "posy=\"%posy\""
+								+ "posx=\"%posx\", "
+								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
 						append = append.replaceAll("%numberOfAllLeafs", 
 								Integer.toString(x.getNumberOfAllLeafs()));
@@ -191,9 +201,8 @@ public class SortedGraph {
 						append = append.replaceAll("%posy", Double.toString(x.getyPos()));
 						append = append.replaceAll("%radius", Double.toString(x.getRadius()));
 						writer.append(append);
-					} else {
-						writer.append("\n");
 					}
+					writer.append("\n");
 					togo2.addAll(x.getChildren());
 				}
 				togo.clear();
