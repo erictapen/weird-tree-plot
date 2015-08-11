@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Export feature for svg vector graphics
  * At the moment, only circles will be written
