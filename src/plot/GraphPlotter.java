@@ -7,6 +7,7 @@ import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import graph.GraphNode;
 
+@SuppressWarnings("unused")
 public class GraphPlotter {
 
 	/** This is the root Node, where everything starts. needs to be init by hand, 
@@ -82,7 +83,7 @@ public class GraphPlotter {
 		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
 		this.updateSizes();
 		manager.init();
-		SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
+		//SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);

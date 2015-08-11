@@ -64,7 +64,7 @@ public class SortedGraph {
 				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
 				if(x.getRadius()==0.0) {
 					graphNeedsPlot = true;
-					//System.out.println(x.getCaption());
+					System.out.println(x.getCaption());	
 				}
 				togo2.addAll(x.getChildren());
 			}
@@ -102,7 +102,8 @@ public class SortedGraph {
 		//System.out.println(line);
 		line = line.replace("\t", "");  //deletes the tab at the beginning
 		String[] str = line.split(" <-- ");
-		
+		boolean parentGotAttr = false;
+		boolean childGotAttr = false;
 		int attrNumberOfLeafsParent = 0;
 		double attrPosXParent = 0.0;
 		double attrPosYParent = 0.0;
@@ -113,6 +114,7 @@ public class SortedGraph {
 			attrPosXParent = Double.parseDouble(extractAttributeFromString(str[0], "posx"));
 			attrPosYParent = Double.parseDouble(extractAttributeFromString(str[0], "posy"));
 			attrRadiusParent = Double.parseDouble(extractAttributeFromString(str[0], "radius"));
+			parentGotAttr = true;
 			str[0] = str[0].substring(0, str[0].indexOf(" ["));
 		}
 		
@@ -127,6 +129,7 @@ public class SortedGraph {
 			attrPosX = Double.parseDouble(extractAttributeFromString(str[1], "posx"));
 			attrPosY = Double.parseDouble(extractAttributeFromString(str[1], "posy"));
 			attrRadius = Double.parseDouble(extractAttributeFromString(str[1], "radius"));
+			childGotAttr = true;
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
 		
@@ -143,16 +146,18 @@ public class SortedGraph {
 		}
 		child.setParent(parent);
 		parent.addChild(child);
-		child.setNumberOfAllLeafs(attrNumberOfLeafs);
-		child.setxPos(attrPosX);
-		child.setyPos(attrPosY);
-		child.setRadius(attrRadius);
-		if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
-		parent.setxPos(attrPosXParent);
-		parent.setyPos(attrPosYParent);
-		parent.setRadius(attrRadiusParent);
-		//nodes.add(parent);
-		//nodes.add(child);
+		if(parentGotAttr) {
+			if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
+			parent.setxPos(attrPosXParent);
+			parent.setyPos(attrPosYParent);
+			parent.setRadius(attrRadiusParent);
+		}
+		if(childGotAttr) {
+			child.setNumberOfAllLeafs(attrNumberOfLeafs);
+			child.setxPos(attrPosX);
+			child.setyPos(attrPosY);
+			child.setRadius(attrRadius);
+		}
 	}
 	
 	private static String extractAttributeFromString(String str, String attribute) {
