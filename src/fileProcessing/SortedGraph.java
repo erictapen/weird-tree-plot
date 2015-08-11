@@ -82,7 +82,7 @@ public class SortedGraph {
 			System.out.println("Update completed. Your stack was big enough.");
 		} else {
 			System.out.println("Expensive Updateprocess of numberOfAllLeafs was not necessary, due to"
-					+ "enough infomration in the file!");
+					+ "enough information in the file!");
 		}
 		System.out.println("Import completed.");
 		return root;
