@@ -172,7 +172,11 @@ public class GraphDraw extends PApplet {
 					pltr.getPlottedNodes(), false, true, false);
 			SortedGraph.exportFile(pltr.getRoot(), "../data/wiki_sorted_attr.dot", true);
 		} else {
-			
+			TexGraph.exportToTex(	exportfile, 
+					this.root.getWholeTree(), true, true, false);
+			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
+					this.root.getWholeTree(), false, true, false);
+			SortedGraph.exportFile(this.root, "../data/wiki_sorted_attr.dot", true);
 		}
 		
 		System.out.println("Export to tikz, svg, dot complete.");
