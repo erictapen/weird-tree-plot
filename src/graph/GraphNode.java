@@ -9,7 +9,7 @@ public class GraphNode {
 	private int numberOfAllLeafs;
 	private double xPos;
 	private double yPos;
-	private double radius = 1.0;
+	private double radius = 0.0;
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
 	private boolean plotted = false;
 
