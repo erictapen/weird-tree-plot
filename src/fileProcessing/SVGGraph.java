@@ -25,9 +25,10 @@ public class SVGGraph {
 		writeCaption = true;
 		writeEdges = false;
 		double scale = 256.0;
-		double strokeWidth = 0.01; //relative to scale
+		double strokeWidth = 0.002; //relative to scale
 		boolean fillGradient = false;
 		boolean stroke = true;
+		double captionMinNodesize = 0.01;
 		double posxmin = Double.MAX_VALUE;
 		double posxmax = Double.MIN_VALUE;
 		double posymin = Double.MAX_VALUE;
@@ -66,7 +67,7 @@ public class SVGGraph {
 			writer.append(append);
 			
 			for(GraphNode x : nodes) {
-				if(writeCaption) {
+				if(writeCaption && x.getRadius() > captionMinNodesize) {
 					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" lengthAdjust=\"spacingAndGlyphs\"\n" + 
 							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" + 
 							"    %caption\n" + 
