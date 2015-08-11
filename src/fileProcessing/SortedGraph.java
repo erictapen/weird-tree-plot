@@ -57,21 +57,21 @@ public class SortedGraph {
 		GraphNode root = nodemap.get(rootcaption);
 		if(root==null) return null;
 		boolean graphNeedsUpdateOnLeafSizes = false;
+		boolean graphNeedsPlot = false;
 		ArrayList<GraphNode> togo = new ArrayList<GraphNode>();
 		ArrayList<GraphNode> togo2 = new ArrayList<GraphNode>();
 		togo.add(root);
 		while(!togo.isEmpty()) {
 			for(GraphNode x : togo) {
-				if(x.getNumberOfAllLeafs()==0) {
-					graphNeedsUpdateOnLeafSizes = true;
-					//System.out.println(x);
-				}
+				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
+				if(x.getRadius()==0.0) graphNeedsPlot = true;
 				togo2.addAll(x.getChildren());
 			}
 			togo.clear();
 			togo.addAll(togo2);
 			togo2.clear();
 		}
+		if(root.getRadius()!=1.0) graphNeedsPlot = true;
 		if(graphNeedsUpdateOnLeafSizes) {
 			System.out.println("It seems like, the imported file doesn't have any information about "
 					+ "numberOfAllLeafs. This must be "
@@ -83,6 +83,12 @@ public class SortedGraph {
 		} else {
 			System.out.println("Expensive Updateprocess of numberOfAllLeafs was not necessary, due to"
 					+ "enough information in the file!");
+		}
+		if(graphNeedsPlot) {
+			System.out.println("Graph needs plot.");
+		} else {
+			System.out.println("It appears, that the graph is already plotted. If you want to "
+					+ "force plot it, change the radius of root to something different than 1.0.");
 		}
 		System.out.println("Import completed.");
 		return root;
@@ -97,16 +103,29 @@ public class SortedGraph {
 		String[] str = line.split(" <-- ");
 		
 		int attrNumberOfLeafsParent = 0;
+		double attrPosXParent = 0.0;
+		double attrPosYParent = 0.0;
+		double attrRadiusParent = 0.0;
 		if(str[0].contains("[")) {
 			attrNumberOfLeafsParent = Integer.parseInt(extractAttributeFromString(str[0], 
 					"numberOfAllLeafs"));
+			attrPosXParent = Double.parseDouble(extractAttributeFromString(str[0], "posx"));
+			attrPosYParent = Double.parseDouble(extractAttributeFromString(str[0], "posy"));
+			attrRadiusParent = Double.parseDouble(extractAttributeFromString(str[0], "radius"));
 			str[0] = str[0].substring(0, str[0].indexOf(" ["));
 		}
 		
 		int attrNumberOfLeafs = 0;
+		double attrPosX = 0.0;
+		double attrPosY = 0.0;
+		double attrRadius = 0.0;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attributes are read out from string
-			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], "numberOfAllLeafs"));
+			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], 
+					"numberOfAllLeafs"));
+			attrPosX = Double.parseDouble(extractAttributeFromString(str[1], "posx"));
+			attrPosY = Double.parseDouble(extractAttributeFromString(str[1], "posy"));
+			attrRadius = Double.parseDouble(extractAttributeFromString(str[1], "radius"));
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
 		
@@ -124,7 +143,13 @@ public class SortedGraph {
 		child.setParent(parent);
 		parent.addChild(child);
 		child.setNumberOfAllLeafs(attrNumberOfLeafs);
+		child.setxPos(attrPosX);
+		child.setyPos(attrPosY);
+		child.setRadius(attrRadius);
 		if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
+		parent.setxPos(attrPosXParent);
+		parent.setyPos(attrPosYParent);
+		parent.setRadius(attrRadiusParent);
 		//nodes.add(parent);
 		//nodes.add(child);
 	}
