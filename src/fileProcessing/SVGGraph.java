@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Locale;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /** Export feature for svg vector graphics
  * At the moment, only circles will be written
  * @author justin
@@ -18,10 +20,10 @@ public class SVGGraph {
 	public static void exportToSVG(	String filename, HashSet<GraphNode> nodes, boolean writeCaption,
 									boolean writeCircles, boolean writeEdges) {
 		
-		writeCaption = false;
+		writeCaption = true;
 		writeEdges = false;
-		double scale = 512.0;
-		double strokeWidth = 0.001; //relative to scale
+		double scale = 256.0;
+		double strokeWidth = 0.01; //relative to scale
 		boolean fillGradient = false;
 		boolean stroke = true;
 		double posxmin = Double.MAX_VALUE;
@@ -63,14 +65,15 @@ public class SVGGraph {
 			
 			for(GraphNode x : nodes) {
 				if(writeCaption) {
-					double size = (50.0*x.getRadius())/(double)x.getCaption().length();
-					if(size!=0.0) {
-						writer.append("\\node[scale=" + 
-								df.format(size) + 
-								"pt] at (" + 
-								df.format(x.getxPos()) + "*\\SCALE," + 
-								df.format(x.getyPos()) + "*\\SCALE) {" + x.getCaption() + "};\n"); 
-					}
+					String insert = "<text x=\"%x\" y=\"%y\"\n" + 
+							"      style=\"text-anchor: middle\">\n" + 
+							"    %caption\n" + 
+							"</text>\n";
+					insert = insert.replaceAll("%x", df.format(x.getxPos()*scale));
+					insert = insert.replaceAll("%y", df.format(x.getyPos()*scale));
+					System.out.println(x.getCaption());
+					insert = insert.replaceAll("%caption",  x.getCaption());
+					writer.append(insert);
 				}
 				if(writeCircles) {
 					GraphNode it = x;
@@ -80,7 +83,7 @@ public class SVGGraph {
 						int level = 255;
 						while(it.getParent()!=null) {
 							it = it.getParent();
-							level -= 10;
+							level -= 30;
 						}
 						if(level < 17) level = 17;
 						insert = insert.replaceAll("%color", "#" + 
