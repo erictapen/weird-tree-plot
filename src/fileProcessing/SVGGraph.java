@@ -20,7 +20,8 @@ public class SVGGraph {
 									boolean writeCircles, boolean writeEdges) {
 		
 		writeCaption = true;
-		writeEdges = false;
+		writeEdges = false; //In terms of clearness its more or less a shitty idea to activate this. 
+							//But it looks good!
 		double scale = 256.0;
 		double strokeWidth = 0.005; //relative to scale
 		boolean fillGradient = false;
@@ -101,16 +102,19 @@ public class SVGGraph {
 					else insert = insert.replaceAll("%Stroke", "none");
 					writer.append(insert);
 				}
-				try{
-					GraphNode p = x.getParent();
-					if(writeEdges && p!=null) {
-						writer.append("\\draw [->] (" + 
-								df.format(x.getxPos()) + "*\\SCALE," + 
-								df.format(x.getyPos()) + "*\\SCALE) -- (" + 
-								df.format(p.getxPos()) + "*\\SCALE," + 
-								df.format(p.getyPos()) + "*\\SCALE);\n\n");
-					}
-				} catch(NullPointerException e) {}
+				GraphNode p = x.getParent();
+				if(writeEdges && p!=null) {
+					String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" + 
+							"          x2=\"%x2\" y2=\"%y2\" \n" + 
+							"          stroke=\"black\" \n" + 
+							"          stroke-width=\"%strokeWidth\"/>\n";
+					insert = insert.replaceAll("%x1", df.format(x.getxPos()*scale));
+					insert = insert.replaceAll("%y1", df.format(x.getyPos()*scale));
+					insert = insert.replaceAll("%x2", df.format(p.getxPos()*scale));
+					insert = insert.replaceAll("%y2", df.format(p.getyPos()*scale));
+					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*scale));
+					writer.append(insert);
+				}
 
 
 			}
