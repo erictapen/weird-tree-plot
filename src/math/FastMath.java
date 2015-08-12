@@ -14,7 +14,7 @@ public class FastMath {
 	private HashMap<Double, Double> sqrtDouble;
 	private HashMap<Vector<Double>, Double> distDouble;
 	
-	FastMath() {
+	public FastMath() {
 		this.sqrtInteger = new HashMap<Integer, Integer>(); //TODO find good initialcapacities
 		this.distInteger = new HashMap<Vector<Integer>, Integer>();
 		this.sqrtDouble = new HashMap<Double, Double>();

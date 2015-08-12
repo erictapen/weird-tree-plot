@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
+import math.FastMath;
+
 /** This is for (probably) more efficient search of neighbored Nodes in the plane
  * @author justin
  *
@@ -17,15 +19,16 @@ public class NodeSetManager {
 	 * 
 	 */
 	private double gridsize;
+	private FastMath mth;
 	
 
-	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;	
-	private HashMap<Integer, Integer> sqrtMap;
+	
+
+	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;
 	
 	public NodeSetManager() {
 		super();
 		this.plottedNodesMap = new HashMap<Vector<Integer>, HashSet<GraphNode>>();
-		this.sqrtMap = new HashMap<Integer, Integer>();
 	}
 
 	public void init() {
@@ -88,8 +91,7 @@ public class NodeSetManager {
 			if(radius==0) System.out.println("Radius ist null!");
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
-					if(this.sqrtMap.get(x*x + y*y) == null) System.out.println(x*x + y*y);
-					if(this.sqrtMap.get(x*x + y*y) > radius+1) continue;
+					if(Math.sqrt(x*x + y*y) > radius+1) continue;
 					Vector<Integer> vect = new Vector<Integer>(2);
 					vect.add(0, new Integer((int)Math.floor(node.getxPos()/this.gridsize)) + x);
 					vect.add(1, new Integer((int)Math.floor(node.getyPos()/this.gridsize)) + y);
@@ -155,5 +157,9 @@ public class NodeSetManager {
 	
 	public double getGridsize() {
 		return gridsize;
+	}
+	
+	public void setMth(FastMath mth) {
+		this.mth = mth;
 	}
 }

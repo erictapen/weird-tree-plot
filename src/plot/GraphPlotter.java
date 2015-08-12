@@ -3,6 +3,7 @@ package plot;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import math.FastMath;
 import fileProcessing.ConfReader;
 import fileProcessing.SortedGraph;
 import graph.GraphNode;
@@ -57,6 +58,7 @@ public class GraphPlotter {
 
 
 	private NodeSetManager movingmanager;
+	private FastMath mth;
 
 
 
@@ -91,6 +93,9 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
+		
+		this.mth = new FastMath();
+		this.manager.setMth(mth);
 	}
 	
 	/** initializes a file by using a config file. Attributes, which are not in the file 
@@ -225,6 +230,7 @@ public class GraphPlotter {
 		for(int i=0; i<this.redrawInterval; i++) {
 			this.movingmanager = new NodeSetManager();
 			this.movingmanager.setGridsize(this.manager.getGridsize());
+			this.movingmanager.setMth(mth);
 			this.movingmanager.init();
 			this.movingmanager.update(this.movingNodes);
 			
