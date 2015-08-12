@@ -29,13 +29,7 @@ public class NodeSetManager {
 	}
 
 	public void init() {
-		int maxRadius = (int)(1/this.gridsize)+10;
-		maxRadius *= maxRadius*2;
-		System.out.println("init with " + maxRadius);
-		for(int i=0; i<maxRadius; i++) {
-			this.sqrtMap.put(i, (int)Math.sqrt(i));
-		}
-		
+		//todo
 	}
 	
 	public void init(ConfReader cnf) {
