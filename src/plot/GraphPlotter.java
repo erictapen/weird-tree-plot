@@ -30,7 +30,7 @@ public class GraphPlotter {
 	/** for larger hops, before a collision occured
 	 * 
 	 */
-	private double bigStepSize;
+	private double bigStepsize;
 	/** Maximum of steps, a single node will travel. After that, it stops where it is.
 	 * 
 	 */
@@ -95,6 +95,7 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
+		this.bigStepsize = this.stepsize;
 		
 	}
 	
@@ -276,19 +277,33 @@ public class GraphPlotter {
 						movingNode.setyPos(	movingNode.getyPos()
 											- Math.cos(radIntersect)*this.stepsize
 											+ Math.cos(radCenter)*this.stepsize*0.5);
+						movingNode.setAlreadyHadACollision(true);
 					} else {       //in case of no intersection
 						double radParent = Math.atan2(	movingNode.getParent().getxPos()
 														- movingNode.getxPos(), 
 														movingNode.getParent().getyPos()
 														- movingNode.getyPos());
-						//pull towards parent
-						//pull towards center
-						movingNode.setxPos( movingNode.getxPos()
-											+ Math.sin(radParent)*this.stepsize
-											- Math.sin(radCenter)*this.stepsize);
-						movingNode.setyPos( movingNode.getyPos()
-											+ Math.cos(radParent)*this.stepsize
-											- Math.cos(radCenter)*this.stepsize);
+						if(movingNode.isAlreadyHadACollision()) {
+							//pull towards parent
+							//pull towards center
+							movingNode.setxPos( movingNode.getxPos()
+												+ Math.sin(radParent)*this.stepsize
+												- Math.sin(radCenter)*this.stepsize);
+							movingNode.setyPos( movingNode.getyPos()
+												+ Math.cos(radParent)*this.stepsize
+												- Math.cos(radCenter)*this.stepsize);
+						} else {
+							//determine bigStepsize from the size of the smallest node
+							this.bigStepsize = movingNode.getRadius()*0.49;
+							//pull towards parent
+							//pull towards center
+							movingNode.setxPos( movingNode.getxPos()
+												+ Math.sin(radParent)*this.bigStepsize
+												- Math.sin(radCenter)*this.bigStepsize);
+							movingNode.setyPos( movingNode.getyPos()
+												+ Math.cos(radParent)*this.bigStepsize
+												- Math.cos(radCenter)*this.bigStepsize);
+						}
 					}
 					movingNode.getMemoryOfMovements().add(0, new ArrayList<Double>());
 					movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
