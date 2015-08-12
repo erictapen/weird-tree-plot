@@ -81,7 +81,7 @@ public class GraphPlotter {
 	}
 
 	public void init() {
-		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
+		System.out.println("root has " + root.getTreeSize() + " leafs.");
 		this.updateSizes();
 		manager.init();
 		//SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
@@ -191,7 +191,7 @@ public class GraphPlotter {
 			this.movingNodes.clear();
 			GraphNode smallest = root;
 			for(GraphNode x : this.waitingNodes) {
-				if(smallest.getNumberOfAllLeafs() > x.getParent().getNumberOfAllLeafs()) 
+				if(smallest.getTreeSize() > x.getParent().getTreeSize()) 
 							smallest = x.getParent();
 			}
 			this.movingNodes.addAll(smallest.getChildren());
@@ -202,7 +202,7 @@ public class GraphPlotter {
 			if(minNodeLeafs>1) {
 				HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
 				for(GraphNode x : this.waitingNodes) {
-					if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
+					if(minNodeLeafs > x.getTreeSize()) tooSmall.add(x);
 				}
 				this.waitingNodes.removeAll(tooSmall);
 			}
@@ -329,7 +329,7 @@ public class GraphPlotter {
 		nodes.add(this.root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
-				x.setRadius(this.getSizeFromLeafs(x.getNumberOfAllLeafs()));
+				x.setRadius(this.getSizeFromLeafs(x.getTreeSize()));
 				temp.addAll(x.getChildren());
 			}
 			nodes.clear();
@@ -344,7 +344,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getNumberOfAllLeafs() + sizeOffSet)));
+		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getTreeSize() + sizeOffSet)));
 	}
 
 

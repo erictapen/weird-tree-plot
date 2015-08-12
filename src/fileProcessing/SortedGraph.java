@@ -61,7 +61,7 @@ public class SortedGraph {
 		togo.add(root);
 		while(!togo.isEmpty()) {
 			for(GraphNode x : togo) {
-				if(x.getNumberOfAllLeafs()==0) graphNeedsUpdateOnLeafSizes = true;
+				if(x.getTreeSize()==0) graphNeedsUpdateOnLeafSizes = true;
 				if(x.getRadius()==0.0) {
 					graphNeedsPlot = true;	
 				}
@@ -74,14 +74,14 @@ public class SortedGraph {
 		if(root.getRadius()!=1.0) graphNeedsPlot = true;
 		if(graphNeedsUpdateOnLeafSizes) {
 			System.out.println("It seems like, the imported file doesn't have any information about "
-					+ "numberOfAllLeafs. This must be "
+					+ "subTreeSize. This must be "
 					+ "updated now.\nUnfortunately, this is a very stack expensive process. "
 					+ "In case of a StackOverflowException you might "
 					+ "need to increase your stack size. Wait a second while the update is running.");
-			root.updateNumberOfAllLeafs();
+			root.updateTreeSize();
 			System.out.println("Update completed. Your stack was big enough.");
 		} else {
-			System.out.println("Expensive Updateprocess of numberOfAllLeafs was not necessary, due to"
+			System.out.println("Expensive Updateprocess of subTreeSize was not necessary, due to"
 					+ "enough information in the file!");
 		}
 		if(graphNeedsPlot) {
@@ -109,7 +109,7 @@ public class SortedGraph {
 		double attrRadiusParent = 0.0;
 		if(str[0].contains("[")) {
 			attrNumberOfLeafsParent = Integer.parseInt(extractAttributeFromString(str[0], 
-					"numberOfAllLeafs"));
+					"treeSize"));
 			attrPosXParent = Double.parseDouble(extractAttributeFromString(str[0], "posx"));
 			attrPosYParent = Double.parseDouble(extractAttributeFromString(str[0], "posy"));
 			attrRadiusParent = Double.parseDouble(extractAttributeFromString(str[0], "radius"));
@@ -124,7 +124,7 @@ public class SortedGraph {
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attributes are read out from string
 			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], 
-					"numberOfAllLeafs"));
+					"treeSize"));
 			attrPosX = Double.parseDouble(extractAttributeFromString(str[1], "posx"));
 			attrPosY = Double.parseDouble(extractAttributeFromString(str[1], "posy"));
 			attrRadius = Double.parseDouble(extractAttributeFromString(str[1], "radius"));
@@ -146,13 +146,13 @@ public class SortedGraph {
 		child.setParent(parent);
 		parent.addChild(child);
 		if(parentGotAttr) {
-			if(attrNumberOfLeafsParent!=0) parent.setNumberOfAllLeafs(attrNumberOfLeafsParent);
+			if(attrNumberOfLeafsParent!=0) parent.setTreeSize(attrNumberOfLeafsParent);
 			parent.setxPos(attrPosXParent);
 			parent.setyPos(attrPosYParent);
 			parent.setRadius(attrRadiusParent);
 		}
 		if(childGotAttr) {
-			child.setNumberOfAllLeafs(attrNumberOfLeafs);
+			child.setTreeSize(attrNumberOfLeafs);
 			child.setxPos(attrPosX);
 			child.setyPos(attrPosY);
 			child.setRadius(attrRadius);
@@ -211,12 +211,12 @@ public class SortedGraph {
 				for(GraphNode x : togo) {
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
-						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+						String append = " [treeSize=\"%treeSize\", "
 								+ "posx=\"%posx\""
 								+ "posy=\"%posy\""
 								+ "radius=\"%radius\"]";
-						append = append.replaceAll("%numberOfAllLeafs", 
-								Integer.toString(x.getParent().getNumberOfAllLeafs()));
+						append = append.replaceAll("%treeSize", 
+								Integer.toString(x.getParent().getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getParent().getxPos()));
 						append = append.replaceAll("%posy", Double.toString(x.getParent().getyPos()));
 						append = append.replaceAll("%radius", 
@@ -225,12 +225,12 @@ public class SortedGraph {
 					}
 					writer.append(" <-- " + x.getCaption());
 					if(writeAttributes) {
-						String append = " [numberOfAllLeafs=\"%numberOfAllLeafs\", "
+						String append = " [treeSize=\"%treeSize\", "
 								+ "posx=\"%posx\", "
 								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
-						append = append.replaceAll("%numberOfAllLeafs", 
-								Integer.toString(x.getNumberOfAllLeafs()));
+						append = append.replaceAll("%treeSize", 
+								Integer.toString(x.getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getxPos()));
 						append = append.replaceAll("%posy", Double.toString(x.getyPos()));
 						append = append.replaceAll("%radius", Double.toString(x.getRadius()));
