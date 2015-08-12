@@ -1,6 +1,6 @@
 # WeirdTreePlot, an Graph Plotter for weird graphs
 This tool was originally an attempt, to create a "map" of the whole Wikipedia, which one can hang up it's wall. It turned out to be useful as a graph plotter for somewhat special trees.
-![Alt text](http://full/path/to/img.jpg "Optional title")
+![Alt text](example_result.jpg?raw=true "Just a test")
 
 # Do I need it?
 You might like it, if your tree has
