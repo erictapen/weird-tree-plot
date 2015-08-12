@@ -26,11 +26,7 @@ public class GraphPlotter {
 	/** Every node will travel with this stepsize. It will determine the accuracy of the result.
 	 *  For smaller stepsize, you'll need more iterations
 	 */
-	private double stepsize;  
-	/** for larger hops, before a collision occured
-	 * 
-	 */
-	private double bigStepsize;
+	private double stepsize;
 	/** Maximum of steps, a single node will travel. After that, it stops where it is.
 	 * 
 	 */
@@ -95,7 +91,6 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
-		this.bigStepsize = this.stepsize;
 		
 	}
 	
@@ -293,8 +288,7 @@ public class GraphPlotter {
 												+ Math.cos(radParent)*this.stepsize
 												- Math.cos(radCenter)*this.stepsize);
 						} else {
-							//determine bigStepsize from the size of the smallest node
-							//this.bigStepsize = movingNode.getRadius()*0.49;
+							//determine alternativeStepsize from the size of the movingNode
 							//pull towards parent
 							//pull towards center
 							movingNode.setxPos( movingNode.getxPos()
