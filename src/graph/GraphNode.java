@@ -13,9 +13,11 @@ public class GraphNode {
 	private double radius = 0.0;
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
 	private boolean plotted = false;
+	private boolean alreadyHadACollision = false;
 
 	
 
+	
 	public boolean isPlotted() {
 		return plotted;
 	}
@@ -98,6 +100,14 @@ public class GraphNode {
 
 	public void setyPos(double yPos) {
 		this.yPos = yPos;
+	}
+	
+	public boolean isAlreadyHadACollision() {
+		return alreadyHadACollision;
+	}
+
+	public void setAlreadyHadACollision(boolean alreadyHadACollision) {
+		this.alreadyHadACollision = alreadyHadACollision;
 	}
 	
 	/**Recursive

@@ -26,7 +26,11 @@ public class GraphPlotter {
 	/** Every node will travel with this stepsize. It will determine the accuracy of the result.
 	 *  For smaller stepsize, you'll need more iterations
 	 */
-	private double stepsize;       
+	private double stepsize;  
+	/** for larger hops, before a collision occured
+	 * 
+	 */
+	private double bigStepSize;
 	/** Maximum of steps, a single node will travel. After that, it stops where it is.
 	 * 
 	 */
