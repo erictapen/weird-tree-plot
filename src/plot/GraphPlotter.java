@@ -294,15 +294,15 @@ public class GraphPlotter {
 												- Math.cos(radCenter)*this.stepsize);
 						} else {
 							//determine bigStepsize from the size of the smallest node
-							this.bigStepsize = movingNode.getRadius()*0.49;
+							//this.bigStepsize = movingNode.getRadius()*0.49;
 							//pull towards parent
 							//pull towards center
 							movingNode.setxPos( movingNode.getxPos()
-												+ Math.sin(radParent)*this.bigStepsize
-												- Math.sin(radCenter)*this.bigStepsize);
+												+ Math.sin(radParent)*movingNode.getRadius()*0.49
+												- Math.sin(radCenter)*movingNode.getRadius()*0.49);
 							movingNode.setyPos( movingNode.getyPos()
-												+ Math.cos(radParent)*this.bigStepsize
-												- Math.cos(radCenter)*this.bigStepsize);
+												+ Math.cos(radParent)*movingNode.getRadius()*0.49
+												- Math.cos(radCenter)*movingNode.getRadius()*0.49);
 						}
 					}
 					movingNode.getMemoryOfMovements().add(0, new ArrayList<Double>());
