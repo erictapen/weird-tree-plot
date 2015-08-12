@@ -11,3 +11,4 @@ plotter.conf
 /processing-master/
 /roadmap/
 *.swp
+!example_result.svg
