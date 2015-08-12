@@ -20,15 +20,22 @@ public class NodeSetManager {
 	
 
 	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;	
-	
+	private HashMap<Integer, Integer> sqrtMap;
 	
 	public NodeSetManager() {
 		super();
 		this.plottedNodesMap = new HashMap<Vector<Integer>, HashSet<GraphNode>>();
+		this.sqrtMap = new HashMap<Integer, Integer>();
 	}
 
 	public void init() {
-		//still nothing to do. This is just here for future support.
+		int maxRadius = (int)(1/this.gridsize)+10;
+		maxRadius *= maxRadius*2;
+		System.out.println("init with " + maxRadius);
+		for(int i=0; i<maxRadius; i++) {
+			this.sqrtMap.put(i, (int)Math.sqrt(i));
+		}
+		
 	}
 	
 	public void init(ConfReader cnf) {
@@ -87,7 +94,8 @@ public class NodeSetManager {
 			if(radius==0) System.out.println("Radius ist null!");
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
-					if(Math.sqrt(x*x + y*y) > radius+1) continue;
+					if(this.sqrtMap.get(x*x + y*y) == null) System.out.println(x*x + y*y);
+					if(this.sqrtMap.get(x*x + y*y) > radius+1) continue;
 					Vector<Integer> vect = new Vector<Integer>(2);
 					vect.add(0, new Integer((int)Math.floor(node.getxPos()/this.gridsize)) + x);
 					vect.add(1, new Integer((int)Math.floor(node.getyPos()/this.gridsize)) + y);

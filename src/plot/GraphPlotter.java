@@ -56,7 +56,7 @@ public class GraphPlotter {
 	private int persistenceBeforeAbort = 500;
 
 
-	private NodeSetManager movingmanager = new NodeSetManager();
+	private NodeSetManager movingmanager;
 
 
 
@@ -73,6 +73,7 @@ public class GraphPlotter {
 		this.root = root;
 		this.debug = debug;
 		this.manager = new NodeSetManager();
+		this.movingmanager = new NodeSetManager();
 		this.plottedNodes = new HashSet<GraphNode>();
 		this.movingNodes = new HashSet<GraphNode>();
 		this.waitingNodes = new HashSet<GraphNode>();
@@ -224,6 +225,7 @@ public class GraphPlotter {
 		for(int i=0; i<this.redrawInterval; i++) {
 			this.movingmanager = new NodeSetManager();
 			this.movingmanager.setGridsize(this.manager.getGridsize());
+			this.movingmanager.init();
 			this.movingmanager.update(this.movingNodes);
 			
 			for(GraphNode movingNode : this.movingNodes) {
