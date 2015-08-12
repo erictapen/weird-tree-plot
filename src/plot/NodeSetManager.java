@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
-import math.FastMath;
 
 /** This is for (probably) more efficient search of neighbored Nodes in the plane
  * @author justin
@@ -19,7 +18,6 @@ public class NodeSetManager {
 	 * 
 	 */
 	private double gridsize;
-	private FastMath mth;
 	
 
 	
@@ -157,9 +155,5 @@ public class NodeSetManager {
 	
 	public double getGridsize() {
 		return gridsize;
-	}
-	
-	public void setMth(FastMath mth) {
-		this.mth = mth;
 	}
 }
