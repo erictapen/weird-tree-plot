@@ -91,6 +91,7 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
+		this.root.setAlreadyHadACollision(true); //avoid this big pink dot in the middle of the screen
 		
 	}
 	
