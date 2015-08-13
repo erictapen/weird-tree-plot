@@ -49,9 +49,9 @@ public class GraphDraw extends PApplet {
 		
 		background(0xffffff);
 		noFill();
+		System.out.println(System.getProperty("user.dir"));
 		
-		
-		config = new ConfReader("../plotter.conf");
+		config = new ConfReader("plotter.conf");
 		String value;
 		
 		value = config.getValueByKey("DRAWdisplayWidth");
@@ -154,7 +154,6 @@ public class GraphDraw extends PApplet {
 		}
 		
 		System.out.print("drawing completed.                                 \n");
-		saveFrame(); //TODO delete debugging msg
 		if(pltr.getWaitingNodes().isEmpty() || exportAndClose) {
 			abortAndExport();
 		}

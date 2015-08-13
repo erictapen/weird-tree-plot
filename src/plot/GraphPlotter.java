@@ -26,7 +26,7 @@ public class GraphPlotter {
 	/** Every node will travel with this stepsize. It will determine the accuracy of the result.
 	 *  For smaller stepsize, you'll need more iterations
 	 */
-	private double stepsize;       
+	private double stepsize;
 	/** Maximum of steps, a single node will travel. After that, it stops where it is.
 	 * 
 	 */
@@ -56,7 +56,7 @@ public class GraphPlotter {
 	private int persistenceBeforeAbort = 500;
 
 
-	private NodeSetManager movingmanager = new NodeSetManager();
+	private NodeSetManager movingmanager;
 
 
 
@@ -73,6 +73,7 @@ public class GraphPlotter {
 		this.root = root;
 		this.debug = debug;
 		this.manager = new NodeSetManager();
+		this.movingmanager = new NodeSetManager();
 		this.plottedNodes = new HashSet<GraphNode>();
 		this.movingNodes = new HashSet<GraphNode>();
 		this.waitingNodes = new HashSet<GraphNode>();
@@ -80,7 +81,7 @@ public class GraphPlotter {
 	}
 
 	public void init() {
-		System.out.println("root has " + root.getNumberOfAllLeafs() + " leafs.");
+		System.out.println("root has " + root.getTreeSize() + " leafs.");
 		this.updateSizes();
 		manager.init();
 		//SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
@@ -90,6 +91,7 @@ public class GraphPlotter {
 		root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
+		
 	}
 	
 	/** initializes a file by using a config file. Attributes, which are not in the file 
@@ -189,7 +191,7 @@ public class GraphPlotter {
 			this.movingNodes.clear();
 			GraphNode smallest = root;
 			for(GraphNode x : this.waitingNodes) {
-				if(smallest.getNumberOfAllLeafs() > x.getParent().getNumberOfAllLeafs()) 
+				if(smallest.getTreeSize() > x.getParent().getTreeSize()) 
 							smallest = x.getParent();
 			}
 			this.movingNodes.addAll(smallest.getChildren());
@@ -200,7 +202,7 @@ public class GraphPlotter {
 			if(minNodeLeafs>1) {
 				HashSet<GraphNode> tooSmall = new HashSet<GraphNode>();
 				for(GraphNode x : this.waitingNodes) {
-					if(minNodeLeafs > x.getNumberOfAllLeafs()) tooSmall.add(x);
+					if(minNodeLeafs > x.getTreeSize()) tooSmall.add(x);
 				}
 				this.waitingNodes.removeAll(tooSmall);
 			}
@@ -224,6 +226,7 @@ public class GraphPlotter {
 		for(int i=0; i<this.redrawInterval; i++) {
 			this.movingmanager = new NodeSetManager();
 			this.movingmanager.setGridsize(this.manager.getGridsize());
+			this.movingmanager.init();
 			this.movingmanager.update(this.movingNodes);
 			
 			for(GraphNode movingNode : this.movingNodes) {
@@ -269,19 +272,32 @@ public class GraphPlotter {
 						movingNode.setyPos(	movingNode.getyPos()
 											- Math.cos(radIntersect)*this.stepsize
 											+ Math.cos(radCenter)*this.stepsize*0.5);
+						movingNode.setAlreadyHadACollision(true);
 					} else {       //in case of no intersection
 						double radParent = Math.atan2(	movingNode.getParent().getxPos()
 														- movingNode.getxPos(), 
 														movingNode.getParent().getyPos()
 														- movingNode.getyPos());
-						//pull towards parent
-						//pull towards center
-						movingNode.setxPos( movingNode.getxPos()
-											+ Math.sin(radParent)*this.stepsize
-											- Math.sin(radCenter)*this.stepsize);
-						movingNode.setyPos( movingNode.getyPos()
-											+ Math.cos(radParent)*this.stepsize
-											- Math.cos(radCenter)*this.stepsize);
+						if(movingNode.isAlreadyHadACollision()) {
+							//pull towards parent
+							//pull towards center
+							movingNode.setxPos( movingNode.getxPos()
+												+ Math.sin(radParent)*this.stepsize
+												- Math.sin(radCenter)*this.stepsize);
+							movingNode.setyPos( movingNode.getyPos()
+												+ Math.cos(radParent)*this.stepsize
+												- Math.cos(radCenter)*this.stepsize);
+						} else {
+							//determine alternativeStepsize from the size of the movingNode
+							//pull towards parent
+							//pull towards center
+							movingNode.setxPos( movingNode.getxPos()
+												+ Math.sin(radParent)*movingNode.getRadius()*0.49
+												- Math.sin(radCenter)*movingNode.getRadius()*0.49);
+							movingNode.setyPos( movingNode.getyPos()
+												+ Math.cos(radParent)*movingNode.getRadius()*0.49
+												- Math.cos(radCenter)*movingNode.getRadius()*0.49);
+						}
 					}
 					movingNode.getMemoryOfMovements().add(0, new ArrayList<Double>());
 					movingNode.getMemoryOfMovements().get(0).add(0, movingNode.getxPos());
@@ -313,7 +329,7 @@ public class GraphPlotter {
 		nodes.add(this.root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
-				x.setRadius(this.getSizeFromLeafs(x.getNumberOfAllLeafs()));
+				x.setRadius(this.getSizeFromLeafs(x.getTreeSize()));
 				temp.addAll(x.getChildren());
 			}
 			nodes.clear();
@@ -328,7 +344,7 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int n) {
-		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getNumberOfAllLeafs() + sizeOffSet)));
+		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getTreeSize() + sizeOffSet)));
 	}
 
 

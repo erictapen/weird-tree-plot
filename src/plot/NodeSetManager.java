@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
+
 /** This is for (probably) more efficient search of neighbored Nodes in the plane
  * @author justin
  *
@@ -19,8 +20,9 @@ public class NodeSetManager {
 	private double gridsize;
 	
 
-	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;	
 	
+
+	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;
 	
 	public NodeSetManager() {
 		super();
@@ -28,7 +30,7 @@ public class NodeSetManager {
 	}
 
 	public void init() {
-		//still nothing to do. This is just here for future support.
+		//todo
 	}
 	
 	public void init(ConfReader cnf) {
@@ -87,6 +89,7 @@ public class NodeSetManager {
 			if(radius==0) System.out.println("Radius ist null!");
 			for(int x=-radius-1; x<=radius+1; x++) {
 				for(int y=-radius-1; y<=radius+1; y++) {
+					if(Math.sqrt(x*x + y*y) > radius+1) continue;
 					Vector<Integer> vect = new Vector<Integer>(2);
 					vect.add(0, new Integer((int)Math.floor(node.getxPos()/this.gridsize)) + x);
 					vect.add(1, new Integer((int)Math.floor(node.getyPos()/this.gridsize)) + y);

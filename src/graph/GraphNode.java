@@ -7,15 +7,20 @@ public class GraphNode {
 	private String caption;
 	private GraphNode parent;
 	private ArrayList<GraphNode> children = new ArrayList<GraphNode>();
-	private int numberOfAllLeafs;
+	/** The size of the subtree under the node. For example, a leaf always has treeSize=0.
+	 * 
+	 */
+	private int treeSize;
 	private double xPos;
 	private double yPos;
 	private double radius = 0.0;
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
 	private boolean plotted = false;
+	private boolean alreadyHadACollision = false;
 
 	
 
+	
 	public boolean isPlotted() {
 		return plotted;
 	}
@@ -76,12 +81,12 @@ public class GraphNode {
 		this.checked = checked;
 	}
 
-	public int getNumberOfAllLeafs() {
-		return numberOfAllLeafs;
+	public int getTreeSize() {
+		return treeSize;
 	}
 
-	public void setNumberOfAllLeafs(int numberOfAllLeafs) {
-		this.numberOfAllLeafs = numberOfAllLeafs;
+	public void setTreeSize(int treeSize) {
+		this.treeSize = treeSize;
 	}
 	
 	public double getxPos() {
@@ -100,21 +105,29 @@ public class GraphNode {
 		this.yPos = yPos;
 	}
 	
+	public boolean isAlreadyHadACollision() {
+		return alreadyHadACollision;
+	}
+
+	public void setAlreadyHadACollision(boolean alreadyHadACollision) {
+		this.alreadyHadACollision = alreadyHadACollision;
+	}
+	
 	/**Recursive
 	 * 
 	 */
-	public int updateNumberOfAllLeafs() {
+	public int updateTreeSize() {
 		if(children.isEmpty()) { 
-			this.setNumberOfAllLeafs(1);
+			this.setTreeSize(1);
 			return 1;
 		}
 		int res = 1;
 		int temp = 0;
 		for(GraphNode x : children) {
-			temp = x.updateNumberOfAllLeafs();
+			temp = x.updateTreeSize();
 			res += temp;
 		}
-		this.setNumberOfAllLeafs(res);
+		this.setTreeSize(res);
 		return res;
 	}
 	
@@ -124,8 +137,8 @@ public class GraphNode {
 	@Override
 	public String toString() {
 		return "GraphNode [caption=" + caption + ", parent=" + parent
-				+ ", children=" + children.size() + ", numberOfAllLeafs="
-				+ numberOfAllLeafs + ", xPos=" + xPos + ", yPos=" + yPos
+				+ ", children=" + children.size() + ", TreeSize="
+				+ treeSize + ", xPos=" + xPos + ", yPos=" + yPos
 				+ ", radius=" + radius + ", checked=" + checked + "]";
 	}
 
