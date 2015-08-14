@@ -41,6 +41,8 @@ public class GraphDraw extends PApplet {
 	 */
 	private long startTime = 0;
 	private long stopTime = 0;
+
+	private boolean drawEverything = false;
 	
 	public void setup() {
 		startTime = System.currentTimeMillis();
@@ -145,12 +147,14 @@ public class GraphDraw extends PApplet {
 		//highlights every block of the NodeSetManager for better optimization
 		drawNodeSetManagerGrid();
 		drawWaitingNodeSetManagerGrid();
-		//draw Nodes
-		for(GraphNode x : pltr.getPlottedNodes()) {
-			drawNode(x, 0);
-		}
-		for(GraphNode x : pltr.getMovingNodes()) {
-			drawNode(x, 127);
+		if(drawEverything ) {
+			//draw Nodes
+			for(GraphNode x : pltr.getPlottedNodes()) {
+				drawNode(x, 0);
+			}
+			for(GraphNode x : pltr.getMovingNodes()) {
+				drawNode(x, 127);
+			}
 		}
 		
 		System.out.print("drawing completed.                                 \n");
