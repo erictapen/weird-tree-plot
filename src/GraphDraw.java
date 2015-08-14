@@ -51,7 +51,7 @@ public class GraphDraw extends PApplet {
 		noFill();
 		System.out.println(System.getProperty("user.dir"));
 		
-		config = new ConfReader("plotter.conf");
+		config = new ConfReader("../plotter.conf");
 		String value;
 		
 		value = config.getValueByKey("DRAWdisplayWidth");
