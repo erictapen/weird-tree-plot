@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import plot.GraphPlotter;
 import draw.GraphDraw;
 
 
@@ -17,10 +18,6 @@ public class ConfReader {
 	 * 
 	 */
 	private HashMap<String, String> content;
-	private String errorMsgInteger;
-	private String errorMsgDouble;
-	private char[] errorMsgBoolean;
-	
 	
 	public ConfReader(String file) {
 		this.content = new HashMap<String, String>();
@@ -118,20 +115,23 @@ public class ConfReader {
 		int sizey = this.getIntegerByKey("DRAWdisplayHeight", 512);
 		if(sizey==0) sizey = sizex; //this is specified in plotter_example.conf
 		obj.size(sizex, sizey);
-		
 		obj.setInputDOTfile(this.getStringByKey("GRAPHinputDOTfile", "data/input.dot"));
-		
 		obj.setRootCaption(this.getStringByKey("GRAPHrootCaption", "Philosophie"));
-		
 		obj.setExportfile(this.getStringByKey("GRAPHoutputTEXfile", "out/out.tex"));
-		
 		obj.setDrawRootSize(this.getDoubleByKey("DRAWrootSize", 75.0));
-		
 		obj.setDrawLines(this.getBooleanByKey("DRAWlines", false));
-		
 		obj.setDrawEveryUpdateInterval(this.getIntegerByKey("DRAWeveryNumberOfUpdates", 10));
-		
-		
+	}
+	
+	public void setupGraphPlotter(GraphPlotter obj) {
+		obj.setRedrawInterval(this.getIntegerByKey("PLOTTERredrawInterval", 200));
+		obj.setMaxIteration(this.getIntegerByKey("PLOTTERmaxIteration", 2000));
+		obj.setStepsize(this.getDoubleByKey("PLOTTERstepSize", 0.01));
+		obj.setMovingCircleRadius(this.getDoubleByKey("PLOTTERmovingCircleRadius", 10));
+		obj.setSizeOffSet(this.getDoubleByKey("PLOTTERsizeOffSet", 0.0));
+		obj.setMinNodeLeafs(this.getIntegerByKey("PLOTTERminNodeLeafs", 1));
+		obj.setMinStepSizeBeforeAbort(this.getDoubleByKey("PLOTTERminStepSizeBeforeAbort", 0.02));
+		obj.setPersistenceBeforeAbort(this.getIntegerByKey("PLOTTERpersistenceBeforeAbort", 500));
 	}
 
 }
