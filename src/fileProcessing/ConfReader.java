@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import plot.GraphPlotter;
@@ -19,9 +20,32 @@ public class ConfReader {
 	 * 
 	 */
 	private HashMap<String, String> content;
+	private ArrayList<String> allowedKeys;
 	
 	public ConfReader(String file) {
 		this.content = new HashMap<String, String>();
+		
+		this.allowedKeys = new ArrayList<String>();
+		this.allowedKeys.add("DRAWdisplayWidth");
+		this.allowedKeys.add("DRAWdisplayHeight");
+		this.allowedKeys.add("GRAPHinputDOTfile");
+		this.allowedKeys.add("GRAPHrootCaption");
+		this.allowedKeys.add("GRAPHoutputTEXfile");
+		this.allowedKeys.add("DRAWrootSize");
+		this.allowedKeys.add("DRAWlines");
+		this.allowedKeys.add("DRAWeveryNumberOfUpdates");
+		
+		this.allowedKeys.add("PLOTTERredrawInterval");
+		this.allowedKeys.add("PLOTTERmaxIteration");
+		this.allowedKeys.add("PLOTTERstepSize");
+		this.allowedKeys.add("PLOTTERmovingCircleRadius");
+		this.allowedKeys.add("PLOTTERsizeOffSet");
+		this.allowedKeys.add("PLOTTERminNodeLeafs");
+		this.allowedKeys.add("PLOTTERminStepSizeBeforeAbort");
+		this.allowedKeys.add("PLOTTERpersistenceBeforeAbort");
+		
+		this.allowedKeys.add("NODESETMANAGERgridSize");		
+		
 		System.out.println("Reading config file " + file + " ...");
 		int count = 0;
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -35,6 +59,11 @@ public class ConfReader {
 					System.out.println("Syntax error on line " + count + 
 							"! There are only lines of the form \"KEY = VALUE\" allowed!");
 					continue;
+				}
+				if(!this.allowedKeys.contains(pair[0])) {
+					System.out.println("Semantic error on line " +  count + "! " + pair[0] 
+							+ " is unknown!");
+							continue;
 				}
 				content.put(pair[0], pair[1]);
 			}
@@ -137,7 +166,6 @@ public class ConfReader {
 	
 	public void setupNodeSetManager(NodeSetManager obj) {
 		obj.setGridsize(this.getDoubleByKey("NODESETMANAGERgridSize", 0.01));
-		
 	}
 
 }
