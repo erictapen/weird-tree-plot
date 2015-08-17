@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import plot.GraphPlotter;
+import plot.NodeSetManager;
 import draw.GraphDraw;
 
 
@@ -132,6 +133,11 @@ public class ConfReader {
 		obj.setMinNodeLeafs(this.getIntegerByKey("PLOTTERminNodeLeafs", 1));
 		obj.setMinStepSizeBeforeAbort(this.getDoubleByKey("PLOTTERminStepSizeBeforeAbort", 0.02));
 		obj.setPersistenceBeforeAbort(this.getIntegerByKey("PLOTTERpersistenceBeforeAbort", 500));
+	}
+	
+	public void setupNodeSetManager(NodeSetManager obj) {
+		obj.setGridsize(this.getDoubleByKey("NODESETMANAGERgridSize", 0.01));
+		
 	}
 
 }
