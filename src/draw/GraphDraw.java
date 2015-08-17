@@ -1,3 +1,4 @@
+package draw;
 import java.util.Vector;
 
 import fileProcessing.ConfReader;
