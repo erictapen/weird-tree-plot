@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import draw.GraphDraw;
-import processing.core.PApplet;
 
 
 
@@ -20,10 +19,11 @@ public class ConfReader {
 	private HashMap<String, String> content;
 	private String errorMsgInteger;
 	private String errorMsgDouble;
+	private char[] errorMsgBoolean;
 	
 	
 	private enum Value {
-	    INTEGER, STRING, DOUBLE
+	    INTEGER, STRING, DOUBLE, BOOLEAN
 	}
 	
 	public ConfReader(String file) {
@@ -78,9 +78,16 @@ public class ConfReader {
 						System.out.println(this.errorMsgDouble);
 					}
 					return resD;
+				case BOOLEAN:
+					boolean resB = (boolean) defaultValue;
+					try{
+						resB = Boolean.parseBoolean(str);
+					} catch(NumberFormatException e) {
+						System.out.println(this.errorMsgBoolean);
+					}
+					return resB;
 				case STRING:
 					return str;
-					
 			}
 		}
 		return null; //unreachable
@@ -93,6 +100,29 @@ public class ConfReader {
 		obj.size(sizex, sizey);
 		
 		obj.setInputDOTfile((String)this.getValueByKey("GRAPHinputDOTfile", Value.STRING, "data/input.dot"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setExportfile((String)this.getValueByKey("GRAPHoutputTEXfile", Value.STRING, "out/out.tex"));
+		
+		obj.setDrawRootSize((double)this.getValueByKey("DRAWrootSize", Value.DOUBLE, 75.0));
+		
+		obj.setDrawLines((boolean)this.getValueByKey("DRAWlines", Value.BOOLEAN, false));
+		
+		obj.setDrawEveryUpdateInterval((int)this.getValueByKey("DRAWeveryNumberOfUpdates", Value.INTEGER, 10));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
+		obj.setRootCaption((String)this.getValueByKey("GRAPHrootCaption", Value.STRING, "Philosophie"));
+		
 		
 	}
 

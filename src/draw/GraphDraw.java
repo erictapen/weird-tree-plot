@@ -56,42 +56,9 @@ public class GraphDraw extends PApplet {
 		
 		config = new ConfReader("../plotter.conf");
 		String value;
+				
 		
-		value = config.getValueByKey("GRAPHinputDOTfile");
-		if(value != null) this.inputDOTfile = value;
-		else this.inputDOTfile = 
-				"../data/wiki_sorted_attr.dot"; //default value
 		
-		value = config.getValueByKey("GRAPHrootCaption");
-		if(value != null) this.rootCaption = value;
-		else this.rootCaption = "formale Sprache"; //default value
-		
-		value = config.getValueByKey("GRAPHoutputTEXfile");
-		if(value != null) this.exportfile = value;
-		else this.exportfile = "../out/out.tex"; //default value
-		
-		value = config.getValueByKey("DRAWrootSize");
-		try {
-			if(value != null) this.drawRootSize = Double.parseDouble(value);
-			else this.drawRootSize = 75.0; //default value
-		} catch (NumberFormatException e) {
-			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
-					+ "DRAWrootSize.");
-		}
-		
-		value = config.getValueByKey("DRAWlines");
-		if(value == "true") this.drawLines = true;
-		else if(value == "false") this.drawLines = false;
-		else this.drawLines = false; //default value
-		
-		value = config.getValueByKey("DRAWeveryNumberOfUpdates");
-		try {
-			if(value != null) this.drawEveryUpdateInterval = Integer.parseInt(value);
-			else this.drawEveryUpdateInterval = 10; //default value
-		} catch (NumberFormatException e) {
-			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
-					+ "DRAWeveryNumberOfUpdates.");
-		}
 		
 		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption);
 		
