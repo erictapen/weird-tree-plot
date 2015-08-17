@@ -47,15 +47,13 @@ public class GraphDraw extends PApplet {
 	
 	public void setup() {
 		startTime = System.currentTimeMillis();
-		int sizex = 0;
-		int sizey = 0;
 		
 		background(0xffffff);
 		noFill();
 		System.out.println(System.getProperty("user.dir"));
 		
 		config = new ConfReader("../plotter.conf");
-		String value;
+		config.setupGraphDraw(this);
 				
 		
 		
