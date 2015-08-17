@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import processing.core.PApplet;
+
 
 public class ConfReader {
 	
@@ -13,6 +15,13 @@ public class ConfReader {
 	 * 
 	 */
 	private HashMap<String, String> content;
+	private String errorMsgInteger;
+	private String errorMsgDouble;
+	
+	
+	public enum Value {
+	    INTEGER, STRING, DOUBLE
+	}
 	
 	public ConfReader(String file) {
 		this.content = new HashMap<String, String>();
@@ -42,8 +51,39 @@ public class ConfReader {
 		System.out.println(count + "lines of config read.");
 	}
 
-	public String getValueByKey(String key) {
-		return content.get(key);
+	private Object getValueByKey(String key, Value val, String errmsg, Object defaultValue) {
+		String str = this.content.get(key);
+		if(str==null) {
+			System.out.println(errmsg);
+			return defaultValue;
+		} else {
+			switch(val) {
+				case INTEGER:
+					int resI = (int) defaultValue;
+					try{
+						resI = Integer.parseInt(str);
+					} catch(NumberFormatException e) {
+						System.out.println(this.errorMsgInteger);
+					}
+					return resI;
+				case DOUBLE:
+					double resD = (double) defaultValue;
+					try{
+						resD = Double.parseDouble(str);
+					} catch(NumberFormatException e) {
+						System.out.println(this.errorMsgDouble);
+					}
+					return resD;
+				case STRING:
+					return str;
+					
+			}
+		}
+		return null; //unreachable
+	}
+	
+	public void setupGraphDraw(PApplet obj) {
+		
 	}
 
 }
