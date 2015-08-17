@@ -19,7 +19,7 @@ public class ConfReader {
 	private String errorMsgDouble;
 	
 	
-	public enum Value {
+	private enum Value {
 	    INTEGER, STRING, DOUBLE
 	}
 	
@@ -51,10 +51,11 @@ public class ConfReader {
 		System.out.println(count + "lines of config read.");
 	}
 
-	private Object getValueByKey(String key, Value val, String errmsg, Object defaultValue) {
+	private Object getValueByKey(String key, Value val, Object defaultValue) {
 		String str = this.content.get(key);
 		if(str==null) {
-			System.out.println(errmsg);
+			System.out.println("There was a problem with the attribute " + key 
+					+ ". Please check, if it fits the type " + val.toString() + ".");
 			return defaultValue;
 		} else {
 			switch(val) {
@@ -82,7 +83,13 @@ public class ConfReader {
 		return null; //unreachable
 	}
 	
-	public void setupGraphDraw(PApplet obj) {
+	public void setupGraphDraw(GraphDraw obj) {
+		int sizex = (int)this.getValueByKey("DRAWdisplayWidth", Value.INTEGER, 512);
+		int sizey = (int)this.getValueByKey("DRAWdisplayHeight", Value.INTEGER, 512);
+		if(sizey==0) sizey = sizex; //this is specified in plotter_example.conf
+		obj.size(sizex, sizey);
+		
+		obj.setInputDOTfile((String)this.getValueByKey("GRAPHinputDOTfile", Value.STRING, "data/input.dot"));
 		
 	}
 

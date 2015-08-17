@@ -56,27 +56,6 @@ public class GraphDraw extends PApplet {
 		config = new ConfReader("../plotter.conf");
 		String value;
 		
-		value = config.getValueByKey("DRAWdisplayWidth");
-		try {
-			if(value != null) sizex = Integer.parseInt(value);
-			else sizex = 512; //default value
-		} catch (NumberFormatException e) {
-			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
-					+ "DRAWdisplayWidth.");
-		}
-		
-		value = config.getValueByKey("DRAWdisplayHeight");
-		try {
-			if(value != null) sizey = Integer.parseInt(value);
-			else sizey = 0; //default value
-		} catch (NumberFormatException e) {
-			System.out.print("Config Syntax Error. " + value + " is not an appropiate value for"
-					+ "DRAWdisplayHeight.");
-		}
-		
-		if(sizey==0) size(sizex, sizex);
-		else size(sizex, sizey);
-		
 		value = config.getValueByKey("GRAPHinputDOTfile");
 		if(value != null) this.inputDOTfile = value;
 		else this.inputDOTfile = 
@@ -296,6 +275,36 @@ public class GraphDraw extends PApplet {
 	public void mousePressed() {
 		   exportAndClose = true;
 		   System.out.println("Will abort program asap.");
-		}
+	}
+
+	public void setDrawRootSize(double drawRootSize) {
+		this.drawRootSize = drawRootSize;
+	}
+
+	public void setDrawLines(boolean drawLines) {
+		this.drawLines = drawLines;
+	}
+
+	public void setDrawEveryUpdateInterval(int drawEveryUpdateInterval) {
+		this.drawEveryUpdateInterval = drawEveryUpdateInterval;
+	}
+
+	public void setExportfile(String exportfile) {
+		this.exportfile = exportfile;
+	}
+
+	public void setInputDOTfile(String inputDOTfile) {
+		this.inputDOTfile = inputDOTfile;
+	}
+
+	public void setRootCaption(String rootCaption) {
+		this.rootCaption = rootCaption;
+	}
+
+	public void setDrawEverything(boolean drawEverything) {
+		this.drawEverything = drawEverything;
+	}
+	
+	
 
 }
