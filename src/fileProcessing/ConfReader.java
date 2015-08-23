@@ -20,6 +20,9 @@ public class ConfReader {
 	 * 
 	 */
 	private HashMap<String, String> content;
+	/** All keys must be registered here!
+	 * 
+	 */
 	private ArrayList<String> allowedKeys;
 	
 	public ConfReader(String file) {
