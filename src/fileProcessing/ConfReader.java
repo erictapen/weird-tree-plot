@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.lang3.ArrayUtils;
 
 import plot.GraphPlotter;
 import plot.NodeSetManager;
