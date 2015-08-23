@@ -25,7 +25,7 @@ public class ConfReader {
 	 */
 	private ArrayList<String> allowedKeys;
 	
-	public ConfReader(String file) {
+	public ConfReader() {
 		this.content = new HashMap<String, String>();
 		
 		this.allowedKeys = new ArrayList<String>();
@@ -47,11 +47,13 @@ public class ConfReader {
 		this.allowedKeys.add("PLOTTERminStepSizeBeforeAbort");
 		this.allowedKeys.add("PLOTTERpersistenceBeforeAbort");
 		
-		this.allowedKeys.add("NODESETMANAGERgridSize");		
-		
-		System.out.println("Reading config file " + file + " ...");
+		this.allowedKeys.add("NODESETMANAGERgridSize");
+	}
+	
+	public void loadConfFromFile(String filename) {
+		System.out.println("Reading config file " + filename + " ...");
 		int count = 0;
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				count++;
