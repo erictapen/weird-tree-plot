@@ -74,7 +74,7 @@ public class ConfReader {
 			System.out.println("There was a problem with the config file.");
 			e.printStackTrace();
 		}
-		System.out.println(count + "lines of config read.");
+		System.out.println(count + " lines of config read.");
 	}
 	
 	/** Reads an Integer value from config
