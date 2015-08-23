@@ -52,7 +52,7 @@ public class GraphDraw extends PApplet {
 		noFill();
 		System.out.println(System.getProperty("user.dir"));
 		
-		config = new ConfReader("../plotter.conf");
+		config = new ConfReader("plotter.conf");
 		config.setupGraphDraw(this);
 				
 		
@@ -118,13 +118,13 @@ public class GraphDraw extends PApplet {
 									pltr.getPlottedNodes(), true, true, false);
 			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
 					pltr.getPlottedNodes(), false, true, false);
-			SortedGraph.exportFile(pltr.getRoot(), "../data/wiki_sorted_attr.dot", true);
+			SortedGraph.exportFile(pltr.getRoot(), "data/wiki_sorted_attr.dot", true);
 		} else {
 			TexGraph.exportToTex(	exportfile, 
 					this.root.getWholeTree(), true, true, false);
 			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
 					this.root.getWholeTree(), false, true, false);
-			SortedGraph.exportFile(this.root, "../data/wiki_sorted_attr.dot", true);
+			SortedGraph.exportFile(this.root, "data/wiki_sorted_attr.dot", true);
 		}
 		
 		System.out.println("Export to tikz, svg, dot complete.");
