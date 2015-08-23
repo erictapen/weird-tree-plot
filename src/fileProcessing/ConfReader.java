@@ -77,6 +77,11 @@ public class ConfReader {
 		System.out.println(count + "lines of config read.");
 	}
 	
+	/** Reads an Integer value from config
+	 * @param key The key of the key/value pair
+	 * @param defaultValue If no entry is set, use this value
+	 * @return The value
+	 */
 	private int getIntegerByKey(String key, int defaultValue) {
 		String str = this.content.get(key);
 		if(str==null) {
@@ -95,6 +100,11 @@ public class ConfReader {
 		}
 	}
 	
+	/** Reads an Double value from config
+	 * @param key The key of the key/value pair
+	 * @param defaultValue If no entry is set, use this value
+	 * @return The value
+	 */
 	private double getDoubleByKey(String key, double defaultValue) {
 		String str = this.content.get(key);
 		if(str==null) {
@@ -112,6 +122,11 @@ public class ConfReader {
 		}
 	}
 	
+	/** Reads an Boolean value from config
+	 * @param key The key of the key/value pair
+	 * @param defaultValue If no entry is set, use this value
+	 * @return The value
+	 */
 	private boolean getBooleanByKey(String key, boolean defaultValue) {
 		String str = this.content.get(key);
 		if(str==null) {
@@ -129,6 +144,11 @@ public class ConfReader {
 		}
 	}
 
+	/** Reads an String value from config
+	 * @param key The key of the key/value pair
+	 * @param defaultValue If no entry is set, use this value
+	 * @return The value
+	 */
 	private String getStringByKey(String key, String defaultValue) {
 		String str = this.content.get(key);
 		if(str==null) {
@@ -140,6 +160,10 @@ public class ConfReader {
 		}
 	}
 	
+	/** This initializes a GraphDraw object. 
+	 * Every new configurable field must be mentioned here.
+	 * @param obj The GraphDraw object
+	 */
 	public void setupGraphDraw(GraphDraw obj) {
 		int sizex = this.getIntegerByKey("DRAWdisplayWidth", 512);
 		int sizey = this.getIntegerByKey("DRAWdisplayHeight", 512);
@@ -153,6 +177,10 @@ public class ConfReader {
 		obj.setDrawEveryUpdateInterval(this.getIntegerByKey("DRAWeveryNumberOfUpdates", 10));
 	}
 	
+	/** This initializes a GraphPlotter object. 
+	 * Every new configurable field must be mentioned here.
+	 * @param obj The GraphPlotter object
+	 */
 	public void setupGraphPlotter(GraphPlotter obj) {
 		obj.setRedrawInterval(this.getIntegerByKey("PLOTTERredrawInterval", 200));
 		obj.setMaxIteration(this.getIntegerByKey("PLOTTERmaxIteration", 2000));
@@ -164,6 +192,10 @@ public class ConfReader {
 		obj.setPersistenceBeforeAbort(this.getIntegerByKey("PLOTTERpersistenceBeforeAbort", 500));
 	}
 	
+	/** This initializes a NodeSetManager object. 
+	 * Every new configurable field must be mentioned here.
+	 * @param obj The NodeSetManager object
+	 */
 	public void setupNodeSetManager(NodeSetManager obj) {
 		obj.setGridsize(this.getDoubleByKey("NODESETMANAGERgridSize", 0.01));
 	}
