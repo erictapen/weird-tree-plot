@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import plot.GraphPlotter;
 import plot.NodeSetManager;
 import draw.GraphDraw;
@@ -48,6 +50,23 @@ public class ConfReader {
 		this.allowedKeys.add("PLOTTERpersistenceBeforeAbort");
 		
 		this.allowedKeys.add("NODESETMANAGERgridSize");
+	}
+	
+	public void loadConfFromCMDArguments(String[] arguments) {
+		int count = 0;
+		if(arguments.length % 2 != 0) {
+			System.out.println("Command line Arguments invalid! Please make sure, that "
+					+ "only \"-KEY VALUE\" pairs are passed.");
+			return;
+		}
+		for(int i=0; i<arguments.length; i+=2) {
+			String key = arguments[i].substring(1, arguments[i].length()); //remove the leading minus
+			String value = arguments[i+1];
+			if(this.allowedKeys.contains(key)) this.content.put(key, value);
+			else System.out.println("Error. " + key + " is not a valid option.");
+			count++;
+		}
+		System.out.println("Parsed " + count + " command line arguments.");
 	}
 	
 	public void loadConfFromFile(String filename) {

@@ -54,6 +54,7 @@ public class GraphDraw extends PApplet {
 		
 		config = new ConfReader();
 		config.loadConfFromFile("plotter.conf");
+		config.loadConfFromCMDArguments(args);
 		config.setupGraphDraw(this);
 				
 		
