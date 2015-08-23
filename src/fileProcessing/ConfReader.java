@@ -166,7 +166,7 @@ public class ConfReader {
 	 */
 	public void setupGraphDraw(GraphDraw obj) {
 		int sizex = this.getIntegerByKey("DRAWdisplayWidth", 512);
-		int sizey = this.getIntegerByKey("DRAWdisplayHeight", 512);
+		int sizey = this.getIntegerByKey("DRAWdisplayHeight", sizex);
 		if(sizey==0) sizey = sizex; //this is specified in plotter_example.conf
 		obj.size(sizex, sizey);
 		obj.setInputDOTfile(this.getStringByKey("GRAPHinputDOTfile", "data/input.dot"));
