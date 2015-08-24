@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>weird-tree-plot</groupId>
   <artifactId>weird-tree-plot</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1</version>
   <name>weird-tree-plot</name>
   <build>
     <sourceDirectory>src</sourceDirectory>
