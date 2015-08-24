@@ -10,7 +10,8 @@ plotter.conf
 *.svg
 *.jpg
 /processing-master/
-/roadmap/
 *.swp
 !example_result.svg
 !example_result.jpg
+/target/
+*.jar
