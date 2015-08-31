@@ -76,6 +76,7 @@ public class GraphDraw extends PApplet {
 		pltr.getManager().init(config);
 		
 		System.out.println("root has " + root.getChildren().size() + " children.");
+		SortedGraph.exportFile(this.root, "data/wiki_attr_before_plot.dot", true);
 	}
 
 	public void draw() {
@@ -120,13 +121,13 @@ public class GraphDraw extends PApplet {
 									pltr.getPlottedNodes(), true, true, false);
 			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
 					pltr.getPlottedNodes(), false, true, false);
-			SortedGraph.exportFile(pltr.getRoot(), "data/wiki_sorted_attr.dot", true);
+			SortedGraph.exportFile(pltr.getRoot(), exportfile.replaceAll(".tex", ".dot"), true);
 		} else {
 			TexGraph.exportToTex(	exportfile, 
 					this.root.getWholeTree(), true, true, false);
 			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
 					this.root.getWholeTree(), false, true, false);
-			SortedGraph.exportFile(this.root, "data/wiki_sorted_attr.dot", true);
+			SortedGraph.exportFile(this.root, exportfile.replaceAll(".tex", ".dot"), true);
 		}
 		
 		System.out.println("Export to tikz, svg, dot complete.");
