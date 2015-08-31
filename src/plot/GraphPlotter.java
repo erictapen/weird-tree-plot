@@ -11,7 +11,7 @@ import graph.GraphNode;
 public class GraphPlotter {
 
 	/** This is the root Node, where everything starts. needs to be init by hand, 
-	 * this is not obvious from looking at your inputfile!
+	 * this is not obvious from looking at your inputfile, because you can choose it.
 	 * 
 	 */
 	private GraphNode root;
@@ -54,6 +54,10 @@ public class GraphPlotter {
 
 	private double minStepSizeBeforeAbort = 0.02;
 	private int persistenceBeforeAbort = 500;
+	
+	private double sizeMethodMix = 0.5;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
+													//												  0.0 means size comes from amount of children
+	private int largestChildrenSet = 0;             //biggest amount of children in tree is saved here
 
 
 	private NodeSetManager movingmanager;
@@ -88,13 +92,14 @@ public class GraphPlotter {
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
-		root.setRadius(1.0);
+		//root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
 		this.root.setAlreadyHadACollision(true); //avoid this big pink dot in the middle of the screen
+		this.evalLargestChildrenSet();
 		
 	}
-	
+
 	/** initializes a file by using a config file. Attributes, which are not in the file 
 	 * will be initialized by their default.
 	 * @param cnf The config Reader, which holds the data for initialization.
@@ -257,7 +262,7 @@ public class GraphPlotter {
 		nodes.add(this.root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
-				x.setRadius(this.getSizeFromLeafs(x.getTreeSize()));
+				x.setRadius(this.getSizeFromLeafs(x.getTreeSize(), x.getChildren().size()));
 				temp.addAll(x.getChildren());
 			}
 			nodes.clear();
@@ -271,8 +276,24 @@ public class GraphPlotter {
 	 * @param n Number of Leafs of a GraphNode
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
-	private double getSizeFromLeafs(int n) {
-		return Math.sqrt((((double) n + sizeOffSet)/ ((double) root.getTreeSize() + sizeOffSet)));
+	private double getSizeFromLeafs(int treeSize, int childSize) {
+		return this.sizeMethodMix * Math.sqrt((((double) treeSize + sizeOffSet)/ ((double) root.getTreeSize() + sizeOffSet)))
+				+ (1-this.sizeMethodMix) * Math.sqrt((((double) childSize + sizeOffSet)/ ((double) this.largestChildrenSet + sizeOffSet)));
+	}
+
+	private void evalLargestChildrenSet() {
+		HashSet<GraphNode> nodes = new HashSet<GraphNode>();
+		HashSet<GraphNode> temp  = new HashSet<GraphNode>();
+		nodes.add(this.root);
+		while(!nodes.isEmpty()) {
+			for(GraphNode x : nodes) {
+				if(x.getChildren().size() > this.largestChildrenSet) this.largestChildrenSet = x.getChildren().size();
+				temp.addAll(x.getChildren());
+			}
+			nodes.clear();
+			nodes.addAll(temp);
+			temp.clear();
+		}
 	}
 
 
@@ -367,6 +388,15 @@ public class GraphPlotter {
 	public NodeSetManager getMovingmanager() {
 		return movingmanager;
 	}
+
+	public int getMinNodeLeafs() {
+		return minNodeLeafs;
+	}
+
+	public void setSizeMethodMix(double sizeMethodMix) {
+		this.sizeMethodMix = sizeMethodMix;
+	}
+	
 	
 	
 }

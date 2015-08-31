@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>weird-tree-plot</groupId>
   <artifactId>weird-tree-plot</artifactId>
-  <version>0.1</version>
+  <version>0.1.1</version>
   <name>weird-tree-plot</name>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -61,7 +61,7 @@
   </properties>
   <dependencies>
   	<dependency>
-  		<groupId>com.processing-org</groupId>
+  		<groupId>processing</groupId>
   		<artifactId>processing-org</artifactId>
   		<version>2.2.1</version>
   	</dependency>
@@ -71,4 +71,11 @@
   		<version>3.4</version>
   	</dependency>
   </dependencies>
+  <repositories>
+  	<repository>
+    	<id>in-project</id>
+    	<name>Processing Repo</name>
+    	<url>file://${project.basedir}/repo</url>
+	</repository>
+  </repositories>
 </project>

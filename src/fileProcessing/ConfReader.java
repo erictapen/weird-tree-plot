@@ -47,6 +47,7 @@ public class ConfReader {
 		this.allowedKeys.add("PLOTTERminNodeLeafs");
 		this.allowedKeys.add("PLOTTERminStepSizeBeforeAbort");
 		this.allowedKeys.add("PLOTTERpersistenceBeforeAbort");
+		this.allowedKeys.add("PLOTTERsizeMethodMix");
 		
 		this.allowedKeys.add("NODESETMANAGERgridSize");
 	}
@@ -213,6 +214,7 @@ public class ConfReader {
 		obj.setMinNodeLeafs(this.getIntegerByKey("PLOTTERminNodeLeafs", 1));
 		obj.setMinStepSizeBeforeAbort(this.getDoubleByKey("PLOTTERminStepSizeBeforeAbort", 0.02));
 		obj.setPersistenceBeforeAbort(this.getIntegerByKey("PLOTTERpersistenceBeforeAbort", 500));
+		obj.setSizeMethodMix(this.getDoubleByKey("PLOTTERsizeMethodMix", 1.0));
 	}
 	
 	/** This initializes a NodeSetManager object. 
