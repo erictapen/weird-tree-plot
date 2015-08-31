@@ -11,7 +11,7 @@ import graph.GraphNode;
 public class GraphPlotter {
 
 	/** This is the root Node, where everything starts. needs to be init by hand, 
-	 * this is not obvious from looking at your inputfile!
+	 * this is not obvious from looking at your inputfile, because you can choose it.
 	 * 
 	 */
 	private GraphNode root;
