@@ -256,11 +256,11 @@ public class SortedGraph {
 		System.out.println("Export completed.");
 	}
 
-	/** Default value
-	 * @param root
-	 * @param replaceAll
-	 * @param b
-	 */
+	/** Exports the graph! Every data, which is determined by now will be written into the file
+	 * @param root The rootNode where to start. Every other node with posx=0.0, posy=0.0 
+	 * will be seen as without position data!
+	 * @param ofile Filename where to export. File must exist!
+	 */ 
 	public static void exportFile(GraphNode root, String replaceAll, boolean b) {
 		exportFile(root, replaceAll, b, 1);
 	}
