@@ -367,6 +367,11 @@ public class GraphPlotter {
 	public NodeSetManager getMovingmanager() {
 		return movingmanager;
 	}
+
+	public int getMinNodeLeafs() {
+		return minNodeLeafs;
+	}
+	
 	
 	
 }

@@ -76,7 +76,7 @@ public class GraphDraw extends PApplet {
 		pltr.getManager().init(config);
 		
 		System.out.println("root has " + root.getChildren().size() + " children.");
-		SortedGraph.exportFile(this.root, "data/wiki_attr_before_plot.dot", true);
+		SortedGraph.exportFile(this.root, "data/wiki_attr_before_plot.dot", true, pltr.getMinNodeLeafs());
 	}
 
 	public void draw() {

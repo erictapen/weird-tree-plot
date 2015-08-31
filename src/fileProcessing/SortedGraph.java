@@ -191,8 +191,9 @@ public class SortedGraph {
 	 * @param root The rootNode where to start. Every other node with posx=0.0, posy=0.0 
 	 * will be seen as without position data!
 	 * @param ofile Filename where to export. File must exist!
+	 * @param minTreeSize 
 	 */
-	public static void exportFile(GraphNode root, String ofile, boolean writeAttributes) {
+	public static void exportFile(GraphNode root, String ofile, boolean writeAttributes, int minTreeSize) {
 		if(writeAttributes) {
 			System.out.println("Starting sorted DOT export of " + root.getCaption() + " to " + ofile 
 					+ ". Attributes will be added.");
@@ -209,6 +210,7 @@ public class SortedGraph {
 			togo.addAll(root.getChildren());
 			while(!togo.isEmpty()) {
 				for(GraphNode x : togo) {
+					if(x.getTreeSize() < minTreeSize) continue;            //Exporting only more relevant nodes, if necessary
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
 						String append = " [treeSize=\"%treeSize\", "
@@ -252,5 +254,14 @@ public class SortedGraph {
 			e.printStackTrace();
 		}
 		System.out.println("Export completed.");
+	}
+
+	/** Default value
+	 * @param root
+	 * @param replaceAll
+	 * @param b
+	 */
+	public static void exportFile(GraphNode root, String replaceAll, boolean b) {
+		exportFile(root, replaceAll, b, 1);
 	}
 }
