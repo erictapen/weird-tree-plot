@@ -55,7 +55,7 @@ public class GraphPlotter {
 	private double minStepSizeBeforeAbort = 0.02;
 	private int persistenceBeforeAbort = 500;
 	
-	private double sizeMethodMix = 1.0;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
+	private double sizeMethodMix = 0.5;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
 													//												  0.0 means size comes from amount of children
 	private int largestChildrenSet = 0;             //biggest amount of children in tree is saved here
 
@@ -92,7 +92,7 @@ public class GraphPlotter {
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
-		root.setRadius(1.0);
+		//root.setRadius(1.0);
 		this.movingNodes.add(root);
 		this.waitingNodes.addAll(root.getChildren());
 		this.root.setAlreadyHadACollision(true); //avoid this big pink dot in the middle of the screen
@@ -391,6 +391,10 @@ public class GraphPlotter {
 
 	public int getMinNodeLeafs() {
 		return minNodeLeafs;
+	}
+
+	public void setSizeMethodMix(double sizeMethodMix) {
+		this.sizeMethodMix = sizeMethodMix;
 	}
 	
 	
