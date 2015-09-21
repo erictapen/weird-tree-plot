@@ -160,7 +160,6 @@ public class SortedGraph {
 	}
 	
 	private static String extractAttributeFromString(String str, String attribute) {
-		
 		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
 		Matcher matcher = pattern.matcher(str);
 		matcher.find();
@@ -168,23 +167,7 @@ public class SortedGraph {
 			return matcher.group(1);
 		} catch (IllegalStateException e) {
 			return "0.0";
-		}
-		
-//		String attr = "";
-//		attr = str.substring(str.indexOf("["));
-//		str = str.substring(0, str.indexOf("[")-1);
-//		try{
-//			return attr.substring(	attr.indexOf(attribute + "=\"") + attribute.length() + 2, 
-//									attr.indexOf("\"", attr.indexOf(attribute + "=\"") 
-//											+ attribute.length() + 3));
-//		} catch (NumberFormatException e) {
-//			System.out.println("There might be corrupted attributes in " + str);
-//		} catch (StringIndexOutOfBoundsException e) {
-//			System.out.println("IndexOutOfBounds: " + str);
-//		}
-//		return "";
-		
-		
+		}		
 	}
 
 	/** Exports the graph! Every data, which is determined by now will be written into the file
