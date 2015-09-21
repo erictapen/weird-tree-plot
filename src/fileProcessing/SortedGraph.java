@@ -159,6 +159,11 @@ public class SortedGraph {
 		}
 	}
 	
+	/** 
+	 * @param str An attribute String
+	 * @param attribute The key of the desired attribute
+	 * @return The desired value
+	 */
 	private static String extractAttributeFromString(String str, String attribute) {
 		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
 		Matcher matcher = pattern.matcher(str);
