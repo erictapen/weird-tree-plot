@@ -103,31 +103,29 @@ public class SortedGraph {
 		String[] str = line.split(" <-- ");
 		boolean parentGotAttr = false;
 		boolean childGotAttr = false;
-		int attrNumberOfLeafsParent = 0;
+		int attrTreeSizeParent = 0;
 		double attrPosXParent = 0.0;
 		double attrPosYParent = 0.0;
 		double attrRadiusParent = 0.0;
 		if(str[0].contains("[")) {
-			attrNumberOfLeafsParent = Integer.parseInt(extractAttributeFromString(str[0], 
-					"treeSize"));
-			attrPosXParent = Double.parseDouble(extractAttributeFromString(str[0], "posx"));
-			attrPosYParent = Double.parseDouble(extractAttributeFromString(str[0], "posy"));
-			attrRadiusParent = Double.parseDouble(extractAttributeFromString(str[0], "radius"));
+			attrTreeSizeParent = extractAttributeFromString(str[0], "treeSize", 0);
+			attrPosXParent = extractAttributeFromString(str[0], "posx", 0.0);
+			attrPosYParent = extractAttributeFromString(str[0], "posy", 0.0);
+			attrRadiusParent = extractAttributeFromString(str[0], "radius", 0.0);
 			parentGotAttr = true;
 			str[0] = str[0].substring(0, str[0].indexOf(" ["));
 		}
 		
-		int attrNumberOfLeafs = 0;
+		int attrTreeSize = 0;
 		double attrPosX = 0.0;
 		double attrPosY = 0.0;
 		double attrRadius = 0.0;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attributes are read out from string
-			attrNumberOfLeafs = Integer.parseInt(extractAttributeFromString(str[1], 
-					"treeSize"));
-			attrPosX = Double.parseDouble(extractAttributeFromString(str[1], "posx"));
-			attrPosY = Double.parseDouble(extractAttributeFromString(str[1], "posy"));
-			attrRadius = Double.parseDouble(extractAttributeFromString(str[1], "radius"));
+			attrTreeSize = extractAttributeFromString(str[1], "treeSize", 0);
+			attrPosX = extractAttributeFromString(str[1], "posx", 0.0);
+			attrPosY = extractAttributeFromString(str[1], "posy", 0.0);
+			attrRadius = extractAttributeFromString(str[1], "radius", 0.0);
 			childGotAttr = true;
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
@@ -146,13 +144,13 @@ public class SortedGraph {
 		child.setParent(parent);
 		parent.addChild(child);
 		if(parentGotAttr) {
-			if(attrNumberOfLeafsParent!=0) parent.setTreeSize(attrNumberOfLeafsParent);
+			if(attrTreeSizeParent!=0) parent.setTreeSize(attrTreeSizeParent);
 			parent.setxPos(attrPosXParent);
 			parent.setyPos(attrPosYParent);
 			parent.setRadius(attrRadiusParent);
 		}
 		if(childGotAttr) {
-			child.setTreeSize(attrNumberOfLeafs);
+			child.setTreeSize(attrTreeSize);
 			child.setxPos(attrPosX);
 			child.setyPos(attrPosY);
 			child.setRadius(attrRadius);
@@ -161,17 +159,73 @@ public class SortedGraph {
 	
 	/** 
 	 * @param str An attribute String
-	 * @param attribute The key of the desired attribute
-	 * @return The desired value
+	 * @param key The key of the desired attribute
+	 * @return The desired double value, or defaultVal if no corresponding value could be found
 	 */
-	private static String extractAttributeFromString(String str, String attribute) {
-		Pattern pattern = Pattern.compile(attribute + "=\"(.+?)\"");
+	private static Double extractAttributeFromString(String str, String key, double defaultVal) {
+		String res = extractAttributeFromString(str, key);
+		try{
+			return Double.parseDouble(res);	
+		} catch(NumberFormatException e) {
+			return defaultVal;
+		} catch(NullPointerException e) {
+			return defaultVal;
+		}
+	}
+	
+	/** 
+	 * @param str An attribute String
+	 * @param key The key of the desired attribute
+	 * @return The desired double value, or defaultVal if no corresponding value could be found
+	 */
+	private static Integer extractAttributeFromString(String str, String key, int defaultVal) {
+		String res = extractAttributeFromString(str, key);
+		try{
+			return Integer.parseInt(res);	
+		} catch(NumberFormatException e) {
+			return defaultVal;
+		} catch(NullPointerException e) {
+			return defaultVal;
+		}
+	}
+	
+	/** 
+	 * @param str An attribute String
+	 * @param key The key of the desired attribute
+	 * @return The desired double value, or defaultVal if no corresponding value could be found
+	 */
+	private static Boolean extractAttributeFromString(String str, String key, boolean defaultVal) {
+		String res = extractAttributeFromString(str, key);
+		if(res==null) return defaultVal;
+		if(res == "true") return new Boolean(true); //the Boolean.parseBoolean() function is not suited.
+		if(res == "false") return new Boolean(false);
+		return defaultVal;
+	}
+	
+	/** 
+	 * @param str An attribute String
+	 * @param key The key of the desired attribute
+	 * @return The desired double value, or defaultVal if no corresponding value could be found
+	 */
+	private static String extractAttributeFromString(String str, String key, String defaultVal) {
+		String res = extractAttributeFromString(str, key);
+		if(res==null) return defaultVal;
+		return res;
+	}
+	
+	/** 
+	 * @param str An attribute String
+	 * @param key The key of the desired attribute
+	 * @return The desired double value, or defaultVal if no corresponding value could be found
+	 */
+	private static String extractAttributeFromString(String str, String key) {
+		Pattern pattern = Pattern.compile(key + "=\"(.+?)\"");
 		Matcher matcher = pattern.matcher(str);
 		matcher.find();
 		try{
 			return matcher.group(1);
 		} catch (IllegalStateException e) {
-			return "0.0";
+			return null;
 		}		
 	}
 
