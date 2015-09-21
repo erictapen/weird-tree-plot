@@ -107,32 +107,38 @@ public class SortedGraph {
 		double attrPosXParent = 0.0;
 		double attrPosYParent = 0.0;
 		double attrRadiusParent = 0.0;
+		String attrCaptionParent = null;
 		if(str[0].contains("[")) {
 			attrTreeSizeParent = extractAttributeFromString(str[0], "treeSize", 0);
 			attrPosXParent = extractAttributeFromString(str[0], "posx", 0.0);
 			attrPosYParent = extractAttributeFromString(str[0], "posy", 0.0);
 			attrRadiusParent = extractAttributeFromString(str[0], "radius", 0.0);
+			attrCaptionParent = extractAttributeFromString(str[0], "caption", null);
 			parentGotAttr = true;
 			str[0] = str[0].substring(0, str[0].indexOf(" ["));
 		}
+		if(attrCaptionParent == null) attrCaptionParent = str[0];
 		
 		int attrTreeSize = 0;
 		double attrPosX = 0.0;
 		double attrPosY = 0.0;
 		double attrRadius = 0.0;
+		String attrCaption = null;
 		if(str.length!=2) return;
 		if(str[1].contains("[")) {  //Attributes are read out from string
 			attrTreeSize = extractAttributeFromString(str[1], "treeSize", 0);
 			attrPosX = extractAttributeFromString(str[1], "posx", 0.0);
 			attrPosY = extractAttributeFromString(str[1], "posy", 0.0);
 			attrRadius = extractAttributeFromString(str[1], "radius", 0.0);
+			attrCaption = extractAttributeFromString(str[1], "caption", null);
 			childGotAttr = true;
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
+		if(attrCaption == null) attrCaption = str[1];
 		
 		
-		GraphNode parent = nodemap.get(str[0]);
-		GraphNode child = nodemap.get(str[1]);
+		GraphNode parent = nodemap.get(attrCaptionParent);
+		GraphNode child = nodemap.get(attrCaption);
 		if(child==null) {
 			child = new GraphNode(str[1]);
 			nodemap.put(str[1], child);
@@ -255,10 +261,12 @@ public class SortedGraph {
 					if(x.getTreeSize() < minTreeSize) continue;            //Exporting only more relevant nodes, if necessary
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
-						String append = " [treeSize=\"%treeSize\", "
-								+ "posx=\"%posx\""
-								+ "posy=\"%posy\""
+						String append = " [caption=\"%caption\", "
+								+ "treeSize=\"%treeSize\", "
+								+ "posx=\"%posx\", "
+								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%caption", x.getParent().getCaption());
 						append = append.replaceAll("%treeSize", 
 								Integer.toString(x.getParent().getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getParent().getxPos()));
@@ -269,10 +277,12 @@ public class SortedGraph {
 					}
 					writer.append(" <-- " + x.getCaption());
 					if(writeAttributes) {
-						String append = " [treeSize=\"%treeSize\", "
+						String append = " [caption=\"%caption\", "
+								+ "treeSize=\"%treeSize\", "
 								+ "posx=\"%posx\", "
 								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
+						append = append.replaceAll("%caption", x.getCaption());
 						append = append.replaceAll("%treeSize", 
 								Integer.toString(x.getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getxPos()));
