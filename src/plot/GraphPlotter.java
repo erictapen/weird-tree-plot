@@ -55,7 +55,7 @@ public class GraphPlotter {
 	private double minStepSizeBeforeAbort = 0.02;
 	private int persistenceBeforeAbort = 500;
 	
-	private double sizeMethodMix = 0.5;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
+	private double sizeMethodMix = 0.0;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
 													//												  0.0 means size comes from amount of children
 	private int largestChildrenSet = 0;             //biggest amount of children in tree is saved here
 
