@@ -137,15 +137,15 @@ public class SortedGraph {
 		if(attrCaption == null) attrCaption = str[1];
 		
 		
-		GraphNode parent = nodemap.get(attrCaptionParent);
-		GraphNode child = nodemap.get(attrCaption);
+		GraphNode parent = nodemap.get(str[0]);
+		GraphNode child = nodemap.get(str[1]);
 		if(child==null) {
 			child = new GraphNode(attrCaption);
-			nodemap.put(attrCaption, child);
+			nodemap.put(str[1], child);
 		}
 		if(parent==null) {
 			parent = new GraphNode(attrCaptionParent);
-			nodemap.put(attrCaptionParent, parent);
+			nodemap.put(str[0], parent);
 		}
 		child.setParent(parent);
 		parent.addChild(child);
