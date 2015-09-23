@@ -10,7 +10,8 @@ import java.util.HashMap;
 
 import graph.GraphNode;
 
-/** This class does much more than importing. It can output a sorted list of all graphs which are defined in the .dot-file
+/** This class does much more than importing. 
+ * It can output a sorted list of all graphs which are defined in the .dot-file
  * @author justin
  *
  */
@@ -22,16 +23,10 @@ public class RawGraph {
 	//differentGraphs is a List of all rootcircles, where graphs do not intersect
 	private static ArrayList<ArrayList<GraphNode>> differentGraphs = new ArrayList<ArrayList<GraphNode>>(); 
 
-	public static void main(String[] args) {
-		importFile(filename);
-		analyseGraph();
-		exportSortedFile("/home/justin/Dropbox/java/Wikipedia Crawl/wiki_raw_sorted.dot");
-	}
-
-
 	/** Outputs the correct sorted graphs in a dotfile
 	 * @param ofile The filename.
 	 */
+	@SuppressWarnings("unused")
 	private static void exportSortedFile(String ofile) {
 		System.out.println("Start exporting to file.");
 		try{
@@ -61,8 +56,6 @@ public class RawGraph {
 						temp.clear();
 					}
 				}
-				
-				
 				writer.append("}\n\n");
 			}
 			writer.close();
@@ -70,26 +63,16 @@ public class RawGraph {
 		{
 			e.printStackTrace();
 		}
-		
-
 	}
 
 
 	private static void analyseGraph() {
 		int count = 0;
 		for(GraphNode x : nodes) {
-
 			if(x.isChecked()) continue;
 			ArrayList<GraphNode> rootcircle = paintGraph(x);
 			differentGraphs.add(rootcircle);
 			count++;
-			/*if(rootcircle.size()>2) {
-				System.out.println("Found graph with following rootcircle/root:");
-				for(GraphNode y : rootcircle) {
-					System.out.print("    " + y.getCaption());
-				}
-				System.out.println();
-			}*/
 		}
 		System.out.println("There are " + count + " individual graphs in memory.");
 	}
@@ -131,13 +114,11 @@ public class RawGraph {
 	 * @param ifile
 	 */
 	private static void importFile(String ifile) {
-
-
 		try (BufferedReader br = new BufferedReader(new FileReader(ifile))) {
 			String line;
 			int i=0;
 			while ((line = br.readLine()) != null) {
-				if(i%1 == 0) createGraphFromLine(line); //only due to low RAM on my netbook!!!
+				createGraphFromLine(line); 
 				i++;
 				if(i%1000 == 0) System.out.println(i);
 			}
@@ -150,7 +131,6 @@ public class RawGraph {
 			e.printStackTrace();
 			return;
 		}
-
 		System.out.println("Graph imported. There are " + nodemap.size() + " nodes in memory.");
 	}
 
@@ -176,5 +156,4 @@ public class RawGraph {
 		nodes.add(parent);
 		nodes.add(child);
 	}
-
 }

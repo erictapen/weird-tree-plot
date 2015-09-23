@@ -15,31 +15,38 @@ public class GraphPlotter {
 	 * 
 	 */
 	private GraphNode root;
+	
 	/** Doesn't have any meaning atm
 	 * 
 	 */
 	private boolean debug;
+	
 	/** The manager, which is responsible for getting better solutions for collision detection
 	 * 
 	 */
 	private NodeSetManager manager;
+	
 	/** Every node will travel with this stepsize. It will determine the accuracy of the result.
 	 *  For smaller stepsize, you'll need more iterations
 	 */
 	private double stepsize;
+	
 	/** Maximum of steps, a single node will travel. After that, it stops where it is.
 	 * 
 	 */
 	private int maxIteration;
+	
 	/** iterator for local use
 	 * 
 	 */
 	private int iteration;
+	
 	/** every redrawInterval*iterations, the thread of control will return to the PApplet, in order 
 	 * to update the live drawing of the plot
 	 *  
 	 */
 	private int redrawInterval;
+	
 	/** This is the distance to 0;0, from which every Node starts its journey. 
 	 * Should be big enough to not intersect with any already plotted Nodes!
 	 * The bigger it is, the more iterations you will need.
@@ -55,18 +62,12 @@ public class GraphPlotter {
 	private double minStepSizeBeforeAbort = 0.02;
 	private int persistenceBeforeAbort = 500;
 	
-	private double sizeMethodMix = 0.0;             //There are two different sizeEvaluation methods. 1.0 means size comes from treeSize,
-													//												  0.0 means size comes from amount of children
+	private double sizeMethodMix = 0.0;             //There are two different sizeEvaluation methods. 
+													//		1.0 means size comes from treeSize,
+													//		0.0 means size comes from amount of children
 	private int largestChildrenSet = 0;             //biggest amount of children in tree is saved here
 
-
 	private NodeSetManager movingmanager;
-
-
-
-
-
-	
 
 	/** Also calls init()
 	 * @param root
@@ -88,7 +89,6 @@ public class GraphPlotter {
 		System.out.println("root has " + root.getTreeSize() + " leafs.");
 		this.updateSizes();
 		manager.init();
-		//SortedGraph.exportFile(root, "../data/wiki_sorted_attr.dot", true);
 
 		root.setxPos(0.0);
 		root.setyPos(0.0);
@@ -97,7 +97,6 @@ public class GraphPlotter {
 		this.waitingNodes.addAll(root.getChildren());
 		this.root.setAlreadyHadACollision(true); //avoid this big pink dot in the middle of the screen
 		this.evalLargestChildrenSet();
-		
 	}
 
 	/** initializes a file by using a config file. Attributes, which are not in the file 
@@ -124,8 +123,7 @@ public class GraphPlotter {
 			this.movingNodes.clear();
 			GraphNode smallest = root;
 			for(GraphNode x : this.waitingNodes) {
-				if(smallest.getTreeSize() > x.getParent().getTreeSize()) 
-							smallest = x.getParent();
+				if(smallest.getTreeSize() > x.getParent().getTreeSize()) smallest = x.getParent();
 			}
 			this.movingNodes.addAll(smallest.getChildren());
 			this.waitingNodes.removeAll(smallest.getChildren());
@@ -139,8 +137,7 @@ public class GraphPlotter {
 				}
 				this.waitingNodes.removeAll(tooSmall);
 			}
-			double movingCircleMinRadius = Math.sqrt(	Math.pow(smallest.getxPos(), 2) +
-														Math.pow(smallest.getyPos(), 2))
+			double movingCircleMinRadius = Math.sqrt(Math.pow(smallest.getxPos(), 2) + Math.pow(smallest.getyPos(), 2))
 											+ smallest.getRadius();
 			for(GraphNode x : this.movingNodes) {       //do the movingCircle
 				double rad = 	Math.atan2(x.getParent().getxPos(), x.getParent().getyPos())
@@ -152,9 +149,7 @@ public class GraphPlotter {
 			for(GraphNode x : this.movingNodes) {
 				x.setMemoryOfMovements(new ArrayList<ArrayList<Double>>());
 			}
-			
 		}
-		
 		
 		for(int i=0; i<this.redrawInterval; i++) {
 			this.movingmanager = new NodeSetManager();
@@ -165,8 +160,7 @@ public class GraphPlotter {
 			for(GraphNode movingNode : this.movingNodes) {
 				if(		(!movingNode.isPlotted()) && 
 						(movingNode.getMemoryOfMovements().size() >= this.persistenceBeforeAbort + 1)
-					) {
-					
+				  ) {
 					double traveledDist = Math.sqrt(
 							Math.pow(
 									movingNode.getMemoryOfMovements().get(persistenceBeforeAbort).get(0)
@@ -178,11 +172,7 @@ public class GraphPlotter {
 									2.0));
 					if(traveledDist <= this.minStepSizeBeforeAbort) {
 						movingNode.setPlotted(true);
-						//System.out.println("Node " + movingNode.getCaption() + " only needed " + iteration +
-						//		" steps.");
 					}
-					
-					//if(abort) continue;
 				}
 				if(!movingNode.isPlotted()) {
 					double[] vIntersect = new double[2];
@@ -207,10 +197,8 @@ public class GraphPlotter {
 											+ Math.cos(radCenter)*this.stepsize*0.5);
 						movingNode.setAlreadyHadACollision(true);
 					} else {       //in case of no intersection
-						double radParent = Math.atan2(	movingNode.getParent().getxPos()
-														- movingNode.getxPos(), 
-														movingNode.getParent().getyPos()
-														- movingNode.getyPos());
+						double radParent = Math.atan2(	movingNode.getParent().getxPos() - movingNode.getxPos(), 
+														movingNode.getParent().getyPos() - movingNode.getyPos());
 						if(movingNode.isAlreadyHadACollision()) {
 							//pull towards parent
 							//pull towards center
@@ -248,10 +236,7 @@ public class GraphPlotter {
 				return;
 			}
 		}
-
 	}
-
-
 
 	/** Updates all the size fields in the tree, according to this.getSizeFromLeafs(int)
 	 * @param root
@@ -277,8 +262,11 @@ public class GraphPlotter {
 	 * @return The actual size in ] 0.0 ; 1.0 [
 	 */
 	private double getSizeFromLeafs(int treeSize, int childSize) {
-		return this.sizeMethodMix * Math.sqrt((((double) treeSize + sizeOffSet)/ ((double) root.getTreeSize() + sizeOffSet)))
-				+ (1-this.sizeMethodMix) * Math.sqrt((((double) childSize + sizeOffSet)/ ((double) this.largestChildrenSet + sizeOffSet)));
+		return this.sizeMethodMix * Math.sqrt((((double) treeSize + sizeOffSet)/ 
+						((double) root.getTreeSize() + sizeOffSet)))
+				+
+				(1-this.sizeMethodMix) * Math.sqrt((((double) childSize + sizeOffSet)/ 
+						((double) this.largestChildrenSet + sizeOffSet)));
 	}
 
 	private void evalLargestChildrenSet() {
@@ -295,7 +283,6 @@ public class GraphPlotter {
 			temp.clear();
 		}
 	}
-
 
 	public boolean isDebug() {
 		return debug;
@@ -374,7 +361,6 @@ public class GraphPlotter {
 
 	public GraphNode getRoot() {
 		return root;
-
 	}
 
 	public void setMinStepSizeBeforeAbort(double minStepSizeBeforeAbort) {
@@ -396,7 +382,4 @@ public class GraphPlotter {
 	public void setSizeMethodMix(double sizeMethodMix) {
 		this.sizeMethodMix = sizeMethodMix;
 	}
-	
-	
-	
 }

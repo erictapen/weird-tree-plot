@@ -14,26 +14,21 @@ public class GetDotFromWikiDump {
 	private static int iterations = 100;
 	
 	public static void main(String[] args) {
-		
-
 		String page = "";
 		
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(ofile, "UTF-8");
-			
 		} catch (FileNotFoundException e1) {
 			System.out.println("File \"" + ofile + "\" not found. Abort.");
 			e1.printStackTrace();
 			return;
 		} catch (UnsupportedEncodingException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return;
 		}
 		
 		writer.println("digraph wikiMap {");
-		
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(ifile))) {
 			String line;
@@ -61,23 +56,19 @@ public class GetDotFromWikiDump {
 	private static void extractRelationToFile(String page, PrintWriter writer) {
 		if(iterations >= 0) {
 			if(iterations % 1 == 0) System.out.println(iterations);
-			
-			writer.println(extractScope(page, "<title>", "</title>") + " --> " + extractFirstLink(extractScope(page, "<text xml:space=\"preserve\">", "== ")));
-			
-			
+			writer.println(extractScope(page, "<title>", "</title>") + " --> " 
+					+ extractFirstLink(extractScope(page, "<text xml:space=\"preserve\">", "== ")));
 			iterations--;
 		} else {
 			writer.println("}");
 			writer.close();
 			System.exit(0);
 		}
-		
 	}
 	
 	private static String extractScope(String str, String lbrace, String rbrace) {
 		int open = str.indexOf(lbrace);
 		int close = str.indexOf(rbrace);
-		
 		if(open!=-1 && close!=-1 && open < close) {
 			return str.substring(open + lbrace.length(), close);
 		}
@@ -85,8 +76,6 @@ public class GetDotFromWikiDump {
 	}
 	
 	private static String extractFirstLink(String str) {
-		
-		
 		String res = "";
 		/*
 		//boolean outside = true;
@@ -125,7 +114,6 @@ public class GetDotFromWikiDump {
 			str = str.substring(1);
 			
 		}*/
-		
 		str = str.replaceFirst("(*)", "");
 		return res;
 	}

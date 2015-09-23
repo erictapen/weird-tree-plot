@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 
-
 /** This is for (probably) more efficient search of neighbored Nodes in the plane
  * @author justin
  *
@@ -19,9 +18,6 @@ public class NodeSetManager {
 	 */
 	private double gridsize;
 	
-
-	
-
 	private HashMap<Vector<Integer>, HashSet<GraphNode>> plottedNodesMap;
 	
 	public NodeSetManager() {
@@ -38,8 +34,6 @@ public class NodeSetManager {
 		init();
 	}
 	
-	
-	
 	public HashSet<GraphNode> getNearbyNodes(GraphNode node) {
 		HashSet<GraphNode> res = new HashSet<GraphNode>();
 		int radius = (int)Math.ceil(node.getRadius()/this.gridsize);
@@ -53,20 +47,10 @@ public class NodeSetManager {
 				if(temp!=null) res.addAll(temp);
 			}
 		}
-		//if(Math.random() < 0.0001) {
-			//TODO delete debug messages
-//			System.out.println("Node " + node.getCaption() + node.getRadius() + " lies near " + res.size()
-//					+ " other nodes:");
-//			for(GraphNode x : res) {
-//				System.out.println("\t" + x.getCaption() + "\t " + x.getRadius());
-//			}
-		//}
-
 		return res;
 	}
 
 	public void update() {
-		
 	}
 	
 	/** Add nodes to the managed Set.
@@ -74,7 +58,6 @@ public class NodeSetManager {
 	 */
 	public void update(HashSet<GraphNode> addedNodes) {
 		for(GraphNode node : addedNodes) {
-			
 			int radius = (int)Math.ceil(node.getRadius()/this.gridsize); //nodesize in the grids scale
 			if(radius==0) System.out.println("Radius ist null!");
 			for(int x=-radius-1; x<=radius+1; x++) {
@@ -93,7 +76,6 @@ public class NodeSetManager {
 					}
 				}
 			}
-			
 		}
 	}
 
@@ -124,7 +106,6 @@ public class NodeSetManager {
 			+ biggest + " nodes in the biggest cell" + "\n\t"
 			+ smallest + " nodes in the smallest cell" + "\n\t"
 			+ average + " nodes in the average cell\n";
-		
 	}
 	
 	/** Returns a three-dimensional Vector for every cell, containing the key (0 and 1) and the size (2)

@@ -66,7 +66,8 @@ public class SVGGraph {
 			
 			for(GraphNode x : nodes) {
 				if(writeCaption && x.getRadius() > captionMinNodesize) {
-					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" lengthAdjust=\"spacingAndGlyphs\"\n" + 
+					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" " +
+							"lengthAdjust=\"spacingAndGlyphs\"\n" + 
 							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" + 
 							"    %caption\n" + 
 							"</text>\n";

@@ -27,28 +27,16 @@ public class TexGraph {
 							"\\usepackage[utf8]{inputenc}\n" +
 							"\\newcommand{\\SCALE}{" + df.format(MAX_SCALE) + "}\n" +
 							"\\begin{document}\n" +
-							"\\begin{tikzpicture}\n"
-							
-					);
+							"\\begin{tikzpicture}\n");
 			for(GraphNode x : nodes) {
 				if(writeCaption) {
 					double size = (50.0*x.getRadius())/(double)x.getCaption().length();
 					if(size!=0.0) {
-						writer.append("\\node[scale=" + 
-								df.format(size) + 
-								"pt] at (" + 
+						writer.append("\\node[scale=" + df.format(size) + "pt] at (" + 
 								df.format(x.getxPos()) + "*\\SCALE," + 
 								df.format(x.getyPos()) + "*\\SCALE) {" + x.getCaption() + "};\n"); 
 					}
 				}
-				/*if(writeBoxes) {
-					writer.append("\\node (rect) at (" + 
-							df.format(x.getPosX()*MAX_SCALE) + "," + 
-							df.format(x.getPosY()*MAX_SCALE) + ") [draw, minimum width=" + 
-							df.format(x.getWidth()*MAX_SCALE) + "cm, minimum height=" + 
-							df.format(x.getHeight()*MAX_SCALE) + "cm] {};\n"); 
-
-				}*/
 				if(writeCircles) {
 					writer.append("\\draw (" + 
 							df.format(x.getxPos()) + "*\\SCALE, " + 
@@ -65,21 +53,14 @@ public class TexGraph {
 								df.format(p.getyPos()) + "*\\SCALE);\n\n");
 					}
 				} catch(NullPointerException e) {}
-
-
 			}
-
 
 			writer.append(
 					"\\end{tikzpicture}\n" +
-							"\\end{document}\n"
-					);
-
+					"\\end{document}\n");
 			writer.flush();
 			writer.close();
-		}
-		catch(IOException e)
-		{
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

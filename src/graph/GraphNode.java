@@ -7,6 +7,7 @@ public class GraphNode {
 	private String caption;
 	private GraphNode parent;
 	private ArrayList<GraphNode> children = new ArrayList<GraphNode>();
+
 	/** The size of the subtree under the node. For example, a leaf always has treeSize=0.
 	 * 
 	 */
@@ -17,9 +18,6 @@ public class GraphNode {
 	private ArrayList<ArrayList<Double>> memoryOfMovements;
 	private boolean plotted = false;
 	private boolean alreadyHadACollision = false;
-
-	
-
 	
 	public boolean isPlotted() {
 		return plotted;
@@ -130,9 +128,6 @@ public class GraphNode {
 		this.setTreeSize(res);
 		return res;
 	}
-	
-	
-
 
 	@Override
 	public String toString() {
@@ -141,7 +136,6 @@ public class GraphNode {
 				+ treeSize + ", xPos=" + xPos + ", yPos=" + yPos
 				+ ", radius=" + radius + ", checked=" + checked + "]";
 	}
-
 	
 	/** Detects an intersection
 	 * @param n the Node with which to check
@@ -154,18 +148,7 @@ public class GraphNode {
 						<
 						this.radius + n.getRadius()) {
 			return new double[] {n.getxPos()-this.xPos, n.getyPos()-this.yPos};
-		}/*
-		if(this.parent==null || this.parent==n) return new double[] {0.0, 0.0};
-		double[] a = this.getVectorToParent();
-		double[] b = new double[] {	n.getxPos()-this.parent.getxPos(),     //from parent to n
-									n.getyPos()-this.parent.getyPos()};
-		double[] c = new double[] {	n.getxPos()-this.xPos,                 //from this to n
-									n.getyPos()-this.yPos};
-		if( !((a[0]*b[0]+a[1]*b[1]) * (a[0]*c[0]+a[1]*c[1]) < 0) ) return new double[] {0.0, 0.0};
-		double blength = Math.sqrt(b[0]*b[0] + b[1]*b[1]);
-		if(Math.sin(Math.atan2(a[0], a[1]) - Math.atan2(b[0], b[1])) * blength < n.getSize()) {
-			return new double[] {	0, 0};
-		}*/
+		}
 		return new double[] {0.0, 0.0};
 	}
 
@@ -186,6 +169,4 @@ public class GraphNode {
 		}
 		return res;
 	}
-	
-	
 }

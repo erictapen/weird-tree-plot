@@ -12,15 +12,12 @@ import plot.GraphPlotter;
 import plot.NodeSetManager;
 import draw.GraphDraw;
 
-
-
-
 public class ConfReader {
-	
 	/** Hashmap, which contains all Key/Value pairs in the configfile
 	 * 
 	 */
 	private HashMap<String, String> content;
+
 	/** All keys must be registered here!
 	 * 
 	 */
@@ -85,9 +82,8 @@ public class ConfReader {
 					continue;
 				}
 				if(!this.allowedKeys.contains(pair[0])) {
-					System.out.println("Semantic error on line " +  count + "! " + pair[0] 
-							+ " is unknown!");
-							continue;
+					System.out.println("Semantic error on line " +  count + "! " + pair[0] + " is unknown!");
+					continue;
 				}
 				content.put(pair[0], pair[1]);
 			}

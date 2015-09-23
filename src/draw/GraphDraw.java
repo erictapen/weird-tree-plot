@@ -65,8 +65,8 @@ public class GraphDraw extends PApplet {
 		if(root == null) {
 			System.out.println("root is null! You have to tell the program where it should start."
 					+ "Plese check your config again. "
-					+ "The file at GRAPHinputDOTfile must include a Node GRAPHrootCaption."
-					+ "\nWill terminate.");
+					+ "The file at GRAPHinputDOTfile must include a Node GRAPHrootCaption.\n"
+					+ "Will terminate.");
 			exit();
 		}
 		if(root.getRadius() == 1.0) abortAndExport(); //Graph is already plotted
@@ -85,7 +85,6 @@ public class GraphDraw extends PApplet {
 							+ "iterations, \n" + pltr.getMovingNodes().size() + " movingNodes, "
 							+ pltr.getPlottedNodes().size() + " plottedNodes and " 
 							+ pltr.getWaitingNodes().size() + " waitingNodes\n");
-		//System.out.println(pltr.getManager().getStatus());
 		for(int i=0; i<drawEveryUpdateInterval; i++) {
 			pltr.update();
 		}
@@ -111,22 +110,15 @@ public class GraphDraw extends PApplet {
 		}
 	}
 
-
-	
-
 	private void abortAndExport() {
 		System.out.println("Starting export to tikz, svg, dot.");
 		if(pltr!=null) {
-			TexGraph.exportToTex(	exportfile, 
-									pltr.getPlottedNodes(), true, true, false);
-			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
-					pltr.getPlottedNodes(), false, true, false);
+			TexGraph.exportToTex(exportfile, pltr.getPlottedNodes(), true, true, false);
+			SVGGraph.exportToSVG(exportfile.replaceAll(".tex", ".svg"),	pltr.getPlottedNodes(), false, true, false);
 			SortedGraph.exportFile(pltr.getRoot(), exportfile.replaceAll(".tex", ".dot"), true);
 		} else {
-			TexGraph.exportToTex(	exportfile, 
-					this.root.getWholeTree(), true, true, false);
-			SVGGraph.exportToSVG(	exportfile.replaceAll(".tex", ".svg"), 
-					this.root.getWholeTree(), false, true, false);
+			TexGraph.exportToTex(exportfile, this.root.getWholeTree(), true, true, false);
+			SVGGraph.exportToSVG(exportfile.replaceAll(".tex", ".svg"), this.root.getWholeTree(), false, true, false);
 			SortedGraph.exportFile(this.root, exportfile.replaceAll(".tex", ".dot"), true);
 		}
 		
@@ -143,25 +135,20 @@ public class GraphDraw extends PApplet {
 		if(!x.isPlotted()) {
 			stroke(255, 0, 255);
 			fill(255, 0, 255);
-		} //TODO
-		
-		//draw the node + every link
+		} 
 		
 		ellipse((float) (width/2.0 + x.getxPos()*drawRootSize), 
 				(float) (height/2.0 + x.getyPos()*drawRootSize),
 				(float) (x.getRadius()*drawRootSize*2.0),
 				(float) (x.getRadius()*drawRootSize*2.0));
-		//System.out.println(x);
 		for(GraphNode y : x.getChildren()) {
 			if(!drawLines) break;
 			PVector v1;
 			PVector v2;
 			PVector vNorm1;
 			PVector vNorm2;
-			v1 = new PVector(	width/2 + (float)(x.getxPos()*drawRootSize), 
-					height/2 + (float)(x.getyPos()*drawRootSize));
-			v2 = new PVector(	width/2 + (float)(y.getxPos()*drawRootSize), 
-					height/2 + (float)(y.getyPos()*drawRootSize));
+			v1 = new PVector(width/2 + (float)(x.getxPos()*drawRootSize), height/2 + (float)(x.getyPos()*drawRootSize));
+			v2 = new PVector(width/2 + (float)(y.getxPos()*drawRootSize), height/2 + (float)(y.getyPos()*drawRootSize));
 			vNorm1 = v1.get();
 			vNorm1.sub(v2);
 			vNorm1.normalize();
@@ -173,7 +160,6 @@ public class GraphDraw extends PApplet {
 			line(v1.x, v1.y, v2.x, v2.y);
 		}		
 	}
-	
 
 	/** draws a grid of 1*1 units for better view
 	 * 
@@ -239,7 +225,6 @@ public class GraphDraw extends PApplet {
 			rect(x1, y1, x2, y2);
 		}
 	}
-
 
 	public void mousePressed() {
 		   exportAndClose = true;

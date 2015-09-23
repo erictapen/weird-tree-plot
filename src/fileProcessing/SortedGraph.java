@@ -19,12 +19,7 @@ import java.util.regex.Pattern;
  *
  */
 public class SortedGraph {
-
-	
-	//private static ArrayList<GraphNode> nodes = new ArrayList<GraphNode>();		//list of all nodes
-	private static HashMap<String, GraphNode> nodemap = 
-			new HashMap<String, GraphNode>(4000000, (float) 0.75);
-	
+	private static HashMap<String, GraphNode> nodemap = new HashMap<String, GraphNode>(4000000, (float) 0.75);
 	
 	/** import a single (!) TreeGraph (!) from file
 	 * @param ifile file location
@@ -74,10 +69,9 @@ public class SortedGraph {
 		if(root.getRadius()!=1.0) graphNeedsPlot = true;
 		if(graphNeedsUpdateOnLeafSizes) {
 			System.out.println("It seems like, the imported file doesn't have any information about "
-					+ "subTreeSize. This must be "
-					+ "updated now.\nUnfortunately, this is a very stack expensive process. "
-					+ "In case of a StackOverflowException you might "
-					+ "need to increase your stack size. Wait a second while the update is running.");
+					+ "subTreeSize. This must be updated now.\n"
+					+ "Unfortunately, this is a very stack expensive process. In case of a StackOverflowException "
+					+ "you might need to increase your stack size. Wait a second while the update is running.");
 			root.updateTreeSize();
 			System.out.println("Update completed. Your stack was big enough.");
 		} else {
@@ -98,7 +92,6 @@ public class SortedGraph {
 	 * @param line
 	 */
 	private static void createNodeFromLine(String line) {
-		//System.out.println(line);
 		line = line.replace("\t", "");  //deletes the tab at the beginning
 		String[] str = line.split(" <-- ");
 		boolean parentGotAttr = false;
@@ -135,7 +128,6 @@ public class SortedGraph {
 			str[1] = str[1].substring(0, str[1].indexOf(" ["));
 		}
 		if(attrCaption == null) attrCaption = str[1];
-		
 		
 		GraphNode parent = nodemap.get(str[0]);
 		GraphNode child = nodemap.get(str[1]);
@@ -200,6 +192,7 @@ public class SortedGraph {
 	 * @param key The key of the desired attribute
 	 * @return The desired double value, or defaultVal if no corresponding value could be found
 	 */
+	@SuppressWarnings("unused")
 	private static Boolean extractAttributeFromString(String str, String key, boolean defaultVal) {
 		String res = extractAttributeFromString(str, key);
 		if(res==null) return defaultVal;
@@ -258,7 +251,7 @@ public class SortedGraph {
 			togo.addAll(root.getChildren());
 			while(!togo.isEmpty()) {
 				for(GraphNode x : togo) {
-					if(x.getTreeSize() < minTreeSize) continue;            //Exporting only more relevant nodes, if necessary
+					if(x.getTreeSize() < minTreeSize) continue;  //Exporting only more relevant nodes, if necessary
 					writer.append("\t" + x.getParent().getCaption());
 					if(writeAttributes && x.getParent()==root) {
 						String append = " [caption=\"%caption\", "
@@ -267,12 +260,10 @@ public class SortedGraph {
 								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
 						append = append.replaceAll("%caption", x.getParent().getCaption());
-						append = append.replaceAll("%treeSize", 
-								Integer.toString(x.getParent().getTreeSize()));
+						append = append.replaceAll("%treeSize",	Integer.toString(x.getParent().getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getParent().getxPos()));
 						append = append.replaceAll("%posy", Double.toString(x.getParent().getyPos()));
-						append = append.replaceAll("%radius", 
-								Double.toString(x.getParent().getRadius()));
+						append = append.replaceAll("%radius", Double.toString(x.getParent().getRadius()));
 						writer.append(append);
 					}
 					writer.append(" <-- " + x.getCaption());
@@ -283,8 +274,7 @@ public class SortedGraph {
 								+ "posy=\"%posy\", "
 								+ "radius=\"%radius\"]";
 						append = append.replaceAll("%caption", x.getCaption());
-						append = append.replaceAll("%treeSize", 
-								Integer.toString(x.getTreeSize()));
+						append = append.replaceAll("%treeSize", Integer.toString(x.getTreeSize()));
 						append = append.replaceAll("%posx", Double.toString(x.getxPos()));
 						append = append.replaceAll("%posy", Double.toString(x.getyPos()));
 						append = append.replaceAll("%radius", Double.toString(x.getRadius()));
@@ -297,7 +287,6 @@ public class SortedGraph {
 				togo.addAll(togo2);
 				togo2.clear();
 			}
-			
 			writer.append("}");
 			writer.close();
 		} catch(IOException e)
