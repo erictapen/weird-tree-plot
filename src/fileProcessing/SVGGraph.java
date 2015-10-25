@@ -10,18 +10,39 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-/** Export feature for svg vector graphics
+/** Export feature for svg vector graphics. Export options are explained at the setters documentations.
+ * 
  * @author justin
  *
  */
 public class SVGGraph {
+	
+	
+	
+	
+	
+	
+	private boolean writeCaption;
+	private boolean writeCircles;
+	private boolean writeEdges;
+	
+	//TODO let this four variables make sense.
+	private boolean plottable;
+	private double caption_minsize;
+	private double circle_minsize;
+	private double costXYratio;
+	
+	public SVGGraph() {
+		this.writeCaption = true;
+		this.writeCircles = true;
+		this.writeEdges = false;
+		this.plottable = false;
+		this.caption_minsize = 0.01;
+		this.circle_minsize = 0.001;
+		this.costXYratio = 1.0;
+	}
 
-	public static void exportToSVG(	String filename, HashSet<GraphNode> nodes, boolean writeCaption,
-									boolean writeCircles, boolean writeEdges) {
-		
-		writeCaption = true;
-		writeEdges = false; //In terms of clearness its more or less a shitty idea to activate this. 
-							//But it looks good!
+	public void exportToSVG(	String filename, HashSet<GraphNode> nodes) {
 		double scale = 256.0;
 		double strokeWidth = 0.005; //relative to scale
 		boolean fillGradient = false;
@@ -65,7 +86,7 @@ public class SVGGraph {
 			writer.append(append);
 			
 			for(GraphNode x : nodes) {
-				if(writeCaption && x.getRadius() > captionMinNodesize) {
+				if(this.writeCaption && x.getRadius() > captionMinNodesize) {
 					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" " +
 							"lengthAdjust=\"spacingAndGlyphs\"\n" + 
 							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" + 
@@ -79,7 +100,7 @@ public class SVGGraph {
 							StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
 					writer.append(insert);
 				}
-				if(writeCircles) {
+				if(this.writeCircles) {
 					GraphNode it = x;
 					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
 							+ "stroke=\"%Stroke\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
@@ -104,7 +125,7 @@ public class SVGGraph {
 					writer.append(insert);
 				}
 				GraphNode p = x.getParent();
-				if(writeEdges && p!=null) {
+				if(this.writeEdges && p!=null) {
 					String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" + 
 							"          x2=\"%x2\" y2=\"%y2\" \n" + 
 							"          stroke=\"black\" \n" + 
@@ -116,11 +137,7 @@ public class SVGGraph {
 					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*scale));
 					writer.append(insert);
 				}
-
-
 			}
-
-
 			writer.append(
 					"\\n\" + \n" + 
 					"					\"</svg>"
@@ -134,4 +151,68 @@ public class SVGGraph {
 			e.printStackTrace();
 		}
 	}
+
+	/** Check this to draw text. (true)
+	 * @param writeCaption
+	 */
+	public void setWriteCaption(boolean writeCaption) {
+		this.writeCaption = writeCaption;
+	}
+
+	/** Check this to draw circles. Imho setting this to false is only good for debugging. (true)
+	 * @param writeCircles
+	 */
+	public void setWriteCircles(boolean writeCircles) {
+		this.writeCircles = writeCircles;
+	}
+
+	/** Edges will be drawn. In terms of clearness its more or less a shitty idea to activate this. 
+	 * But it looks good! (false)
+	 * @param writeEdges
+	 */
+	public void setWriteEdges(boolean writeEdges) {
+		this.writeEdges = writeEdges;
+	}
+
+	/** Set this true, if you want your SVG to be plottable with a physical plotter. The drawing will 
+	 * be optimized in the following way:
+	 * * Travelling Salesman solution over all nodes, to accomplish faster plotting. If your 
+	 * plotter has different costs at the x and y-Axis, set your ratio with setCostXYratio()
+	 * * Nodes which are smaller than caption_minsize will be drawn without text
+	 * * Nodes which are smaller than circle_minsize will be drawn as a single line, which treis to connect
+	 * as many small nodes as possible. Think of it as a random line which draws areas black which would
+	 * otherwise be filled with very small circles.
+	 */
+	public void setPlottable(boolean plottable) {
+		this.plottable = plottable;
+	}
+
+	/** If plottable is set, nodes which are smaller than caption_minsize will be drawn without text. 
+	 * (0.1)
+	 * @param caption_minsize
+	 */
+	public void setCaption_minsize(double caption_minsize) {
+		this.caption_minsize = caption_minsize;
+	}
+
+	/** If plottable is set, nodes which are smaller than circle_minsize will be drawn as a single line, 
+	 * which tries to connect as many small nodes as possible. Think of it as a random line which draws 
+	 * areas black which would otherwise be filled with very small circles. (0.001)
+	 * @param circle_minsize
+	 */
+	public void setCircle_minsize(double circle_minsize) {
+		this.circle_minsize = circle_minsize;
+	}
+
+	/** If plottable is set, you can have a Travelling Salesman solution over all nodes, to accomplish 
+	 * faster plotting. If your plotter has different costs at the x and y-Axis, set your ratio here. 
+	 * If your plotter needs for 1m in x-direction twice as much than for 1m in y-direction, set it 
+	 * to 2.0. (1.0)
+	 * @param cost_xy_ratio
+	 */
+	public void setCostXYratio(double cost_xy_ratio) {
+		this.costXYratio = cost_xy_ratio;
+	}
+	
+	
 }
