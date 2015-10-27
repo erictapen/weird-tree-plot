@@ -5,10 +5,14 @@ import graph.GraphNode;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.regex.Matcher;
+
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import plot.NodeSetManager;
 
 /** Export feature for svg vector graphics. Export options are explained at the setters documentations.
  * 
@@ -28,16 +32,24 @@ public class SVGGraph {
 	
 	//TODO let this four variables make sense.
 	private boolean plottable;
-	private double caption_minsize;
+	private double bigcaption_minsize;
+	private double smallcaption_minsize;
 	private double circle_minsize;
 	private double costXYratio;
+	
+	private ArrayList<GraphNode> bigCaptionNodes;
+	private ArrayList<GraphNode> smallCaptionNodes;
+	private ArrayList<GraphNode> noCaptionNodes;
+	private ArrayList<GraphNode> noCircleNodes;
+
 	
 	public SVGGraph() {
 		this.writeCaption = true;
 		this.writeCircles = true;
 		this.writeEdges = false;
 		this.plottable = false;
-		this.caption_minsize = 0.01;
+		this.bigcaption_minsize = 0.05;
+		this.smallcaption_minsize = 0.01;
 		this.circle_minsize = 0.001;
 		this.costXYratio = 1.0;
 	}
@@ -151,6 +163,32 @@ public class SVGGraph {
 			e.printStackTrace();
 		}
 	}
+	
+	/** Fill every node in a it's set, according to its size.
+	 * @param nodes
+	 */
+	private void loadSeperateNodeClasses(HashSet<GraphNode> nodes) {
+		this.bigCaptionNodes = new ArrayList<GraphNode>();
+		this.smallCaptionNodes = new ArrayList<GraphNode>();
+		this.noCaptionNodes = new ArrayList<GraphNode>();
+		this.noCircleNodes = new ArrayList<GraphNode>();
+		for(GraphNode x : nodes) {
+			if(x.getRadius() >= this.bigcaption_minsize) this.bigCaptionNodes.add(x);
+			else if(x.getRadius() >= this.smallcaption_minsize) this.smallCaptionNodes.add(x);
+			else if(x.getRadius() >= this.circle_minsize) this.noCaptionNodes.add(x);
+			else this.noCircleNodes.add(x);
+		}
+	}
+	
+	/** Do Nearest Neighbour over every Nodeclass. Faster/better implementations may follow. Please note, 
+	 * that this will use a Manhattan-Metric, as plotter usually can move the pen on both axis!
+	 * @param ratio Cost x / cost y for physical plotter, where one axis moves faster than another.
+	 */
+	private void sortNodeClassesTSP(double ratio) {
+		NodeSetManager mngr = new NodeSetManager();
+		mngr.init();
+		//TODO
+	}
 
 	/** Check this to draw text. (true)
 	 * @param writeCaption
@@ -187,12 +225,22 @@ public class SVGGraph {
 		this.plottable = plottable;
 	}
 
-	/** If plottable is set, nodes which are smaller than caption_minsize will be drawn without text. 
+	/** If plottable is set, only nodes which are bigger or equal than bigcaption_minsize will be drawn 
+	 * with double-lined text. 
 	 * (0.1)
 	 * @param caption_minsize
 	 */
-	public void setCaption_minsize(double caption_minsize) {
-		this.caption_minsize = caption_minsize;
+	public void setBigCaption_minsize(double bigcaption_minsize) {
+		this.bigcaption_minsize = bigcaption_minsize;
+	}
+
+	/** If plottable is set, only nodes which are bigger or equal than smallcaption_minsize will be drawn 
+	 * with thin and easy drawable text. 
+	 * (0.1)
+	 * @param caption_minsize
+	 */
+	public void setSmallCaption_minsize(double smallcaption_minsize) {
+		this.smallcaption_minsize = smallcaption_minsize;
 	}
 
 	/** If plottable is set, nodes which are smaller than circle_minsize will be drawn as a single line, 
