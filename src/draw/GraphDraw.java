@@ -112,13 +112,14 @@ public class GraphDraw extends PApplet {
 
 	private void abortAndExport() {
 		System.out.println("Starting export to tikz, svg, dot.");
+		SVGGraph svgExporter = new SVGGraph();
 		if(pltr!=null) {
 			TexGraph.exportToTex(exportfile, pltr.getPlottedNodes(), true, true, false);
-			SVGGraph.exportToSVG(exportfile.replaceAll(".tex", ".svg"),	pltr.getPlottedNodes(), false, true, false);
+			svgExporter.exportToSVG(exportfile.replaceAll(".tex", ".svg"),	pltr.getPlottedNodes());
 			SortedGraph.exportFile(pltr.getRoot(), exportfile.replaceAll(".tex", ".dot"), true);
 		} else {
 			TexGraph.exportToTex(exportfile, this.root.getWholeTree(), true, true, false);
-			SVGGraph.exportToSVG(exportfile.replaceAll(".tex", ".svg"), this.root.getWholeTree(), false, true, false);
+			svgExporter.exportToSVG(exportfile.replaceAll(".tex", ".svg"),	pltr.getPlottedNodes());
 			SortedGraph.exportFile(this.root, exportfile.replaceAll(".tex", ".dot"), true);
 		}
 		
