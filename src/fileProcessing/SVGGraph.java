@@ -15,34 +15,29 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import plot.NodeSetManager;
 
 /** Export feature for svg vector graphics. Export options are explained at the setters documentations.
- * 
+ *
  * @author justin
  *
  */
 public class SVGGraph {
-	
-	
-	
-	
-	
-	
+
 	private boolean writeCaption;
 	private boolean writeCircles;
 	private boolean writeEdges;
-	
+
 	//TODO let this four variables make sense.
 	private boolean plottable;
 	private double bigcaption_minsize;
 	private double smallcaption_minsize;
 	private double circle_minsize;
 	private double costXYratio;
-	
+
 	private ArrayList<GraphNode> bigCaptionNodes;
 	private ArrayList<GraphNode> smallCaptionNodes;
 	private ArrayList<GraphNode> noCaptionNodes;
 	private ArrayList<GraphNode> noCircleNodes;
 
-	
+
 	public SVGGraph() {
 		this.writeCaption = true;
 		this.writeCircles = true;
@@ -70,45 +65,45 @@ public class SVGGraph {
 			if(x.getyPos() - x.getRadius() < posymin) posymin = x.getyPos() - x.getRadius();
 			if(x.getyPos() + x.getRadius() > posymax) posymax = x.getyPos() + x.getRadius();
 		}
-		
+
 		double width = posxmax - posxmin;
 		double height = posymax - posymin;
-		
-		
+
+
 		Locale.setDefault(Locale.ENGLISH);
 		DecimalFormat df = new DecimalFormat("#.########");
 		try{
 			FileWriter writer = new FileWriter(filename);
-			String append = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+			String append = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 					"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" "
-					+ "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" + 
-					"\n" + 
-					"<svg xmlns=\"http://www.w3.org/2000/svg\"\n" + 
+					+ "\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n" +
+					"\n" +
+					"<svg xmlns=\"http://www.w3.org/2000/svg\"\n" +
 					"     xmlns:xlink=\"http://www.w3.org/1999/xlink\" "
-					+ "xmlns:ev=\"http://www.w3.org/2001/xml-events\"\n" + 
-					"     version=\"1.1\" baseProfile=\"full\"\n" + 
-					"     width=\"%widthpx\" height=\"%heightpx\"\n" + 
-					"     viewBox=\"%cornerx %cornery %width %height\">\n" + 
+					+ "xmlns:ev=\"http://www.w3.org/2001/xml-events\"\n" +
+					"     version=\"1.1\" baseProfile=\"full\"\n" +
+					"     width=\"%widthpx\" height=\"%heightpx\"\n" +
+					"     viewBox=\"%cornerx %cornery %width %height\">\n" +
 					"\n";
 			append = append.replaceAll("%width", df.format(width*scale));
 			append = append.replaceAll("%height", df.format(height*scale));
 			append = append.replaceAll("%cornerx", df.format(posxmin*scale));
 			append = append.replaceAll("%cornery", df.format(posymin*scale));
-			
+
 			writer.append(append);
-			
+
 			for(GraphNode x : nodes) {
 				if(this.writeCaption && x.getRadius() > captionMinNodesize) {
 					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" " +
-							"lengthAdjust=\"spacingAndGlyphs\"\n" + 
-							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" + 
-							"    %caption\n" + 
+							"lengthAdjust=\"spacingAndGlyphs\"\n" +
+							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" +
+							"    %caption\n" +
 							"</text>\n";
 					insert = insert.replaceAll("%x", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%y", df.format(x.getyPos()*scale + x.getRadius()*scale*0.175));
 					insert = insert.replaceAll("%textlength", df.format(x.getRadius()*1.8*scale));
 					insert = insert.replaceAll("%fontsize", df.format(x.getRadius()*scale*0.5));
-					insert = insert.replaceAll("%caption",  
+					insert = insert.replaceAll("%caption",
 							StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
 					writer.append(insert);
 				}
@@ -123,7 +118,7 @@ public class SVGGraph {
 							level -= 30;
 						}
 						if(level < 17) level = 17;
-						insert = insert.replaceAll("%color", "#" + 
+						insert = insert.replaceAll("%color", "#" +
 								Integer.toHexString(level) + "0000");
 					} else {
 						insert = insert.replaceAll("%color", "none");
@@ -138,9 +133,9 @@ public class SVGGraph {
 				}
 				GraphNode p = x.getParent();
 				if(this.writeEdges && p!=null) {
-					String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" + 
-							"          x2=\"%x2\" y2=\"%y2\" \n" + 
-							"          stroke=\"black\" \n" + 
+					String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" +
+							"          x2=\"%x2\" y2=\"%y2\" \n" +
+							"          stroke=\"black\" \n" +
 							"          stroke-width=\"%strokeWidth\"/>\n";
 					insert = insert.replaceAll("%x1", df.format(x.getxPos()*scale));
 					insert = insert.replaceAll("%y1", df.format(x.getyPos()*scale));
@@ -151,7 +146,7 @@ public class SVGGraph {
 				}
 			}
 			writer.append(
-					"\\n\" + \n" + 
+					"\\n\" + \n" +
 					"					\"</svg>"
 					);
 
@@ -163,7 +158,7 @@ public class SVGGraph {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/** Fill every node in a it's set, according to its size.
 	 * @param nodes
 	 */
@@ -179,8 +174,8 @@ public class SVGGraph {
 			else this.noCircleNodes.add(x);
 		}
 	}
-	
-	/** Do Nearest Neighbour over every Nodeclass. Faster/better implementations may follow. Please note, 
+
+	/** Do Nearest Neighbour over every Nodeclass. Faster/better implementations may follow. Please note,
 	 * that this will use a Manhattan-Metric, as plotter usually can move the pen on both axis!
 	 * @param ratio Cost x / cost y for physical plotter, where one axis moves faster than another.
 	 */
@@ -204,7 +199,7 @@ public class SVGGraph {
 		this.writeCircles = writeCircles;
 	}
 
-	/** Edges will be drawn. In terms of clearness its more or less a shitty idea to activate this. 
+	/** Edges will be drawn. In terms of clearness its more or less a shitty idea to activate this.
 	 * But it looks good! (false)
 	 * @param writeEdges
 	 */
@@ -212,9 +207,9 @@ public class SVGGraph {
 		this.writeEdges = writeEdges;
 	}
 
-	/** Set this true, if you want your SVG to be plottable with a physical plotter. The drawing will 
+	/** Set this true, if you want your SVG to be plottable with a physical plotter. The drawing will
 	 * be optimized in the following way:
-	 * * Travelling Salesman solution over all nodes, to accomplish faster plotting. If your 
+	 * * Travelling Salesman solution over all nodes, to accomplish faster plotting. If your
 	 * plotter has different costs at the x and y-Axis, set your ratio with setCostXYratio()
 	 * * Nodes which are smaller than caption_minsize will be drawn without text
 	 * * Nodes which are smaller than circle_minsize will be drawn as a single line, which treis to connect
@@ -225,8 +220,8 @@ public class SVGGraph {
 		this.plottable = plottable;
 	}
 
-	/** If plottable is set, only nodes which are bigger or equal than bigcaption_minsize will be drawn 
-	 * with double-lined text. 
+	/** If plottable is set, only nodes which are bigger or equal than bigcaption_minsize will be drawn
+	 * with double-lined text.
 	 * (0.1)
 	 * @param caption_minsize
 	 */
@@ -234,8 +229,8 @@ public class SVGGraph {
 		this.bigcaption_minsize = bigcaption_minsize;
 	}
 
-	/** If plottable is set, only nodes which are bigger or equal than smallcaption_minsize will be drawn 
-	 * with thin and easy drawable text. 
+	/** If plottable is set, only nodes which are bigger or equal than smallcaption_minsize will be drawn
+	 * with thin and easy drawable text.
 	 * (0.1)
 	 * @param caption_minsize
 	 */
@@ -243,8 +238,8 @@ public class SVGGraph {
 		this.smallcaption_minsize = smallcaption_minsize;
 	}
 
-	/** If plottable is set, nodes which are smaller than circle_minsize will be drawn as a single line, 
-	 * which tries to connect as many small nodes as possible. Think of it as a random line which draws 
+	/** If plottable is set, nodes which are smaller than circle_minsize will be drawn as a single line,
+	 * which tries to connect as many small nodes as possible. Think of it as a random line which draws
 	 * areas black which would otherwise be filled with very small circles. (0.001)
 	 * @param circle_minsize
 	 */
@@ -252,15 +247,15 @@ public class SVGGraph {
 		this.circle_minsize = circle_minsize;
 	}
 
-	/** If plottable is set, you can have a Travelling Salesman solution over all nodes, to accomplish 
-	 * faster plotting. If your plotter has different costs at the x and y-Axis, set your ratio here. 
-	 * If your plotter needs for 1m in x-direction twice as much than for 1m in y-direction, set it 
+	/** If plottable is set, you can have a Travelling Salesman solution over all nodes, to accomplish
+	 * faster plotting. If your plotter has different costs at the x and y-Axis, set your ratio here.
+	 * If your plotter needs for 1m in x-direction twice as much than for 1m in y-direction, set it
 	 * to 2.0. (1.0)
 	 * @param cost_xy_ratio
 	 */
 	public void setCostXYratio(double cost_xy_ratio) {
 		this.costXYratio = cost_xy_ratio;
 	}
-	
-	
+
+
 }
