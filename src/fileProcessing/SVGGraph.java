@@ -56,52 +56,24 @@ public class SVGGraph {
 	}
 
 	public void exportToSVG(String filename, HashSet<GraphNode> nodes) {
-		
-		
-		double captionMinNodesize = 0.01;
 
 		try{
 			FileWriter writer = new FileWriter(filename);
 			this.appendSVGHeader(writer, nodes);
-
-			for(GraphNode x : nodes) {
-				if(this.writeCaption && x.getRadius() > captionMinNodesize) {
-					String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" " +
-							"lengthAdjust=\"spacingAndGlyphs\"\n" +
-							"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" +
-							"    %caption\n" +
-							"</text>\n";
-					insert = insert.replaceAll("%x", df.format(x.getxPos()*SCALE));
-					insert = insert.replaceAll("%y", df.format(x.getyPos()*SCALE + x.getRadius()*SCALE*0.175));
-					insert = insert.replaceAll("%textlength", df.format(x.getRadius()*1.8*SCALE));
-					insert = insert.replaceAll("%fontsize", df.format(x.getRadius()*SCALE*0.5));
-					insert = insert.replaceAll("%caption",
-							StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
-					writer.append(insert);
-				}
-				if(this.writeCircles) {
-					String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
-							+ "stroke=\"%Stroke\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
-					insert = insert.replaceAll("%color", "none");
-					insert = insert.replaceAll("%cx", df.format(x.getxPos()*SCALE));
-					insert = insert.replaceAll("%cy", df.format(x.getyPos()*SCALE));
-					insert = insert.replaceAll("%r", df.format(x.getRadius()*SCALE));
-					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*SCALE));
-					insert = insert.replaceAll("%Stroke", "black");
-					writer.append(insert);
-				}
-				GraphNode p = x.getParent();
-				if(this.writeEdges && p!=null) {
-					String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" +
-							"          x2=\"%x2\" y2=\"%y2\" \n" +
-							"          stroke=\"black\" \n" +
-							"          stroke-width=\"%strokeWidth\"/>\n";
-					insert = insert.replaceAll("%x1", df.format(x.getxPos()*SCALE));
-					insert = insert.replaceAll("%y1", df.format(x.getyPos()*SCALE));
-					insert = insert.replaceAll("%x2", df.format(p.getxPos()*SCALE));
-					insert = insert.replaceAll("%y2", df.format(p.getyPos()*SCALE));
-					insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*SCALE));
-					writer.append(insert);
+			if(this.plottable) {
+				this.loadSeperateNodeClasses(nodes);
+				
+			} else {
+				for(GraphNode x : nodes) {
+					if(this.writeCaption && x.getRadius() > this.bigcaption_minsize) {
+						this.appendCaption(writer, x);
+					}
+					if(this.writeCircles) {
+						this.appendCircle(writer, x);
+					}
+					if(this.writeEdges) {
+						this.appendEdge(writer, x);
+					}
 				}
 			}
 			writer.append("\n</svg>");
@@ -152,6 +124,48 @@ public class SVGGraph {
 		append = append.replaceAll("%cornery", df.format(posymin*SCALE));
 
 		writer.append(append);
+	}
+	
+	private void appendCaption(FileWriter writer, GraphNode x) throws IOException {
+		String insert = "<text x=\"%x\" y=\"%y\" textLength=\"%textlength\" " +
+				"lengthAdjust=\"spacingAndGlyphs\"\n" +
+				"      style=\"text-anchor: middle; font-size: %fontsizepx;\">\n" +
+				"    %caption\n" +
+				"</text>\n";
+		insert = insert.replaceAll("%x", df.format(x.getxPos()*SCALE));
+		insert = insert.replaceAll("%y", df.format(x.getyPos()*SCALE + x.getRadius()*SCALE*0.175));
+		insert = insert.replaceAll("%textlength", df.format(x.getRadius()*1.8*SCALE));
+		insert = insert.replaceAll("%fontsize", df.format(x.getRadius()*SCALE*0.5));
+		insert = insert.replaceAll("%caption",
+				StringEscapeUtils.escapeXml11(Matcher.quoteReplacement(x.getCaption())));
+		writer.append(insert);
+	}
+	
+	private void appendCircle(FileWriter writer, GraphNode x) throws IOException {
+		String insert = "\t<circle cx=\"%cx\" cy=\"%cy\" r=\"%r\" "
+				+ "stroke=\"%Stroke\" stroke-width=\"%strokeWidthpx\" fill=\"%color\"/>\n";
+		insert = insert.replaceAll("%color", "none");
+		insert = insert.replaceAll("%cx", df.format(x.getxPos()*SCALE));
+		insert = insert.replaceAll("%cy", df.format(x.getyPos()*SCALE));
+		insert = insert.replaceAll("%r", df.format(x.getRadius()*SCALE));
+		insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*SCALE));
+		insert = insert.replaceAll("%Stroke", "black");
+		writer.append(insert);
+	}
+	
+	private void appendEdge(FileWriter writer, GraphNode x) throws IOException {
+		GraphNode p = x.getParent();
+		if(p==null) return;
+		String insert = "\t<line x1=\"%x1\" y1=\"%y1\" \n" +
+				"          x2=\"%x2\" y2=\"%y2\" \n" +
+				"          stroke=\"black\" \n" +
+				"          stroke-width=\"%strokeWidth\"/>\n";
+		insert = insert.replaceAll("%x1", df.format(x.getxPos()*SCALE));
+		insert = insert.replaceAll("%y1", df.format(x.getyPos()*SCALE));
+		insert = insert.replaceAll("%x2", df.format(p.getxPos()*SCALE));
+		insert = insert.replaceAll("%y2", df.format(p.getyPos()*SCALE));
+		insert = insert.replaceAll("%strokeWidth", df.format(strokeWidth*SCALE));
+		writer.append(insert);
 	}
 
 	/** Fill every node in a it's set, according to its size.
