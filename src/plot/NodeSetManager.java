@@ -49,6 +49,31 @@ public class NodeSetManager {
 		}
 		return res;
 	}
+	
+	/** Returns the next node from node or null, if no one is left. Only node centers will be used. 
+	 * Manhattan means, that the manhattan metric will be applied.
+	 * @param node
+	 * @return
+	 */
+	public GraphNode getNextNodeManhattan(GraphNode node) {
+		GraphNode res = null;
+		//TODO
+		return res;
+	}
+	
+	/** Returns the node, which circle can be fastest reached from pos, using the manhattan metric. Imagine drawing
+	 * a series of circles with a pen. At the point where you finished the first one, you want to get from your 
+	 * position on the circle as fast as possible to the next circle. Hereby it's only important to look after the
+	 * next reachable point on another circle line.
+	 * @param pos The position, from where you are looking for the next point. Usually this is an point on your already
+	 * drawn circle.
+	 * @return
+	 */
+	public GraphNode getNextNodeArcManhattan(Vector<Double> pos) {
+		GraphNode res = null;
+		//TODO
+		return res;
+	}
 
 	public void update() {
 	}

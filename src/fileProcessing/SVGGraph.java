@@ -56,10 +56,10 @@ public class SVGGraph {
 	}
 
 	public void exportToSVG(String filename, HashSet<GraphNode> nodes) {
-
 		try{
 			FileWriter writer = new FileWriter(filename);
 			this.appendSVGHeader(writer, nodes);
+			
 			if(this.plottable) {
 				this.loadSeperateNodeClasses(nodes);
 				
@@ -76,8 +76,8 @@ public class SVGGraph {
 					}
 				}
 			}
+			
 			writer.append("\n</svg>");
-
 			writer.flush();
 			writer.close();
 		}
