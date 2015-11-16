@@ -247,7 +247,7 @@ public class GraphPlotter {
 		nodes.add(this.root);
 		while(!nodes.isEmpty()) {
 			for(GraphNode x : nodes) {
-				x.setRadius(this.getSizeFromLeafs(x.getTreeSize(), x.getChildren().size()));
+				x.setRadius(this.getSizeFromLeafs(x.getTreeSize(), x.getChildren().size()+1));
 				temp.addAll(x.getChildren());
 			}
 			nodes.clear();
