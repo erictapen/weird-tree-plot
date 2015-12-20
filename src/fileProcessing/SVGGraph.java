@@ -47,7 +47,7 @@ public class SVGGraph {
 		this.writeEdges = false;
 		this.strokeWidth = 0.005;
 		this.plottable = false;
-		this.bigcaption_minsize = 0.05;
+		this.bigcaption_minsize = 0.03;
 		this.smallcaption_minsize = 0.01;
 		this.circle_minsize = 0.001;
 		this.costXYratio = 1.0;
