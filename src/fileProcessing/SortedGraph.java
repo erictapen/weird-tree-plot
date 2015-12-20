@@ -34,7 +34,7 @@ public class SortedGraph {
 			while ((line = br.readLine()) != null) {
 				createNodeFromLine(line);
 				i++;
-				if(i%10000 == 0) System.out.println(i + " Nodes imported.");
+				if(i%100000 == 0) System.out.println(i + " Nodes imported.");
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("File \"" + ifile + "\" not found. Abort.");
