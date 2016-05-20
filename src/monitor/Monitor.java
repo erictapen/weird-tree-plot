@@ -9,12 +9,12 @@ public class Monitor extends Thread {
 	private PlotM plotM = new PlotM();
 	private ExportM exportM = new ExportM();
 
-	public enum MState {
+	public enum State {
 		IMPORT, PLOT, EXPORT
 	}
 
-	MState state;
-	
+	State state;
+
 	public Monitor() {
 		super();
 	}
@@ -43,8 +43,10 @@ public class Monitor extends Thread {
 	}
 
 	private String generateImportInfo() {
-		// TODO Auto-generated method stub
-		return null;
+		if (importM.error == ImportM.Error.NONE)
+			return importM.getStatusString();
+		else
+			return importM.getErrorMessage();
 	}
 
 	private String generatePlotInfo() {
