@@ -6,6 +6,7 @@ import fileProcessing.SVGGraph;
 import fileProcessing.SortedGraph;
 import fileProcessing.TexGraph;
 import graph.GraphNode;
+import monitor.Monitor;
 import plot.GraphPlotter;
 import processing.core.*;
 
@@ -57,10 +58,10 @@ public class GraphDraw extends PApplet {
 		config.loadConfFromCMDArguments(args);
 		config.setupGraphDraw(this);
 				
+		Monitor mon = new Monitor();
+		mon.start();
 		
-		
-		
-		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption);
+		root = SortedGraph.importFile(this.inputDOTfile, this.rootCaption, mon.getImportM());
 		
 		if(root == null) {
 			System.out.println("root is null! You have to tell the program where it should start."

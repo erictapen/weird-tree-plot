@@ -36,6 +36,7 @@ public class SortedGraph {
 	public static GraphNode importFile(String ifile, String rootcaption, ImportM mon) {
 		mon.setRootcaption(rootcaption);
 		mon.setImportfile(ifile);
+		mon.setState(ImportM.State.IMPORTING);
 		try (BufferedReader br = new BufferedReader(new FileReader(ifile))) {
 			String line;
 			int i = 0;

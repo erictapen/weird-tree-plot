@@ -2,10 +2,12 @@ package monitor;
 
 public class Monitor extends Thread {
 
+	private MsgPoster poster = new MsgPoster();
+
 	private int terminalWidth;
 	private int terminalHeight;
 
-	private ImportM importM = new ImportM();
+	private ImportM importM = new ImportM(this);
 	private PlotM plotM = new PlotM();
 	private ExportM exportM = new ExportM();
 
@@ -13,49 +15,64 @@ public class Monitor extends Thread {
 		IMPORT, PLOT, EXPORT
 	}
 
-	State state;
+	State state = State.IMPORT;
 
 	public Monitor() {
 		super();
+
 	}
 
 	public void run() {
-		this.terminalWidth = jline.TerminalFactory.get().getWidth();
-		this.terminalHeight = jline.TerminalFactory.get().getHeight();
-		System.out.println(this.generateInfoString());
-		try {
-			Monitor.sleep(500);
-		} catch (InterruptedException e) {
-
+		poster.start();
+		while (!Thread.currentThread().isInterrupted()) {
+			this.terminalWidth = jline.TerminalFactory.get().getWidth();
+			this.terminalHeight = jline.TerminalFactory.get().getHeight();
+			this.postInfoString();
 		}
 	}
 
-	private String generateInfoString() {
+	private void postInfoString() {
 		switch (state) {
 		case IMPORT:
-			return generateImportInfo();
+			postImportInfo();
 		case PLOT:
-			return generatePlotInfo();
+			postPlotInfo();
 		case EXPORT:
-			return generateExportInfo();
+			postExportInfo();
 		}
-		return "";
 	}
 
-	private String generateImportInfo() {
-		if (importM.error == ImportM.Error.NONE)
-			return importM.getStatusString();
-		else
-			return importM.getErrorMessage();
+	private void postImportInfo() {
+		if (importM.error != ImportM.Error.NONE) {
+			poster.addMsg(importM.getErrorMessage());
+		}
+		else if (importM.state == ImportM.State.IMPORTING) {
+			poster.replaceLastMsg(importM.getStatusString());
+		}
+		else {
+			poster.addMsg(importM.getStatusString());
+		}
+
 	}
 
-	private String generatePlotInfo() {
+	private void postPlotInfo() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
-	private String generateExportInfo() {
+	private void postExportInfo() {
 		// TODO Auto-generated method stub
-		return null;
 	}
+
+	public ImportM getImportM() {
+		return importM;
+	}
+
+	public PlotM getPlotM() {
+		return plotM;
+	}
+
+	public ExportM getExportM() {
+		return exportM;
+	}
+
 }

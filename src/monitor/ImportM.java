@@ -5,6 +5,8 @@ public class ImportM {
 	String rootcaption;
 	int nodesImported;
 	int uniqueNodesImported;
+	
+	Monitor parent = null;
 
 	public enum Error {
 		NONE, FILE_NOT_FOUND, IO_EXCEPTION
@@ -15,13 +17,13 @@ public class ImportM {
 	public String getErrorMessage() {
 		switch (error) {
 		case NONE:
-			return "";
+			return "ha";
 		case FILE_NOT_FOUND:
-			return "";
+			return "ha";
 		case IO_EXCEPTION:
-			return "";
+			return "ha";
 		}
-		return "";
+		return "ha";
 	}
 
 	public enum State {
@@ -33,16 +35,16 @@ public class ImportM {
 	public String getStatusString() {
 		switch (state) {
 		case STARTING:
-			return "Starting imported of file " + importfile + "\n";
+			return "Starting import of file " + importfile + "\n";
 		case IMPORTING:
-			return nodesImported + " Nodes imported.\r";
+			return "\r" + nodesImported + " Nodes imported.";
 		case LINES_LOADED:
 			return "\n";
 		case UPDATING_LEEF_SIZES:
 			return "It seems like, the imported file doesn't have any information about "
 					+ "subTreeSize. This must be updated now.\n";
 		case NOT_UPDATING_LEEF_SIZES:
-			return "Found information about leef sizes in file. If you don't trust this information, erase it.\n";
+			return "Found information about leef sizes in file. If you want to recompute this information, erase it on at least node.\n";
 		case GRAPH_IS_NOT_PLOTTED:
 			return "Graph is not plotted yet.\n";
 		case GRAPH_IS_PLOTTED:
@@ -52,6 +54,11 @@ public class ImportM {
 			return "Import completed successfull.\n";
 		}
 		return "";
+	}
+	
+	public ImportM(Monitor parent) {
+		super();
+		this.parent = parent;
 	}
 
 	public void setImportfile(String importfile) {
