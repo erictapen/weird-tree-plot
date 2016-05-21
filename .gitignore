@@ -15,3 +15,5 @@ plotter.conf
 !example_result.jpg
 /target/
 *.jar
+/.idea/*
+weird-tree-plot.iml
