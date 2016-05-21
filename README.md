@@ -24,7 +24,7 @@ WeirdTreePlot accepts parameters both written in the configuration file and pass
 ```
 java -jar weird-tree-plot-X.X-static-dependencies.jar -GRAPHinputDOTfile wiki_sorted_20k.dot -GRAPHrootCaption Philosophie
 ```
-Now, a window should pop up, which illustrates the current plotting process. In the terminal, additional information is provided. After the process is finished, you will find several output files in your directory.  
+Now, a window should pop up, which illustrates the current plotting process. In the terminal, additional information is provided. Just take a walk in the meantime, this will take about 20min an on average machine. After the process is finished, you will find several output files in your directory.  
 If you want to dig deeper into the capabilities of WeirdTreePlot, have a look into the `plotter_example.conf`, where every parameter is documented.
 
 If you have additional questions, notes or bug reports, I'd be glad if you contact me on GitHub or Twitter.
@@ -47,6 +47,5 @@ Unfortunately, I don't have a step-by-step solution here. You might get it runni
 
 
 #Data :
-The Data can be downloaded as .dot here:
-https://drive.google.com/folderview?id=0B7TXAQUsQGPQfnozOWRBVVExR2s3SmVnb1RJa0t2VmJoZFNRSk5QMFBaYnN1VlhXSjl4WXc&usp=sharing
-Without this file, you can't do anything. It is just too big for GitHub.
+@FinnIckler hosted some example data [here](https://drive.google.com/folderview?id=0B7TXAQUsQGPQfnozOWRBVVExR2s3SmVnb1RJa0t2VmJoZFNRSk5QMFBaYnN1VlhXSjl4WXc&usp=sharing).
+I will write another application about how to to get this kind of data from Wikipedia as soon as possible.

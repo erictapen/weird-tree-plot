@@ -14,7 +14,7 @@ public class GraphDraw extends PApplet {
 	PApplet parent; // The parent PApplet that we will render ourselves onto
 
 	private GraphNode root;
-	/** The size of the root node on the sreen, in pixels
+	/** The size of the root node on the screen, in pixels
 	 */
 	private double drawRootSize;
 	/**check this, if you want to draw edges of the graph
