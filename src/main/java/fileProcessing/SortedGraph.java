@@ -2,7 +2,8 @@ package fileProcessing;
 
 import graph.GraphNode;
 import monitor.Monitor;
-import monitor.Monitor.MVariable;
+import monitor.Monitor.MStates;
+import monitor.Monitor.MVariables;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,19 +42,19 @@ public class SortedGraph {
 		mon.postUrgentMessage("Starting sorted DOT import of " + rootcaption + " from " + ifile);
 		try (LineNumberReader lnr = new LineNumberReader(new FileReader(new File(ifile)))) {
 			lnr.skip(Long.MAX_VALUE);
-			mon.setState(MVariable.LINES_TOTAL, lnr.getLineNumber() + 1);
+			mon.setVariable(MVariables.LINES_TOTAL, lnr.getLineNumber() + 1);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		mon.setState(MStates.LOADING_BAR);
 		try (BufferedReader br = new BufferedReader(new FileReader(ifile))) {
 			String line;
 			int i = 0;
 			while ((line = br.readLine()) != null) {
 				createNodeFromLine(line);
 				i++;
-				mon.setState(MVariable.LINES_IMPORTED, i);
+				mon.setVariable(MVariables.LINES_IMPORTED, i);
 			}
 		} catch (FileNotFoundException e) {
 			mon.postErrorMessage("File \"" + ifile + "\" not found. Abort.");
@@ -64,6 +65,7 @@ public class SortedGraph {
 			e.printStackTrace();
 			return null;
 		}
+		mon.setState(MStates.TERMINAL);
 		mon.postUrgentMessage("Graph imported. There are " + nodemap.size() + " nodes in memory.");
 		GraphNode root = nodemap.get(rootcaption);
 		if (root == null)

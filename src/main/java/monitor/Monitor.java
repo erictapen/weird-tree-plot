@@ -8,13 +8,18 @@ public class Monitor {
 	private ArrayList<String> urgentMessages = new ArrayList<String>();
 	private ArrayList<String> errorMessages = new ArrayList<String>();
 
-	public enum MVariable {
+	public enum MVariables {
 		URGENT_MSG, ERROR_MSG, LINES_IMPORTED, LINES_TOTAL
 	}
 
-	public enum MState {
+	public enum MStates {
 		TERMINAL, LOADING_BAR, WINDOW
 	}
+	
+	private MStates state = MStates.TERMINAL;
+
+	private int linesImported;
+	private int linesTotal;
 
 	public Monitor() {
 		p = new Poster(this);
@@ -29,20 +34,51 @@ public class Monitor {
 		this.errorMessages.add(msg);
 	}
 
-	public void setState(Monitor.MVariable v, String msg) {
+	public void setVariable(Monitor.MVariables v, String msg) {
 
 	}
 
-	public void setState(Monitor.MVariable v, int msg) {
-
+	public void setVariable(Monitor.MVariables v, int msg) {
+		switch (v) {
+		case LINES_IMPORTED:
+			this.linesImported = msg;
+			break;
+		case LINES_TOTAL:
+			this.linesTotal = msg;
+			break;
+		default:
+			break;
+		}
 	}
 
 	ArrayList<String> getUrgentMessages() {
-		return errorMessages;
+		ArrayList<String> res = urgentMessages;
+		urgentMessages = new ArrayList<String>();
+		return res;
 	}
 
 	ArrayList<String> getErrorMessages() {
-		return urgentMessages;
+		ArrayList<String> res = errorMessages;
+		errorMessages = new ArrayList<String>();
+		return res;
 	}
+
+	MStates getState() {
+		return state;
+	}
+
+	public void setState(MStates state) {
+		this.state = state;
+	}
+
+	public int getLinesImported() {
+		return linesImported;
+	}
+
+	public int getLinesTotal() {
+		return linesTotal;
+	}
+	
+	
 
 }
